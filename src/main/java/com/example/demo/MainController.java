@@ -1,9 +1,22 @@
 package com.example.demo;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Collection;
+import java.util.Locale;
+
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import datos.DT_rol;
 
 //import com.example.dao.DT_user;
 //import com.example.entity.User;
@@ -12,12 +25,54 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class MainController {
 	
 	@GetMapping("/")
-	public String greeting(@RequestParam(name="name", required=false, defaultValue="XD") String name, Model model) {
+	public String greeting(@RequestParam(name="name", required=false, defaultValue="XD") String name, Model model, 
+			@CookieValue(value = "token-access", defaultValue = "Atta") String token,
+			@CookieValue(value = "token-refresh", defaultValue = "Atta") String token2
+			, HttpServletResponse res) {
 		//DT_user dtu = new DT_user();
 		//User[] users = dtu.getUsers();
         //model.addAttribute("name", users[0]);
         //dtu.getUsers();
         //System.out.println("hola");
-        return "index.jsp";
+		DT_rol dtr = new DT_rol();
+		try {
+			
+			if(token.equals("Atta")) {
+				
+				String[] sessions = dtr.optenerCredenciales();
+				if(sessions != null) {
+					String [] parts = sessions[0].split("=");
+					String [] parts2 = sessions[1].split("=");
+					Cookie ck = new Cookie(parts[0],parts[1]);
+					Cookie ck2 = new Cookie(parts2[0],parts2[1]);
+					ck.setMaxAge(300);
+					ck2.setMaxAge(300);
+					res.addCookie(ck);
+					res.addCookie(ck2);
+				}
+			}
+			dtr.getRoles(res, token, token2);
+			
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			//e.getMessage();
+			return "redirect:http://localhost:8080/login";
+			
+			//e.printStackTrace();
+		}
+        return "charts.html";
     }
+	
+	@GetMapping("/login")
+	public String login(@RequestParam(name="name", required=false, defaultValue="login") String name, Model model) {
+		//DT_user dtu = new DT_user();
+		//User[] users = dtu.getUsers();
+        model.addAttribute("name", "Login");
+        //dtu.getUsers();
+        //System.out.println("hola");
+        return "login.jsp";
+    }
+	
+
 }
