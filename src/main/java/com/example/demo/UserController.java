@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
 import datos.DT_user;
 import entidades.Tbl_user;
@@ -24,8 +25,13 @@ public class UserController {
 		return "/seguridad/usuarios.jsp";
 	}
 	
+	@GetMapping("/seguridad/newUser")
+	public String nuevo() {
+		return "/seguridad/newUser.jsp";
+	}
+	
 	@RequestMapping(value = "/verify", method = RequestMethod.POST)
-	public void login(HttpServletRequest req, ModelMap map,
+	public ModelAndView login(HttpServletRequest req, ModelMap map,
 			HttpServletResponse res) throws IOException {
 		
 		String usr = req.getParameter("username");
@@ -45,13 +51,20 @@ public class UserController {
 			res.addCookie(ck);
 			res.addCookie(ck2);
 			
-			res.sendRedirect("/");
-			return;
+			ModelAndView ma = new ModelAndView();
+			
+			ma.setViewName("redirect:/");
+			
+			return ma;
+			
+			//res.sendRedirect("/");
+			//return;
+		    //return new ModelAndView("redirect:/");
 			//return "charts.html";
 		}else {
 			//return "login.jsp";
 		}
 		
-		//return "charts.html";
+	    return null;
 	}
 }

@@ -2,7 +2,11 @@
 package datos;
 
 import java.io.IOException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+
 import java.util.List;
+
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -13,6 +17,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+
+
 
 import entidades.Tbl_rol;
 
@@ -74,6 +80,9 @@ public class DT_rol {
 	}
 
 	public String [] optenerCredenciales() {
+		
+		
+		
 		String URL = Server.getHostname() + "login/";
 		
 		Credential cred = new Credential();

@@ -8,6 +8,14 @@
             response.setDateHeader("Expires", -1);
     %>
     
+    
+    <%
+    
+    DT_rol dtr = new DT_rol();
+    String[] sessions = dtr.optenerCredenciales();
+    
+    %>
+    
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
 <!DOCTYPE html>
 <html>

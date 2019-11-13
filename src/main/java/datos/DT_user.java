@@ -72,9 +72,10 @@ public class DT_user {
 			
 			
 			return cks;
-		}catch(HttpClientErrorException e) {
+		}catch(Exception e) {
 			if(e.getMessage().equals("401 Unauthorized")) {
 				System.out.println("No tienes acceso we...");
+				System.err.println(e.getMessage());
 				return null;
 			}
 		}
