@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import datos.DT_rol;
+import entidades.Tbl_rol;
 
 //import com.example.dao.DT_user;
 //import com.example.entity.User;
@@ -29,11 +30,8 @@ public class MainController {
 			@CookieValue(value = "token-access", defaultValue = "Atta") String token,
 			@CookieValue(value = "token-refresh", defaultValue = "Atta") String token2
 			, HttpServletResponse res) {
-		//DT_user dtu = new DT_user();
-		//User[] users = dtu.getUsers();
-        //model.addAttribute("name", users[0]);
-        //dtu.getUsers();
-        //System.out.println("hola");
+		
+		
 		DT_rol dtr = new DT_rol();
 		try {
 			
@@ -57,7 +55,7 @@ public class MainController {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			//e.getMessage();
-			return "redirect:http://localhost:8080/login";
+			//return "redirect:http://localhost:8080/login";
 			
 			//e.printStackTrace();
 		}
@@ -65,13 +63,46 @@ public class MainController {
     }
 	
 	@GetMapping("/login")
-	public String login(@RequestParam(name="name", required=false, defaultValue="login") String name, Model model) {
-		//DT_user dtu = new DT_user();
-		//User[] users = dtu.getUsers();
-        model.addAttribute("name", "Login");
-        //dtu.getUsers();
-        //System.out.println("hola");
-        return "login.jsp";
+	public String login(@RequestParam(name="name", required=false, defaultValue="XD") String name, Model model, 
+			@CookieValue(value = "token-access", defaultValue = "Atta") String token,
+			@CookieValue(value = "token-refresh", defaultValue = "Atta") String token2
+			, HttpServletResponse res) {
+		
+		
+		DT_rol dtr = new DT_rol();
+		Tbl_rol[] roles = null;
+		try {
+			
+			if(token.equals("Atta")) {
+				
+				String[] sessions = dtr.optenerCredenciales();
+				if(sessions != null) {
+					String [] parts = sessions[0].split("=");
+					String [] parts2 = sessions[1].split("=");
+					Cookie ck = new Cookie(parts[0],parts[1]);
+					Cookie ck2 = new Cookie(parts2[0],parts2[1]);
+					ck.setMaxAge(300);
+					ck2.setMaxAge(300);
+					res.addCookie(ck);
+					res.addCookie(ck2);
+				}
+			}
+			roles = dtr.getRoles(res, token, token2);
+			
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			//e.getMessage();
+			//return "redirect:http://localhost:8080/login";
+			
+			//e.printStackTrace();
+		}
+        
+		if(roles != null) {
+			model.addAttribute("listaRoles", roles);
+			return "login.jsp";
+		}
+		return "login.jsp";
     }
 	
 

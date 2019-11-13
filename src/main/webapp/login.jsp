@@ -7,6 +7,8 @@
             response.setDateHeader("Expires", 0);
             response.setDateHeader("Expires", -1);
     %>
+    
+<%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -22,42 +24,27 @@
   <!-- Custom fonts for this template-->
   <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
-
+  <link rel="shortcut icon" href="img/Logo.png" type="image/x-icon">
   <!-- Custom styles for this template-->
   <link href="css/sb-admin-2.min.css" rel="stylesheet">
 
-<%
-	//DESTRUYE LA SESIÓN
-		/*HttpSession hts = request.getSession(false);
-		hts.removeAttribute("login");
-		hts.invalidate();*/
-		
-		//VALIDACIÓN DE LA EXISTENCIA DE LA SESIÓN
-		String loginUser="";
-		loginUser = (String)session.getAttribute("login");
-		//VALIDA QUE LA VARIABLE loginUser NO SEA NULL
-		loginUser = loginUser==null?"":loginUser;
-		if(!loginUser.equals(""))
-		{
-	response.sendRedirect("./index.jsp");
-		}
-%>
 </head>
 
 <%
 	boolean error = false;
  String msg = "";
  String msgType = "";
- String status = request.getParameter("status");
+ //String status = request.getParameter("status");
  
  // Cargando los roles para ingresar
  
  //DT_rol dtrol = new DT_rol();
  
 // Tbl_rol[] listaRoles = dtrol.getRoles(response, ck, ck2);
+Tbl_rol[] listaRoles = new Tbl_rol[10];
  
  
- if(status != null)
+ /*if(status != null)
  {
 	 error = true;
 	 if(status.equals("2")) {
@@ -67,24 +54,13 @@
 		 msg = "Error: <strong>usuario o contrasela</strong> incorrecta";
 		 msgType = "danger";
 	 }
- }
+ }*/
 %>
 
 <body class="bg-gradient-primary">
 
   <div class="container">
-  <%
-  	if(error) {
-  %>
-        <div class="alert alert-<%=msgType%> alert-dismissible fade show" role="alert">
-	  <%=msg%>
-	  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-	    <span aria-hidden="true">&times;</span>
-	  </button>
-	</div>
-  <%
-  	}
-  %>
+ 
 
     <!-- Outer Row -->
     <div class="row justify-content-center">
@@ -101,7 +77,8 @@
                   <div class="text-center">
                     <h1 class="h4 text-gray-900 mb-4">Login</h1>
                   </div>
-                  <form method="post" action="./SL_login" class="user">
+                  <form method="post" action="verify" class="user">
+                  <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                     <div class="form-group">
                       <input type="text" class="form-control form-control-user" id="exampleInputEmail" placeholder="Username" aria-describedby="emailHelp" name="username">
                     </div>
@@ -110,13 +87,13 @@
                     </div>
                     <div class="form-group">
                       <label for="selectRol">Ingresar como:</label>
-                      <select id="selectRol" name="selectRol" class="form-control" required>
+                      <select id="selectRol" name="selectRol" class="form-control">
                       <option selected value="">Seleccionar...</option>
-                      <%
-                      	for(Tbl_rol rol: listaRoles) {
-                      %>
-                      <option value="<%=rol.getId_rol()%>"><%=rol.getRol_name() %></option>
-                      <%} %>
+                      <c:if test="${listaRoles != null}">
+                          <c:forEach items="${listaRoles}" var="rol">
+                            <option value="${rol.id}">${rol.name}</option>
+                          </c:forEach>
+                      </c:if>
                       </select>
                     </div>
                     <input type="submit" class="btn btn-primary btn-user btn-block" value="Login" /> 

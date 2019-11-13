@@ -7,7 +7,7 @@
 <title>Nuevo Usuario</title>
 <!-- Tell the browser to be responsive to screen width -->
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
+<link rel="shortcut icon" href="../img/Logo.png" type="image/x-icon">
 <!-- Custom fonts for this template -->
   <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
@@ -33,45 +33,12 @@ jAlert css
 <link rel="stylesheet" href="../../plugins/jAlert/dist/jAlert.css" /> -->
 
 
+</head>
+
 <%
-//VALIDACIÃ“N DE LA EXISTENCIA DE LA SESIÃ“N
-		String loginUser="";
-		loginUser = (String)session.getAttribute("login");
-		//VALIDA QUE LA VARIABLE loginUser NO SEA NULL
-		loginUser = loginUser==null?"":loginUser;
-		if(loginUser.equals(""))
-		{
-			response.sendRedirect("../login.jsp?status=2");
-			return;
-		} 
-		
-		
-// VALIDAR ACCESO
-ArrayList<VW_user_opciones> opciones = (ArrayList<VW_user_opciones>) session.getAttribute("opciones");
-boolean acceso = false;
-
-for(VW_user_opciones vu: opciones) {
-	 if(vu.getOpcion().equals("./seguridad/newUser.jsp")) {
-		 acceso = true;
-	 }
-}
-
-if(!acceso){
-	 response.sendRedirect("../accesoDenegado.jsp");
-}
-
-///////////
-
-
-/* RECUPERAMOS EL VALOR DE LA VARIABLE MSJ */
-String mensaje = "";
-mensaje = request.getParameter("msj");
-mensaje = mensaje==null?"":mensaje;
+ String mensaje = "Se ha guardado";
 
 %>
-
-
-</head>
 <body class="hold-transition sidebar-mini">
 
 <div id="wrapper">
@@ -86,7 +53,7 @@ mensaje = mensaje==null?"":mensaje;
 	    
 	    <section class="content-header">
 	<!-- Navbar -->
-	  	<jsp:include page="/WEB-INF/layouts/header.jsp"></jsp:include>
+	  	<jsp:include page="../WEB-INF/layouts/header.jsp"></jsp:include>
 	<!-- /.navbar -->
 	
 	      <div class="container-fluid">
@@ -132,10 +99,10 @@ mensaje = mensaje==null?"":mensaje;
                     placeholder="Ingrese su ContraseÃ±a" required>
                   </div>
                   <div class="form-group">
-                    <label for="exampleInputPassword1">Confirmar ContraseÃ±a: </label>
+                    <label for="exampleInputPassword1">Confirmar Contraseña: </label>
                     <input type="password" id="password2" name="password2" class="form-control" 
-                    title="Recuerde usar teclas mayÃºsculas, minÃ­sculas, nÃºmeros y caracteres especiales..." 
-                    placeholder="Ingrese nuevamente su ContraseÃ±a" required>
+                    title="Recuerde usar teclas mayúsculas, minúsculas, números y caracteres especiales..." 
+                    placeholder="Ingrese nuevamente su Contraseña" required>
                   </div>
                   <div class="form-group">
                     <label for="exampleInputEmail1">Primer Nombre:</label>
@@ -184,7 +151,7 @@ mensaje = mensaje==null?"":mensaje;
     <!-- /.content -->
 	
 	<!-- Footer -->
-  		<jsp:include page="/WEB-INF/layouts/footer.jsp"></jsp:include>
+  		<jsp:include page="../WEB-INF/layouts/footer.jsp"></jsp:include>
   	<!-- ./Footer -->
 	</div>
   </div>

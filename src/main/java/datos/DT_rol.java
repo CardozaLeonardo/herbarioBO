@@ -21,11 +21,11 @@ public class DT_rol {
 	private static RestTemplate restTemplate = new RestTemplate();
 	private String ENDPOINT_URL = "https://django-acacia.herokuapp.com/api/group/";
 	
-	public void getRoles(HttpServletResponse response, String ck, String ck2) throws IOException {
+	public Tbl_rol[] getRoles(HttpServletResponse response, String ck, String ck2) throws IOException {
 		
 		Tbl_rol[] roles = null;
 		HttpHeaders headers = new HttpHeaders(); // Esto sirve para agregar los headers, con .add() se agregan
-		//headers.add("Authorization", "Token 5957129b89722d3849e20fbc8fe6a2f6eebd5872");
+		
 		headers.add("Cookie", "token-access="+ ck);
 		headers.add("Cookie", "token-refresh="+ ck2);
 		
@@ -48,7 +48,7 @@ public class DT_rol {
 				
 				//System.out.println(roles);
 				
-				
+				return roles;
 			}else if(resul.getStatusCodeValue() == 401) {
 				System.out.println("No tienes acceso we...");
 			}else {
@@ -69,7 +69,7 @@ public class DT_rol {
 		
 		
 		
-		
+		return null;
 		//Tbl_rol[] roles = restTemplate.getForEntity(ENDPOINT_URL, respuesta, Tbl_rol[].class);
 	}
 
@@ -100,4 +100,6 @@ public class DT_rol {
 		
 		return cks;
 	}
+	
+	
 }

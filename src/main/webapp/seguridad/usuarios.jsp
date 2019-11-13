@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1" import="entidades.*, datos.*, java.util.*;"%>
+    pageEncoding="ISO-8859-1" import="entidades.*, datos.*, java.util.*"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -31,31 +31,30 @@
 
 <%
 
-//VALIDACIÓN DE LA EXISTENCIA DE LA SESIÓN
-		String loginUser="";
-		loginUser = (String)session.getAttribute("login");
-		//VALIDA QUE LA VARIABLE loginUser NO SEA NULL
-		loginUser = loginUser==null?"":loginUser;
-		if(loginUser.equals(""))
-		{
-			response.sendRedirect("../login.jsp?status=2");
-			return;
-		} 
-		
-		
-//VALIDAR ACCESO
-ArrayList<VW_user_opciones> opciones = (ArrayList<VW_user_opciones>) session.getAttribute("opciones");
-boolean acceso = false;
+Cookie[] cookies = request.getCookies();
+if(cookies == null){
+	response.sendRedirect("../login");
+}
+String token = null;
+String tokenRefresh = null;
 
-for(VW_user_opciones vu: opciones) {
-	 if(vu.getOpcion().equals("./seguridad/usuarios.jsp")) {
-		 acceso = true;
-	 }
+for(Cookie c : cookies)
+{
+	if(c.getName().equals("token-access")){
+		token = c.getValue();
+	}
+	
+	if(c.getName().equals("token-refresh")){
+		tokenRefresh = c.getValue();
+	}
 }
 
-if(!acceso){
-	 response.sendRedirect("../accesoDenegado.jsp");
+if(token == null && tokenRefresh == null){
+	response.sendRedirect("../login");
 }
+
+DT_user dtus = new DT_user();
+Tbl_user[] users = dtus.getUsers(token, tokenRefresh);
 
 ///////////
 
@@ -65,13 +64,14 @@ mensaje = request.getParameter("msj");
 mensaje = mensaje==null?"":mensaje;
 %>
 
+<%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
 </head>
 <body id="page-top">
    <!-- Page Wrapper -->
   <div id="wrapper">
 
     <!-- Sidebar -->
-    <jsp:include page="../WEB-INF/layouts/sidebar.jsp"></jsp:include>
+    
     <!-- End of Sidebar -->
 
     <!-- Content Wrapper -->
@@ -82,7 +82,7 @@ mensaje = mensaje==null?"":mensaje;
      
 
         <!-- Topbar -->
-        <jsp:include page="../WEB-INF/layouts/header.jsp"></jsp:include>
+        
         <!-- End of Topbar -->
 
 			<section class="content-header">
@@ -132,42 +132,28 @@ mensaje = mensaje==null?"":mensaje;
                     </tr>
                   </thead>
                   <tbody>
-                    <%
-                	DT_Usuario dtus = new DT_Usuario();
-  	        		ArrayList<Tbl_usuario> listarUsuarios = new ArrayList<Tbl_usuario>();
-  	        		listarUsuarios = dtus.listarUsuarios();
-  	        		
-  	        		String nombreCompleto = "";
-  	        		String nombre2="";
-  	        		String apellido2="";
-  	        		String apellidos= "";
-  	        		String estado = "";
-  	        		for(Tbl_usuario tus : listarUsuarios)
-  	        		{
-  	        			nombre2=tus.getNombre2();
-  	        			nombre2=nombre2==null?" ":nombre2;
-  	        			apellido2=tus.getApellido2();
-  	        			apellido2=apellido2==null?" ":apellido2;
-  	        			nombreCompleto = tus.getNombre1()+" "+nombre2;
-  	        			apellidos = tus.getApellido1()+" "+apellido2;
-  	        			estado = tus.getEstado()==1||tus.getEstado()==2?"ACTIVO":"";
-                %>
+                    
 	                <tr>
-	                  <td><%=tus.getId_user()%></td>
-	                  <td><%=nombreCompleto %></td>
-	                  <td><%=apellidos %></td>
-	                  <td><%=tus.getUsername() %></td>
-	                  <td><%=tus.getEmail() %></td>
-	                  <td><%=estado %></td>
+	                <c:if test="<%=users != null %>">
+	                
+	                <c:forEach items="<%=users%>" var="usr">
+	                   
+	                  <td>${usr.id}</td>
+	                  <td>${usr.first_name}</td>
+	                  <td>${usr.last_name}</td>
+	                  <td>${usr.username}</td>
+	                  <td>${usr.email}</td>
+	                  <td>Activo</td>
 	                  <td>
-	                  	<a href="#" onclick="linkEditUser('<%=tus.getId_user()%>');"><i class="far fa-edit" title="Editar"></i></a>&nbsp;&nbsp;
-	                  	<a href="#" onclick="deleteUser('<%=tus.getId_user()%>');"><i class="far fa-trash-alt" title="Eliminar"></i> </a>
+	                  	<a href="#" onclick="linkEditUser('${usr.id}');"><i class="far fa-edit" title="Editar"></i></a>&nbsp;&nbsp;
+	                  	<a href="#" onclick="deleteUser('${usr.id}');"><i class="far fa-trash-alt" title="Eliminar"></i> </a>
 	                  	
 	                  </td>
+	                </c:forEach>
+	                 
+	                </c:if>
 	                </tr>
-	             <%
-	        		}   
-	             %>        
+	                     
                   </tbody>
                    <tfoot>
                     <tr>
@@ -189,7 +175,7 @@ mensaje = mensaje==null?"":mensaje;
       <!-- End of Main Content -->
 
       <!-- Footer -->
-      <jsp:include page="../WEB-INF/layouts/footer.jsp"></jsp:include>
+      
       <!-- End of Footer -->
 
     </div>
