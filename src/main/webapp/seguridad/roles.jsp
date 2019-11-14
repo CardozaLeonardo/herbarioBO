@@ -30,48 +30,42 @@
 
 </head>
 <%
-	//VALIDACIÓN DE LA EXISTENCIA DE LA SESIÓN
-		String loginUser="";
-		loginUser = (String)session.getAttribute("login");
-		//VALIDA QUE LA VARIABLE loginUser NO SEA NULL
-		loginUser = loginUser==null?"":loginUser;
-		if(loginUser.equals(""))
-		{
-	response.sendRedirect("../login.jsp?status=2");
-	return;
-		}
-		
-// VALIDAR ACCESO
-ArrayList<VW_user_opciones> opciones = (ArrayList<VW_user_opciones>) session.getAttribute("opciones");
-boolean acceso = false;
 
-for(VW_user_opciones vu: opciones) {
-	 if(vu.getOpcion().equals("./seguridad/roles.jsp")) {
-		 acceso = true;
-	 }
-}
-
-if(!acceso){
-	 response.sendRedirect("../accesoDenegado.jsp");
-}
 
 ///////////
+
+        Cookie[] cookies = request.getCookies();
+
+        boolean access = false;
+		boolean refresh = false;
+		String tok  = null;
+		String tok2 = null;
+		
+		for(Cookie c : cookies)
+		{
+			if(c.getName().equals("token-access")) {
+				access = true;
+				tok = c.getValue();
+			}
+			
+			if(c.getName().equals("token-refresh")) {
+				refresh = true;
+				tok2 = c.getValue();
+			}
+		}
+		
+		if(!(access && refresh)) {
+			response.sendRedirect("../login.jsp");
+		}
  
 
+ DT_rol dtr = new DT_rol();
 
- DT_rolUsuario tru = new DT_rolUsuario();
- ArrayList<VW_user_rol> rolesUser = null;
- 
- DT_Rol dtr = new DT_Rol();
- ArrayList<Tbl_rol> listaRoles = dtr.listarRoles();
- 
- ArrayList<VW_rol_opcion> opcionesRol = null;
- DT_rolOpcion  dtro = new DT_rolOpcion();
- 
- 
- 
- DT_opcion dto = new DT_opcion();
- ArrayList<Tbl_opcion> listaOpciones = dto.listarOpciones();
+Tbl_rol[] listaRoles = dtr.getRoles(response, tok, tok2);
+
+if(listaRoles == null){
+	response.sendRedirect("../login.jsp");
+}
  
  
  Tbl_rol role = null;
@@ -82,39 +76,8 @@ if(!acceso){
  String errorMsg = "";
  boolean error = false; // Para indicar cualquier error a notificar
  
+ %>
  
- if(request.getParameter("rol") != null)
- {
-	 try{
-	     int idRol = Integer.parseInt(request.getParameter("rol"));
-		 opcionesRol = dtro.listarRolOpcion(idRol);
-		 role = dtr.obtenerRol(idRol);
-		 if(role == null){
-	 response.sendRedirect("rolesOpciones.jsp?error=1");
-	 return;
-	 //System.out.println("Adios");
-		 }
-		 
-		 rolInput = role.getRol_name();
-		 id_rol += role.getId_rol();
-		 withRole = true;
-	 
-	 }catch(NumberFormatException e){
-		 response.sendRedirect("rolesUsuarios.jsp?error=2");
-		 return;
-	 }
- }
- 
- if(request.getParameter("error") !=null){
-	 error = true;
-	 String errorVal = request.getParameter("error");
-	 if(errorVal.equals("1")){
-		 errorMsg = "El rol especificado no existe";
-	 }else if(errorVal.equals("2")){
-		 errorMsg = "Parámetro incorrecto";
-	 }
- }
-%>
 <body id="page-top">
    <!-- Page Wrapper -->
   <div id="wrapper">
@@ -138,59 +101,7 @@ if(!acceso){
           
 		  
 		  
-		  <%if(request.getParameter("saved") != null) {%>
-	       <div class="alert alert-success alert-dismissible fade show" role="alert">
-			  ¡El registro se ha guardado <strong>correctamente</strong>!
-			  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-			    <span aria-hidden="true">&times;</span>
-			  </button>
-			</div>
-		  <%} %>
 		  
-		  <%if(request.getParameter("upd") != null) {%>
-	       <div class="alert alert-success alert-dismissible fade show" role="alert">
-			  ¡El registro se ha modificado <strong>correctamente</strong>!
-			  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-			    <span aria-hidden="true">&times;</span>
-			  </button>
-			</div>
-		  <%} %>
-		  
-		  <%if(request.getParameter("fail") != null && Integer.parseInt(request.getParameter("fail")) == 1) {%>
-	       <div class="alert alert-danger alert-dismissible fade show" role="alert">
-			  Algo salió mal al guardar el registro
-			  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-			    <span aria-hidden="true">&times;</span>
-			  </button>
-			</div>
-		  <%} %>
-		  
-		  <%if(request.getParameter("fail") != null && Integer.parseInt(request.getParameter("fail")) == 2) {%>
-	       <div class="alert alert-danger alert-dismissible fade show" role="alert">
-			  El nuevo nombre para rol ya está <strong>asignado</strong>
-			  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-			    <span aria-hidden="true">&times;</span>
-			  </button>
-			</div>
-		  <%} %>
-		  
-		  <%if(request.getParameter("del") != null && Integer.parseInt(request.getParameter("del")) == 1) {%>
-	       <div class="alert alert-success alert-dismissible fade show" role="alert">
-			  ¡Se ha <strong>eliminado</strong> el rol correctamente!
-			  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-			    <span aria-hidden="true">&times;</span>
-			  </button>
-			</div>
-		  <%} %>
-		  
-		  <%if(request.getParameter("del") != null && Integer.parseInt(request.getParameter("del")) == 2) {%>
-	       <div class="alert alert-danger alert-dismissible fade show" role="alert">
-			  ¡Ha ocurrido un error<strong>eliminando</strong> el rol!
-			  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-			    <span aria-hidden="true">&times;</span>
-			  </button>
-			</div>
-		  <%} %>
 
           <!-- Page Heading -->
           <h1 class="h3 mb-2 text-gray-800">Roles</h1>
@@ -198,7 +109,7 @@ if(!acceso){
 
             
             
-            <form role="form" method="POST" class="col-6" action="../SL_roles">
+            <form role="form" method="POST" class="col-6" action="../nuevoRol">
               
             <input type="hidden" id="idRol" name="idRol" value="">
             <input type="hidden" id="opc" name="opc" value="1">
@@ -226,7 +137,6 @@ if(!acceso){
                     <tr>
                       <th>ID</th>
                       <th>Rol</th>
-                      <th>Descripción</th>
                       <th>Opcion</th>
                     </tr>
                   </thead>
@@ -234,7 +144,6 @@ if(!acceso){
                     <tr>
                       <th>ID</th>
                       <th>Rol</th>
-                      <th>Descripción</th>
                       <th>Opcion</th>
                     </tr>
                   </tfoot>
@@ -243,16 +152,15 @@ if(!acceso){
                     	for(Tbl_rol rol: listaRoles) {
                     %>
                     <tr>
-                      <td id="cl-id-<%=rol.getId_rol()%>"><%=rol.getId_rol() %></td>
-                      <td id="cl-name-<%=rol.getId_rol()%>"><%=rol.getRol_name() %></td>
-                      <td id="cl-desc-<%=rol.getId_rol()%>"><%=rol.getRol_desc() %></td>
+                      <td id="cl-id-<%=rol.getId()%>"><%=rol.getId() %></td>
+                      <td id="cl-name-<%=rol.getId()%>"><%=rol.getName() %></td>
                       <td>
-                       <a href="#" id="<%=rol.getId_rol()%>" class="editRole">
+                       <a href="#" id="<%=rol.getId()%>" class="editRole">
                        
                        <i class="fas fa-edit editRole"></i>
                        </a>
                        &nbsp;&nbsp;
-                       <a href="#" id="<%=rol.getId_rol()%>" class="deleteRole">
+                       <a href="#" id="<%=rol.getId()%>" class="deleteRole">
                         <i class="fas fa-trash-alt"></i>
                        </a>
                       </td>

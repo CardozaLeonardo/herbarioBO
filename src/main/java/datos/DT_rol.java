@@ -10,15 +10,18 @@ import java.util.List;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONObject;
 import org.springframework.boot.autoconfigure.ldap.embedded.EmbeddedLdapProperties.Credential;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
-
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import entidades.Tbl_rol;
 
@@ -110,12 +113,22 @@ public class DT_rol {
 		return cks;
 	}
 	
-	public Tbl_rol guardarRol(Tbl_rol rol, Cookie[] cookies) {
+	public Tbl_rol guardarRol(Tbl_rol rol, Cookie[] cookies){
 		
 		boolean access = false;
 		boolean refresh = false;
 		String tok  = null;
 		String tok2 = null;
+		
+		ObjectMapper om = new ObjectMapper();
+		rol.setPermissions(new int[0]);
+		
+		JSONObject rolJson = new JSONObject(rol);
+		
+		rolJson.remove("id");
+		//rolJson.put("name", rol.getName());
+		String base = rolJson.toString();
+		
 		
 		for(Cookie c : cookies)
 		{
@@ -140,17 +153,33 @@ public class DT_rol {
 		
 		headers.add("Cookie", "token-access="+ tok);
 		headers.add("Cookie", "token-refresh="+ tok2);
+		headers.setContentType(MediaType.APPLICATION_JSON);
 		
-		HttpEntity<Tbl_rol> respuesta = new HttpEntity<Tbl_rol>(headers);
+		HttpEntity<String> respuesta = new HttpEntity<String>(rolJson.toString(), headers);
+		
+		try {
+			String str = om.writeValueAsString(rol);
+			System.out.println(rolJson.toString());
+			//System.out.println(str);
+		} catch (JsonProcessingException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		
 		try {
 			ResponseEntity<Tbl_rol> resul = restTemplate.exchange(ENDPOINT_URL, HttpMethod.POST,respuesta, Tbl_rol.class);
-			
+			//String res = restTemplate.postForObject(URL, respuesta, String.class);
 			Tbl_rol check = resul.getBody();
+			
+			
+			//System.out.println("Status: " + resul.getStatusCodeValue());
+			//return check;
 			
 			return check;
 		}catch(Exception e)
 		{
+			System.err.println(e.getMessage());
+			e.printStackTrace();
 			return null;
 		}
 		
