@@ -7,7 +7,7 @@ import java.security.NoSuchAlgorithmException;
 
 import java.util.List;
 
-
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.boot.autoconfigure.ldap.embedded.EmbeddedLdapProperties.Credential;
@@ -110,5 +110,49 @@ public class DT_rol {
 		return cks;
 	}
 	
-	
+	public Tbl_rol guardarRol(Tbl_rol rol, Cookie[] cookies) {
+		
+		boolean access = false;
+		boolean refresh = false;
+		String tok  = null;
+		String tok2 = null;
+		
+		for(Cookie c : cookies)
+		{
+			if(c.getName().equals("token-access")) {
+				access = true;
+				tok = c.getValue();
+			}
+			
+			if(c.getName().equals("token-refresh")) {
+				refresh = true;
+				tok2 = c.getValue();
+			}
+		}
+		
+		if(!(access && refresh)) {
+			return null;
+		}
+		
+		String URL = Server.getHostname() + "group/";
+		
+        HttpHeaders headers = new HttpHeaders(); 
+		
+		headers.add("Cookie", "token-access="+ tok);
+		headers.add("Cookie", "token-refresh="+ tok2);
+		
+		HttpEntity<Tbl_rol> respuesta = new HttpEntity<Tbl_rol>(headers);
+		
+		try {
+			ResponseEntity<Tbl_rol> resul = restTemplate.exchange(ENDPOINT_URL, HttpMethod.POST,respuesta, Tbl_rol.class);
+			
+			Tbl_rol check = resul.getBody();
+			
+			return check;
+		}catch(Exception e)
+		{
+			return null;
+		}
+		
+	}
 }
