@@ -1,5 +1,6 @@
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8" import="datos.*, entidades.*, org.json.JSONObject"%>
     <%
     
     //Limpia la CACHE del navegador
@@ -7,6 +8,17 @@
     response.setHeader("Cache-Control", "no-store");
     response.setDateHeader("Expires", 0);
     response.setDateHeader("Expires", -1);
+    
+    
+    DT_user dtu = new DT_user();
+    JSONObject obj = dtu.obtenerUsuarioIngresado(request.getCookies());
+    
+    if(obj.getInt("code") == 0 || obj.getInt("code") == 401)
+    {
+    	response.sendRedirect(request.getContextPath() + "/login");
+    	return;
+    }
+    
     %>
    
 <!DOCTYPE html>
@@ -20,7 +32,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>SB Admin 2 - Blank</title>
+  <title><%=Server.getAppName() %> - Inicio</title>
 
   <!-- Custom fonts for this template-->
   <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -29,17 +41,7 @@
   <!-- Custom styles for this template-->
   <link href="css/sb-admin-2.min.css" rel="stylesheet">
 
-<%
-		//VALIDACIÓN DE LA EXISTENCIA DE LA SESIÓN
-		String loginUser="";
-		loginUser = (String)session.getAttribute("login");
-		//VALIDA QUE LA VARIABLE loginUser NO SEA NULL
-		loginUser = loginUser==null?"":loginUser;
-		if(loginUser.equals(""))
-		{
-			response.sendRedirect("./login.jsp");
-		}
-%>
+
 </head>
 
 <body id="page-top">
@@ -65,7 +67,7 @@
         <div class="container-fluid">
 
           <!-- Page Heading -->
-          <h1 class="h3 mb-4 text-gray-800">Blank Page</h1>
+          <h1 class="h3 mb-4 text-gray-800">Blank Page <%=obj.getInt("code")%></h1>
 
         </div>
         <!-- /.container-fluid -->

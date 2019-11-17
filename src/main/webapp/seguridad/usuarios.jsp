@@ -71,7 +71,7 @@ mensaje = mensaje==null?"":mensaje;
   <div id="wrapper">
 
     <!-- Sidebar -->
-    
+    <jsp:include page="../WEB-INF/layouts/sidebar.jsp"></jsp:include>
     <!-- End of Sidebar -->
 
     <!-- Content Wrapper -->
@@ -82,7 +82,7 @@ mensaje = mensaje==null?"":mensaje;
      
 
         <!-- Topbar -->
-        
+        <jsp:include page="../WEB-INF/layouts/header.jsp"></jsp:include>
         <!-- End of Topbar -->
 
 			<section class="content-header">
@@ -110,7 +110,7 @@ mensaje = mensaje==null?"":mensaje;
           <p class="mb-4">DataTables is a third party plugin that is used to generate the demo table below. For more information about DataTables, please visit the <a target="_blank" href="https://datatables.net">official DataTables documentation</a>.</p> -->
 
             <h2>Usuarios</h2>
-                <a href="./newUser.jsp" class="btn btn-primary btn-icon-split">
+                <a href="<%=request.getContextPath()%>/seguridad/newUser" class="btn btn-primary btn-icon-split">
                     <span class="icon text-white-50">
                       <i class="fas fa-user-plus"></i>
                     </span>
@@ -133,26 +133,39 @@ mensaje = mensaje==null?"":mensaje;
                   </thead>
                   <tbody>
                     
-	                <tr>
 	                <c:if test="<%=users != null %>">
 	                
 	                <c:forEach items="<%=users%>" var="usr">
+	                <tr>
 	                   
 	                  <td>${usr.id}</td>
 	                  <td>${usr.first_name}</td>
 	                  <td>${usr.last_name}</td>
 	                  <td>${usr.username}</td>
 	                  <td>${usr.email}</td>
-	                  <td>Activo</td>
+	                  <td>${(usr.is_active)?"Activo":"Inactivo"}</td>
 	                  <td>
-	                  	<a href="#" onclick="linkEditUser('${usr.id}');"><i class="far fa-edit" title="Editar"></i></a>&nbsp;&nbsp;
-	                  	<a href="#" onclick="deleteUser('${usr.id}');"><i class="far fa-trash-alt" title="Eliminar"></i> </a>
+	                  	<a href="./updateUser?id=${usr.id}" onclick="linkEditUser('${usr.id}');"><i class="far fa-edit" title="Editar"></i></a>&nbsp;&nbsp;
+	                  	<c:choose>
+	                  	  <c:when test="${usr.is_active}">
+	                  	     
+	                  	<a href="" onclick="deleteUser('${usr.id}');"><i class="far fa-trash-alt" title="Eliminar"></i> </a>
+	                  	  </c:when>
+	                  	  
+	                  	  <c:when test="${usr.is_active == false}">
+	                  	      
+	                  	      <a href="" onclick="deleteUser('${usr.id}');"><i class="far fa-trash-alt" title="Eliminar"></i> </a>
+	                  	      
+	                  	  </c:when>
+	                  	</c:choose>
+	                  	
+	                  	
 	                  	
 	                  </td>
+	                </tr>
 	                </c:forEach>
 	                 
 	                </c:if>
-	                </tr>
 	                     
                   </tbody>
                    <tfoot>
@@ -175,7 +188,7 @@ mensaje = mensaje==null?"":mensaje;
       <!-- End of Main Content -->
 
       <!-- Footer -->
-      
+      <jsp:include page="../WEB-INF/layouts/footer.jsp"></jsp:include>
       <!-- End of Footer -->
 
     </div>
@@ -271,7 +284,7 @@ function deleteUser(user)
 	confirm(function(e,btn)
      { 	//event + button clicked
      	e.preventDefault();
-     	window.location.href="../SLguardarUsuario?opc=1&userID="+idUsuario;
+     	window.location.href="./deleteUser?id="+idUsuario;
        	//successAlert('Confirmed!');
      }, 
      function(e,btn)

@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1" import="entidades.Tbl_rolUsuario, datos.DT_rolUsuario, java.util.ArrayList,entidades.Tbl_rol,datos.DT_Rol,entidades.Tbl_usuario,datos.DT_Usuario,entidades.VW_user_rol,entidades.VW_user_opciones,datos.DT_rolOpcion"%>
+    pageEncoding="ISO-8859-1" import="entidades.*, java.util.ArrayList,datos.*"%>
    <!-- 
        AUTOR:  Leonardo Cardoza
        FIN:    29/10/2019

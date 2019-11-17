@@ -1,18 +1,30 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8" import="datos.*,entidades.Tbl_rol,java.util.ArrayList"%>
+    pageEncoding="UTF-8" import="datos.*,entidades.*,org.json.JSONObject"%>
     <%
-    	//Limpia la CACHE del navegador
-            response.setHeader("Pragma", "no-cache");
-            response.setHeader("Cache-Control", "no-store");
-            response.setDateHeader("Expires", 0);
-            response.setDateHeader("Expires", -1);
+    
+    //Limpia la CACHE del navegador
+    response.setHeader("Pragma", "no-cache");
+    response.setHeader("Cache-Control", "no-store");
+    response.setDateHeader("Expires", 0);
+    response.setDateHeader("Expires", -1);
+    
+    
+    DT_user dtu = new DT_user();
+    JSONObject obj = dtu.obtenerUsuarioIngresado(request.getCookies());
+    
+    if(obj.getInt("code") == 200)
+    {
+    	response.sendRedirect(request.getContextPath() + "/");
+    	return;
+    }
+    
     %>
     
     
     <%
     
-    DT_rol dtr = new DT_rol();
-    String[] sessions = dtr.optenerCredenciales();
+    //DT_rol dtr = new DT_rol();
+    //String[] sessions = dtr.optenerCredenciales();
     
     %>
     
@@ -27,7 +39,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>SB Admin 2 - Login</title>
+  <title><%=Server.getAppName() %> - Login</title>
 
   <!-- Custom fonts for this template-->
   <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -49,7 +61,7 @@
  //DT_rol dtrol = new DT_rol();
  
 // Tbl_rol[] listaRoles = dtrol.getRoles(response, ck, ck2);
-Tbl_rol[] listaRoles = new Tbl_rol[10];
+//Tbl_rol[] listaRoles = new Tbl_rol[10];
  
  
  /*if(status != null)
@@ -68,7 +80,14 @@ Tbl_rol[] listaRoles = new Tbl_rol[10];
 <body class="bg-gradient-primary">
 
   <div class="container">
- 
+ <c:if test="${error != null}">
+    <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+	  ${msg}
+	  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+	    <span aria-hidden="true">&times;</span>
+	  </button>
+	</div>
+ </c:if>
 
     <!-- Outer Row -->
     <div class="row justify-content-center">

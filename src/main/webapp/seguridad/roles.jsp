@@ -1,3 +1,4 @@
+<%@page import="org.json.JSONObject"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1" import="entidades.*, datos.*, java.util.ArrayList"%>
     
@@ -6,6 +7,8 @@
        FIN:    29/10/2019
    
  -->
+ 
+ <%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
     
 <!DOCTYPE html>
 <html>
@@ -55,16 +58,27 @@
 		}
 		
 		if(!(access && refresh)) {
-			response.sendRedirect("../login.jsp");
+			response.sendRedirect("../login");
+			return;
 		}
  
 
  DT_rol dtr = new DT_rol();
 
-Tbl_rol[] listaRoles = dtr.getRoles(response, tok, tok2);
+JSONObject obj = dtr.getRoles(request.getCookies());
+Tbl_rol[] listaRoles = null;
+
+if(obj.getInt("status") == 200){
+  listaRoles = (Tbl_rol[]) obj.get("roles");
+	
+}else if(obj.getInt("status") == 401){
+	response.sendRedirect("../login");
+	return;
+}
 
 if(listaRoles == null){
-	response.sendRedirect("../login.jsp");
+	response.sendRedirect("../login");
+	return;
 }
  
  
@@ -99,7 +113,14 @@ if(listaRoles == null){
         <!-- Begin Page Content -->
         <div class="container-fluid">
           
-		  
+		  <c:if test="${error != null}">
+		    <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+			  ${msg}
+			  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+			    <span aria-hidden="true">&times;</span>
+			  </button>
+			</div>
+		 </c:if>
 		  
 		  
 
@@ -109,8 +130,8 @@ if(listaRoles == null){
 
             
             
-            <form role="form" method="POST" class="col-6" action="../nuevoRol">
-              
+            <form role="form" method="POST" id="roleForm" class="col-6" action="../nuevoRol">
+              <h4 id="opcIndicador" class="text-gray-800">Operación actual: creación</h4>
             <input type="hidden" id="idRol" name="idRol" value="">
             <input type="hidden" id="opc" name="opc" value="1">
             

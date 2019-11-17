@@ -8,6 +8,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONObject;
@@ -17,8 +18,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -30,13 +33,38 @@ public class DT_rol {
 	private static RestTemplate restTemplate = new RestTemplate();
 	private String ENDPOINT_URL = "https://django-acacia.herokuapp.com/api/group/";
 	
-	public Tbl_rol[] getRoles(HttpServletResponse response, String ck, String ck2) throws IOException {
+	public JSONObject getRoles(Cookie[] cookies) throws IOException {
+		
+		boolean access = false;
+		boolean refresh = false;
+		String tok  = null;
+		String tok2 = null;
+		
+		
+		for(Cookie c : cookies)
+		{
+			if(c.getName().equals("token-access")) {
+				access = true;
+				tok = c.getValue();
+			}
+			
+			if(c.getName().equals("token-refresh")) {
+				refresh = true;
+				tok2 = c.getValue();
+			}
+		}
+		
+		if(!(access && refresh)) {
+			JSONObject retorno = new JSONObject();
+			retorno.put("status", 0);
+			return retorno;
+		}
 		
 		Tbl_rol[] roles = null;
 		HttpHeaders headers = new HttpHeaders(); // Esto sirve para agregar los headers, con .add() se agregan
 		
-		headers.add("Cookie", "token-access="+ ck);
-		headers.add("Cookie", "token-refresh="+ ck2);
+		headers.add("Cookie", "token-access="+ tok);
+		headers.add("Cookie", "token-refresh="+ tok2);
 		
 		HttpEntity<Tbl_rol[]> respuesta = new HttpEntity<Tbl_rol[]>(headers);
 		// Usar arrays tradicionales para recibir la informacion, no funciona con ArrayList y otros.
@@ -47,33 +75,25 @@ public class DT_rol {
 			
 			
 			if(resul.getStatusCodeValue() == 200) {
-				//String roles = resul.getBody();
+				
 				roles = resul.getBody();
 				
-				for(Tbl_rol r:roles) {
-					System.out.println(r.getId());
-					System.out.println(r.getName());
-				}
 				
-				//System.out.println(roles);
+				JSONObject retorno = new JSONObject();
+				retorno.put("status", resul.getStatusCodeValue());
+				retorno.put("roles", roles);
+				return retorno;
 				
-				return roles;
 			}else if(resul.getStatusCodeValue() == 401) {
 				System.out.println("No tienes acceso we...");
 			}else {
 				System.out.println("Algo salio mal we...");
 			}
 		}catch(HttpClientErrorException e) {
-			//System.out.println("Algo salio mal we... " + e.getMessage());
 			
-			if(e.getMessage().equals("404 Not Found")) {
-				
-				System.out.println("Algo salio mal we...");
-			}else if(e.getMessage().equals("401 Unauthorized")) {
-				System.out.println("No tienes acceso we...");
-				/*response.sendRedirect("http://localhost:8080/login");
-				return;*/
-			}
+			JSONObject retorno = new JSONObject();
+			retorno.put("status", e.getStatusCode().value());
+			return retorno;
 		}
 		
 		
@@ -113,7 +133,7 @@ public class DT_rol {
 		return cks;
 	}
 	
-	public Tbl_rol guardarRol(Tbl_rol rol, Cookie[] cookies){
+	public JSONObject guardarRol(Tbl_rol rol, Cookie[] cookies){
 		
 		boolean access = false;
 		boolean refresh = false;
@@ -126,7 +146,6 @@ public class DT_rol {
 		JSONObject rolJson = new JSONObject(rol);
 		
 		rolJson.remove("id");
-		//rolJson.put("name", rol.getName());
 		String base = rolJson.toString();
 		
 		
@@ -144,7 +163,9 @@ public class DT_rol {
 		}
 		
 		if(!(access && refresh)) {
-			return null;
+			JSONObject retorno = new JSONObject();
+			retorno.put("status", 0);
+			return retorno;
 		}
 		
 		String URL = Server.getHostname() + "group/";
@@ -168,20 +189,133 @@ public class DT_rol {
 		
 		try {
 			ResponseEntity<Tbl_rol> resul = restTemplate.exchange(ENDPOINT_URL, HttpMethod.POST,respuesta, Tbl_rol.class);
-			//String res = restTemplate.postForObject(URL, respuesta, String.class);
+			
 			Tbl_rol check = resul.getBody();
 			
+			JSONObject retorno = new JSONObject();
+			retorno.put("status", resul.getStatusCodeValue());
+			retorno.put("rol", check);
+			return retorno;
+			
+			
+		}catch(HttpClientErrorException e)
+		{
+			JSONObject retorno = new JSONObject();
+			retorno.put("status", e.getStatusCode().value());
+			return retorno;
+		}
+		
+	}
+	
+	
+	public JSONObject eliminarRol(int idRol, Cookie[] cookies) {
+		boolean access = false;
+		boolean refresh = false;
+		String tok  = null;
+		String tok2 = null;
+		
+		for(Cookie c : cookies)
+		{
+			if(c.getName().equals("token-access")) {
+				access = true;
+				tok = c.getValue();
+			}
+			
+			if(c.getName().equals("token-refresh")) {
+				refresh = true;
+				tok2 = c.getValue();
+			}
+		}
+		
+		if(!(access && refresh)) {
+			return null;
+		}
+		
+		String URL = Server.getHostname() + "group/" + idRol + "/";
+		Tbl_rol rol = new Tbl_rol();
+		
+        HttpHeaders headers = new HttpHeaders(); 
+		
+		headers.add("Cookie", "token-access="+ tok);
+		headers.add("Cookie", "token-refresh="+ tok2);
+		
+		HttpEntity<String> req = new HttpEntity<String>(headers);
+		
+		try {
+			ResponseEntity<String> resul = restTemplate.exchange(URL, HttpMethod.DELETE,req, String.class);
+			
+			String check = "eliminado";
 			
 			//System.out.println("Status: " + resul.getStatusCodeValue());
 			//return check;
-			
-			return check;
+		    JSONObject retorno = new JSONObject();
+		    retorno.put("objecto", rol);
+		    retorno.put("code", resul.getStatusCodeValue());
+			return retorno;
 		}catch(Exception e)
 		{
 			System.err.println(e.getMessage());
 			e.printStackTrace();
 			return null;
 		}
-		
 	}
+	
+	public JSONObject actualizarRol(Tbl_rol rol, Cookie[] cookies) {
+		boolean access = false;
+		boolean refresh = false;
+		String tok  = null;
+		String tok2 = null;
+		
+		for(Cookie c : cookies)
+		{
+			if(c.getName().equals("token-access")) {
+				access = true;
+				tok = c.getValue();
+			}
+			
+			if(c.getName().equals("token-refresh")) {
+				refresh = true;
+				tok2 = c.getValue();
+			}
+		}
+		
+		if(!(access && refresh)) {
+			
+			JSONObject retorno = new JSONObject();
+			retorno.put("status", 0);
+			return retorno;
+		}
+		
+		String URL = Server.getHostname() + "group/" + rol.getId() + "/";
+		
+		JSONObject datos = new JSONObject(rol);
+		datos.remove("id");
+		datos.remove("permissions");
+		
+        HttpHeaders headers = new HttpHeaders(); 
+		
+		headers.add("Cookie", "token-access="+ tok);
+		headers.add("Cookie", "token-refresh="+ tok2);
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		
+		HttpEntity<String> req = new HttpEntity<String>(datos.toString(),headers);
+		
+		try {
+			ResponseEntity<String> resul = restTemplate.exchange(URL, HttpMethod.PUT,req, String.class);
+			
+			String check = "eliminado";
+			
+			
+		    JSONObject retorno = new JSONObject();
+		    retorno.put("objecto", rol);
+		    retorno.put("code", resul.getStatusCodeValue());
+			return retorno;
+		}catch(Exception e)
+		{
+			System.err.println(e.getMessage());
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 }

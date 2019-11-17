@@ -8,6 +8,8 @@ $("a.editRole").click(function(){
     $("#opc").val("2");
     $("#rolName").val(rol_name);
     $("#rolDesc").val(rol_desc);
+    $("#opcIndicador").text("Operaci\u00F3n actual: actualizar");
+    $("#roleForm").attr("action", "../actualizarRol");
 });
 
 $("a.deleteRole").click(function(){
@@ -15,7 +17,7 @@ $("a.deleteRole").click(function(){
     idRol = $(this).attr("id");
     confirm(function()
     { 	
-        window.location.replace(`../SL_roles?delete=${idRol}`);
+        window.location.replace(`../deleteRol?id=${idRol}`);
     }, 
     function(e,btn)
     {

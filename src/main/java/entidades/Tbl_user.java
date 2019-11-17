@@ -9,6 +9,7 @@ public class Tbl_user {
     private String username;
     private String first_name;
     private String last_name;
+    private String password;
     private String email;
     private boolean is_staff;
     private boolean is_active;
@@ -92,6 +93,12 @@ public class Tbl_user {
 	}
 	public void setGroups(int[] groups) {
 		this.groups = groups;
+	}
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
 	}
     
     

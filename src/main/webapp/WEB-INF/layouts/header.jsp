@@ -1,5 +1,7 @@
 
-
+        <%@ page import="entidades.*"%>
+        
+        <%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
         <!-- Topbar -->
         <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
@@ -149,11 +151,17 @@
             </li>
 
             <div class="topbar-divider d-none d-sm-block"></div>
-
+            <%Tbl_user user = (Tbl_user) request.getSession().getAttribute("user"); %>
             <!-- Nav Item - User Information -->
             <li class="nav-item dropdown no-arrow">
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><%="Leonardo" + " " +"Car"%></span>
+                <span class="mr-2 d-none d-lg-inline text-gray-600 small">
+                <%if(user != null){ %>
+                   <%=user.getUsername()%>
+                <%} else{%>
+                  <%="Anónimo" %>
+                <%} %>
+                </span>
                 <img class="img-profile rounded-circle" src="https://source.unsplash.com/QAB-WJcbgJk/60x60">
               </a>
               <!-- Dropdown - User Information -->
@@ -171,9 +179,9 @@
                   Activity Log
                 </a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="<%=request.getContextPath()%>/SL_login?logout=1">
+                <a class="dropdown-item" href="<%=request.getContextPath()%>/exit">
                   <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                  Logout
+                  Cerrar Sesión
                 </a>
               </div>
             </li>

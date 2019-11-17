@@ -1,6 +1,6 @@
 package entidades;
 
-import java.util.ArrayList;
+
 
 public class Tbl_rol {
 	private int id;
