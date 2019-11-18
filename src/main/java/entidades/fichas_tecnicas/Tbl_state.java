@@ -1,0 +1,19 @@
+package entidades.fichas_tecnicas;
+
+public class Tbl_state {
+	private String name;
+	private Tbl_country country;
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public Tbl_country getCountry() {
+		return country;
+	}
+	public void setCountry(Tbl_country country) {
+		this.country = country;
+	}
+	
+}
