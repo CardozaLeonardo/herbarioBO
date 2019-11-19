@@ -208,6 +208,8 @@ public class DT_rol {
 	}
 	
 	
+	
+	
 	public JSONObject eliminarRol(int idRol, Cookie[] cookies) {
 		boolean access = false;
 		boolean refresh = false;
@@ -303,18 +305,18 @@ public class DT_rol {
 		try {
 			ResponseEntity<String> resul = restTemplate.exchange(URL, HttpMethod.PUT,req, String.class);
 			
-			String check = "eliminado";
+			String check = "actualizado";
 			
 			
 		    JSONObject retorno = new JSONObject();
 		    retorno.put("objecto", rol);
-		    retorno.put("code", resul.getStatusCodeValue());
+		    retorno.put("status", resul.getStatusCodeValue());
 			return retorno;
-		}catch(Exception e)
+		}catch(HttpClientErrorException e)
 		{
-			System.err.println(e.getMessage());
-			e.printStackTrace();
-			return null;
+			JSONObject retorno = new JSONObject();
+		    retorno.put("status", e.getStatusCode().value());
+			return retorno;
 		}
 	}
 	

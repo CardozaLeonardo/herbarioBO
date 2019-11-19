@@ -1,3 +1,4 @@
+<%@page import="org.json.JSONObject"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1" import="entidades.*, java.util.ArrayList,datos.*"%>
    <!-- 
@@ -28,50 +29,48 @@
 
 </head>
 <%
-	//VALIDACIÓN DE LA EXISTENCIA DE LA SESIÓN
-		String loginUser="";
-		loginUser = (String)session.getAttribute("login");
-		//VALIDA QUE LA VARIABLE loginUser NO SEA NULL
-		loginUser = loginUser==null?"":loginUser;
-		if(loginUser.equals(""))
-		{
-	response.sendRedirect("../login.jsp?status=2");
-	return;
-		} 
+	
 		
 		
  // VALIDAR ACCESO
- ArrayList<VW_user_opciones> opciones = (ArrayList<VW_user_opciones>) session.getAttribute("opciones");
- boolean acceso = false;
  
- for(VW_user_opciones vu: opciones) {
-	 if(vu.getOpcion().equals("./seguridad/rolesUsuarios.jsp")) {
-		 acceso = true;
-	 }
- }
  
- if(!acceso){
-	 response.sendRedirect("../accesoDenegado.jsp");
- }
  
  ///////////
  
 
 
- DT_rolUsuario tru = new DT_rolUsuario();
- ArrayList<VW_user_rol> rolesUser = null;
+ /*DT_rolUsuario tru = new DT_rolUsuario();
+ ArrayList<VW_user_rol> rolesUser = null;*/
  
- DT_Rol dtr = new DT_Rol();
- ArrayList<Tbl_rol> listaRoles = dtr.listarRoles();
+ DT_rol dtr = new DT_rol();
+ JSONObject objRoles = dtr.getRoles(request.getCookies());
  
- DT_Usuario dtus = new DT_Usuario();
- ArrayList<Tbl_usuario> usuarios = dtus.listarUsuarios();
+ if(objRoles.getInt("status") == 401 || objRoles.getInt("status") == 0){
+	 response.sendRedirect("../login");
+	 return;
+ }
  
- DT_rolOpcion dro = new DT_rolOpcion();
- ArrayList<VW_user_opciones> vus = null;
+ Tbl_rol[] listaRoles = (Tbl_rol[]) objRoles.get("roles");
+
  
  
- Tbl_usuario usr = null;
+ DT_user dtus = new DT_user();
+ 
+ JSONObject objUser = dtus.getActiveUsers(request.getCookies());
+ 
+ if(objUser.getInt("status") == 401 || objUser.getInt("status") == 0){
+	 response.sendRedirect("../login");
+	 return;
+ }
+ 
+ ArrayList<Tbl_user> usuarios = (ArrayList<Tbl_user>) objUser.get("users");
+ 
+ /*DT_rolOpcion dro = new DT_rolOpcion();
+ ArrayList<VW_user_opciones> vus = null;*/
+ 
+ 
+ Tbl_user usr = null;
  
  boolean withUser = false;
  String nameInput = "";
@@ -84,21 +83,27 @@
  {
 	 try{
 	     int idUser = Integer.parseInt(request.getParameter("user"));
-		 rolesUser = tru.listarRolUsuario(idUser);
-		 usr = dtus.obtenerUser(idUser);
+		 //rolesUser = tru.listarRolUsuario(idUser);
+		 JSONObject us = dtus.obtenerUser(idUser, request.getCookies());
+		 
+		 if(us.getInt("status") == 200)
+		 {
+			 usr = (Tbl_user) us.get("user");
+		 }
+		 //usr = dtus.obtenerUser(idUser);
 		 if(usr == null){
-	 response.sendRedirect("rolesUsuarios.jsp?error=1");
+	 response.sendRedirect("rolesUsuarios?error=1");
 	 return;
 	 //System.out.println("Adios");
 		 }
 		 
-		 nameInput = usr.getUsername() + " - " + usr.getNombre1() + " " + usr.getApellido1();
-		 id_user += usr.getId_user();
-		 vus = dro.listarOpcionesUsuario(idUser);
-		 withUser = true;
+		 nameInput = usr.getUsername() + " - " + usr.getFirst_name() + " " + usr.getLast_name();
+		 id_user += usr.getId();
+		 /*vus = dro.listarOpcionesUsuario(idUser);
+		 withUser = true;*/
 	 
 	 }catch(NumberFormatException e){
-		 response.sendRedirect("rolesUsuarios.jsp?error=2");
+		 response.sendRedirect("rolesUsuarios?error=2");
 		 return;
 	 }
  }
@@ -189,7 +194,7 @@
 		     <%
 		     	for(Tbl_rol rol: listaRoles){
 		     %>
-		      <option value="<%=rol.getId_rol()%>"><%=rol.getRol_name()%></option>
+		      <option value="<%=rol.getId()%>"><%=rol.getName()%></option>
 		      <%
 		      	}
 		      %>
@@ -209,11 +214,13 @@
 		   <select name="currentRoles" id="currentRoles" class="form-control">
 		      <option value="" selected>Elegir</option>
 		      <%
-		      	for(VW_user_rol r: rolesUser) {
+		      	if(1 == 0){
+		        //for(VW_user_rol r: rolesUser) {
 		      %>
-		      <option class="cr-<%=r.getId_rol()%>" value="<%=r.getId_user_rol()%>"><%=r.getRol_name()%></option>
+		      <option class="cr-" value=""></option>
 		      <%
-		      	}
+		      	//}
+		        }
 		      %>
 		   </select>
 		   </div>
@@ -249,10 +256,12 @@
 				      <div class="modal-body">
 				        <ol>
 				         <%
-				         	for(VW_user_opciones up: vus) {
+				            if(1 == 0){
+				         	//for(VW_user_opciones up: vus) {
 				         %>
-				         <li><%=up.getOpcion()%></li>
+				         <li></li>
 				         <%
+				         	//}
 				         	}
 				         %>
 				        </ol>
@@ -295,16 +304,16 @@
                   </tfoot>
                   <tbody>
                     <%
-                    	for(Tbl_usuario user: usuarios) {
+                    	for(Tbl_user user: usuarios) {
                     %>
                     <tr>
-                      <td><%=user.getId_user() %></td>
-                      <td><%=user.getNombre1() %></td>
-                      <td><%=user.getApellido1() %></td>
+                      <td><%=user.getId() %></td>
                       <td><%=user.getUsername() %></td>
+                      <td><%=user.getFirst_name() %></td>
+                      <td><%=user.getLast_name() %></td>
                       <td><%=user.getEmail() %></td>
                       <td>
-                       <a role="button" href="./rolesUsuarios.jsp?user=<%=user.getId_user()%>" id="selectUserBTN" 
+                       <a role="button" href="./rolesUsuarios?user=<%=user.getId()%>" id="selectUserBTN" 
                        class="btn btn-primary">Aceptar</a>
                       </td>
                     </tr>

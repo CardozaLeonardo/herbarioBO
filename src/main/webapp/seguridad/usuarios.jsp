@@ -77,10 +77,6 @@ mensaje = mensaje==null?"":mensaje;
     <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
 
-		
-
-     
-
         <!-- Topbar -->
         <jsp:include page="../WEB-INF/layouts/header.jsp"></jsp:include>
         <!-- End of Topbar -->

@@ -65,8 +65,6 @@ public class UserController {
         user.setDate_joined("2012-09-04 06:00:00.000000-08:00");
         user.setName(name);
         
-      
-        
         
         DT_user dtu= new DT_user();
         
@@ -121,12 +119,13 @@ public class UserController {
 			String [] parts2 = cookies[1].split("=");
 			Cookie ck = new Cookie(parts[0],parts[1]);
 			Cookie ck2 = new Cookie(parts2[0],parts2[1]);
-			ck.setMaxAge(300);
-			ck2.setMaxAge(300);
+			ck.setMaxAge(1800);
+			ck2.setMaxAge(1800);
 			res.addCookie(ck);
 			res.addCookie(ck2);
 			
-			 JSONObject obj = dtu.obtenerUsuarioIngresado(req.getCookies());
+			 Cookie [] cks = new Cookie[]{ck, ck2};
+			 JSONObject obj = dtu.obtenerUsuarioIngresado(cks);
 			 if(obj.getInt("code") == 200)
 			 {
 				 HttpSession hts = req.getSession(true);

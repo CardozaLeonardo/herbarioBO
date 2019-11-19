@@ -12,18 +12,20 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import entidades.MeResponse;
 import entidades.Tbl_user;
-import entidades.User;
 
 public class DT_user {
 	
 	private static RestTemplate restTemplate = new RestTemplate();
-	private String ENDPOINT_URL = "http://localhost:3000/usuarios";
+	//private String ENDPOINT_URL = "http://localhost:3000/usuarios";
 	//geeksforgeeks.org/md5-hash-in-java
+	
+	
 	
 	public Tbl_user[] getUsers(String token, String tokenRefresh) {
 		
@@ -47,6 +49,67 @@ public class DT_user {
 		}
 		
 	}
+	
+	public JSONObject getActiveUsers(Cookie[] cookies) {
+		
+		String URL = Server.getHostname() + "user/";
+		
+		boolean access = false;
+		boolean refresh = false;
+		String tok  = null;
+		String tok2 = null;
+		
+		for(Cookie c : cookies)
+		{
+			if(c.getName().equals("token-access")) {
+				access = true;
+				tok = c.getValue();
+			}
+			
+			if(c.getName().equals("token-refresh")) {
+				refresh = true;
+				tok2 = c.getValue();
+			}
+		}
+		
+		if(!(access && refresh)) {
+			JSONObject retorno = new JSONObject();
+			retorno.put("status", 0);
+			return retorno;
+		}
+		
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Cookie", "token-access="+ tok);
+		headers.add("Cookie", "token-refresh="+ tok2);
+		
+		HttpEntity<Tbl_user[]> ent = new HttpEntity<Tbl_user[]>(headers);
+		
+		try {
+			
+			ResponseEntity<Tbl_user[]> result = restTemplate.exchange(URL, HttpMethod.GET, ent, Tbl_user[].class);
+			
+			Tbl_user[] usuarios = result.getBody();
+			ArrayList<Tbl_user> usuariosActivos = new ArrayList<Tbl_user>();
+			
+			for(Tbl_user us: usuarios) {
+				if(us.isIs_active()) {
+					usuariosActivos.add(us);
+				}
+			}
+			
+			JSONObject retorno = new JSONObject();
+			retorno.put("status", result.getStatusCodeValue());
+			retorno.put("users", usuariosActivos);
+			return retorno;
+		}catch(HttpClientErrorException e) {
+			JSONObject retorno = new JSONObject();
+			retorno.put("status", e.getStatusCode().value());
+			return retorno;
+		}
+		
+	}
+	
+	
 	
 	public JSONObject comprobarLogin(String username, String password) {
 		
@@ -334,6 +397,7 @@ public JSONObject updateUser(Tbl_user usr, Cookie[] cookies) {
 		return retorno;
 	}
 }
+
 
 public JSONObject deleteUser(Tbl_user usr, Cookie[] cookies) {
 	String URL = Server.getHostname() + "user/" + usr.getId() +"/";
