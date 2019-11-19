@@ -17,6 +17,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import entidades.MeResponse;
+import entidades.Tbl_profile;
 import entidades.Tbl_user;
 
 public class DT_user {
@@ -204,8 +205,8 @@ public class DT_user {
 			System.err.println(e.getStatusText());
 			JSONObject retorno = new JSONObject();
 			retorno.put("code", e.getStatusCode().value());
-			retorno.put("user", user);
-			return null;
+			//retorno.put("user", user);
+			return retorno;
 		}
 		
 	}
@@ -223,12 +224,13 @@ public JSONObject guardarUser(Tbl_user user, Cookie[] cookies){
         
         
         JSONObject userJson = new JSONObject(user);
-        Tbl_user tb = null;
+        Tbl_profile tb = null;
         
         userJson.remove("id");
         userJson.remove("profile");
         userJson.put("profile", tb);
         userJson.put("user_permissions", new int[0]);
+        
         
         //rolJson.put("name", rol.getName());
         String base = userJson.toString();
@@ -255,7 +257,7 @@ public JSONObject guardarUser(Tbl_user user, Cookie[] cookies){
         
         HttpHeaders headers = new HttpHeaders(); 
         
-        
+        System.out.println(userJson.toString());
         
         headers.add("Cookie", "token-access="+ tok);
         headers.add("Cookie", "token-refresh="+ tok2);

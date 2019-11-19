@@ -150,7 +150,7 @@ mensaje = mensaje==null?"":mensaje;
 	                  	  
 	                  	  <c:when test="${usr.is_active == false}">
 	                  	      
-	                  	      <a href="" onclick="deleteUser('${usr.id}');"><i class="far fa-trash-alt" title="Eliminar"></i> </a>
+	                  	      <!--  <a href="" onclick="deleteUser('${usr.id}');"><i class="far fa-trash-alt" title="Eliminar"></i> </a> -->
 	                  	      
 	                  	  </c:when>
 	                  	</c:choose>

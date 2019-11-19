@@ -1,3 +1,4 @@
+<%@page import="com.fasterxml.jackson.databind.ObjectMapper"%>
 <%@page import="org.json.JSONObject"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1" import="entidades.*, java.util.ArrayList,datos.*"%>
@@ -64,7 +65,12 @@
 	 return;
  }
  
- ArrayList<Tbl_user> usuarios = (ArrayList<Tbl_user>) objUser.get("users");
+ System.out.println(objUser.get("users"));
+ 
+ ObjectMapper mapper = new ObjectMapper();
+ 
+ 
+ Tbl_user[] usuarios = mapper.readValue(objUser.get("users").toString(), Tbl_user[].class);
  
  /*DT_rolOpcion dro = new DT_rolOpcion();
  ArrayList<VW_user_opciones> vus = null;*/

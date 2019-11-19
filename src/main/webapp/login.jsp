@@ -15,6 +15,7 @@
     if(obj.getInt("code") == 200)
     {
     	response.sendRedirect(request.getContextPath() + "/");
+    	
     	return;
     }
     
@@ -98,7 +99,7 @@
           <div class="card-body p-0">
             <!-- Nested Row within Card Body -->
             <div class="row">
-              <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
+              <div class="col-lg-6 d-none d-lg-block bg-login-image" style="background: url(img/Logo.png); backgroung-position: center; background-size:cover;"></div>
               <div class="col-lg-6">
                 <div class="p-5">
                   <div class="text-center">
@@ -112,17 +113,7 @@
                     <div class="form-group">
                       <input type="password" class="form-control form-control-user" id="exampleInputPassword" placeholder="Password" name="password">
                     </div>
-                    <div class="form-group">
-                      <label for="selectRol">Ingresar como:</label>
-                      <select id="selectRol" name="selectRol" class="form-control">
-                      <option selected value="">Seleccionar...</option>
-                      <c:if test="${listaRoles != null}">
-                          <c:forEach items="${listaRoles}" var="rol">
-                            <option value="${rol.id}">${rol.name}</option>
-                          </c:forEach>
-                      </c:if>
-                      </select>
-                    </div>
+                    
                     <input type="submit" class="btn btn-primary btn-user btn-block" value="Login" /> 
                     <hr>
                   </form>

@@ -48,7 +48,7 @@ public class UserController {
         String email = request.getParameter("email");
         //String date_joined = "2019-11-15";
         boolean is_staff = true;
-        boolean is_active = false;
+        boolean is_active = true;
         String name = null;
         
         Tbl_user user = new Tbl_user();
@@ -62,8 +62,9 @@ public class UserController {
         user.setEmail(email);
         user.setIs_staff(is_staff);
         user.setIs_active(is_active);
-        user.setDate_joined("2012-09-04 06:00:00.000000-08:00");
+        user.setDate_joined(null);
         user.setName(name);
+        user.setGroups(new int[0]);
         
         
         DT_user dtu= new DT_user();
