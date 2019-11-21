@@ -52,4 +52,13 @@ public class EspecimenController {
 		
 		return "/fichas/newFungus.jsp";
 	}
+	
+	@GetMapping("/fichas/especimenPlanta")
+	public String especimenPlanta(HttpServletRequest req, HttpServletResponse res,Model model) {
+		return "/fichas/PlantList.jsp";
+	}
+	
+	
+	
+	
 }
