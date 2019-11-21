@@ -13,7 +13,10 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import datos.DT_rol;
+import entidades.Tbl_opcion;
 import entidades.Tbl_rol;
 import negocio.NG_rol;
 import util.Util;
@@ -173,4 +176,56 @@ public class RolController {
 		
 		return rv;
 	}
+	
+	
+	@PostMapping("/asignarOpcion")
+	public RedirectView asignarOpcion(HttpServletRequest req, HttpServletResponse res, RedirectAttributes redir) throws IOException {
+		String rolId = req.getParameter("idRol");
+		String opcId = req.getParameter("listaOpciones");
+		String permisos = req.getParameter("permisos");
+		
+		Tbl_rol role = new Tbl_rol();
+		DT_rol dtr = new DT_rol();
+		 
+		
+		try
+		{
+			int rol = Integer.parseInt(rolId);
+			int opc = Integer.parseInt(opcId);
+			ObjectMapper om = new ObjectMapper();
+			
+			int[]perAct = om.readValue(permisos, int[].class);
+			
+			int[] act = new int[perAct.length + 1];
+			int index = 0;
+			for(int i : perAct) {
+				act[index] = i;
+				index++;
+			}
+			act[perAct.length] = opc;
+			
+			role.setId(rol);
+			role.setName(req.getParameter("rolName"));
+			role.setPermissions(act);
+			
+			JSONObject obj = dtr.asignarOpc(role, req.getCookies());
+			
+			if(obj.getInt("status") == 200) {
+				res.sendRedirect(req.getContextPath() +"/seguridad/rolesOpciones?rol=" + rol+"&saved=1");
+			}
+			
+			
+		}catch(Exception e) {
+			System.err.println("Error en sevlet SL_asignarOpciones: ");
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
+	
+	@GetMapping("/removerOpcion")
+	public RedirectView removerRol(HttpServletRequest req, HttpServletResponse res, RedirectAttributes redir) {
+		
+	}
+	
 }

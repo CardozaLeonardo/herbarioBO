@@ -313,4 +313,51 @@ public class DT_rol {
 		}
 	}
 	
+	
+	
+	public JSONObject asignarOpc(Tbl_rol rol, Cookie[] cookies) {
+        String[] tokens = Util.extractTokens(cookies);
+		
+		if(tokens == null) {
+			
+			JSONObject retorno = new JSONObject();
+			retorno.put("status", 0);
+			return retorno;
+		}
+		
+		String URL = Server.getHostname() + "group/" + rol.getId() + "/";
+		
+		JSONObject datos = new JSONObject(rol);
+		datos.remove("id");
+		//datos.remove("permissions");
+		
+	    System.out.println(datos.toString());
+		
+        HttpHeaders headers = new HttpHeaders(); 
+		
+		headers.add("Cookie", "token-access="+ tokens[0]);
+		headers.add("Cookie", "token-refresh="+ tokens[1]);
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		
+		HttpEntity<String> req = new HttpEntity<String>(datos.toString(),headers);
+		
+		try {
+			ResponseEntity<String> resul = restTemplate.exchange(URL, HttpMethod.PUT,req, String.class);
+			
+			String check = "actualizado";
+			
+			
+		    JSONObject retorno = new JSONObject();
+		    retorno.put("objecto", rol);
+		    retorno.put("status", resul.getStatusCodeValue());
+		    retorno.put("cookies", Util.parseCookie(resul.getHeaders().get("Set-Cookie")));
+			return retorno;
+		}catch(HttpClientErrorException e)
+		{
+			JSONObject retorno = new JSONObject();
+		    retorno.put("status", e.getStatusCode().value());
+			return retorno;
+		}
+	}
+	
 }

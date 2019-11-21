@@ -70,6 +70,7 @@ Tbl_opcion[] permisos = (Tbl_opcion[]) opc.get("permissions");
  boolean withRole = false;
  String rolInput = "";
  String id_rol ="";
+ String rolName = "";
  String errorMsg = "";
  boolean error = false; // Para indicar cualquier error a notificar
  
@@ -99,6 +100,7 @@ Tbl_opcion[] permisos = (Tbl_opcion[]) opc.get("permissions");
 		 
 		 rolInput = role.getName();
 		 id_rol += role.getId();
+		 rolName = role.getName();
 		 withRole = true;
 	 
 	 }catch(NumberFormatException e){
@@ -183,9 +185,10 @@ Tbl_opcion[] permisos = (Tbl_opcion[]) opc.get("permissions");
             <h3>Seleccione un registro de la tabla antes de empezar</h3>
             <%} %>
             
-            <form role="form" method="POST" class="col-6" action="../SL_asignarOpciones">
+            <form role="form" method="POST" class="col-6" action="../asignarOpcion">
               
             <input type="hidden" id="idRol" name="idRol" value="<%=id_rol%>">
+            <input type="hidden" id="rolName" name="rolName" value="<%=rolName%>">
             <input type="hidden" id="permisos" name="permisos" value="<%=str%>">
             <div class="form-group">
 		    <label for="listaOpciones">Opciones: </label>
@@ -219,7 +222,7 @@ Tbl_opcion[] permisos = (Tbl_opcion[]) opc.get("permissions");
 		          for(Tbl_opcion op : permisos){
 		        	if(r == op.getId()){
 		      %>
-		         <option class="cr-" value="<%=op.getId()%>"><%=op.getName()%></option>
+		         <option class="cr-<%=op.getId()%>" value="<%=op.getId()%>"><%=op.getName()%></option>
 		      <%
 		        	}
 		        	}

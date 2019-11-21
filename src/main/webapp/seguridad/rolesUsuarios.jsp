@@ -227,7 +227,7 @@
 		          for(Tbl_rol rl : listaRoles){
 		        	if(r == rl.getId()){
 		      %>
-		         <option class="cr-" value="<%=rl.getId()%>"><%=rl.getName()%></option>
+		         <option class="cr-<%=rl.getId()%>" value="<%=rl.getId()%>"><%=rl.getName()%></option>
 		      <%
 		        	}
 		        	}
