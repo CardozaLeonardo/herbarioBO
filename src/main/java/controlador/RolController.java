@@ -223,9 +223,9 @@ public class RolController {
 		return null;
 	}
 	
-	@GetMapping("/removerOpcion")
-	public RedirectView removerRol(HttpServletRequest req, HttpServletResponse res, RedirectAttributes redir) {
+	//@GetMapping("/removerOpcion")
+	/*public RedirectView removerRol(HttpServletRequest req, HttpServletResponse res, RedirectAttributes redir) {
 		
-	}
+	}*/
 	
 }
