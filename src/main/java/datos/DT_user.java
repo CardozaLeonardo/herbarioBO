@@ -1,6 +1,7 @@
 package datos;
 
 import java.util.ArrayList;
+
 import java.util.List;
 
 import javax.servlet.http.Cookie;
@@ -19,6 +20,7 @@ import org.springframework.web.client.RestTemplate;
 import entidades.MeResponse;
 import entidades.Tbl_profile;
 import entidades.Tbl_user;
+import util.Util;
 
 public class DT_user {
 	
@@ -55,33 +57,18 @@ public class DT_user {
 		
 		String URL = Server.getHostname() + "user/";
 		
-		boolean access = false;
-		boolean refresh = false;
-		String tok  = null;
-		String tok2 = null;
+		String[] tokens = Util.extractTokens(cookies);
 		
-		for(Cookie c : cookies)
-		{
-			if(c.getName().equals("token-access")) {
-				access = true;
-				tok = c.getValue();
-			}
+		if(tokens == null) {
 			
-			if(c.getName().equals("token-refresh")) {
-				refresh = true;
-				tok2 = c.getValue();
-			}
-		}
-		
-		if(!(access && refresh)) {
 			JSONObject retorno = new JSONObject();
 			retorno.put("status", 0);
 			return retorno;
 		}
 		
 		HttpHeaders headers = new HttpHeaders();
-		headers.add("Cookie", "token-access="+ tok);
-		headers.add("Cookie", "token-refresh="+ tok2);
+		headers.add("Cookie", "token-access="+ tokens[0]);
+		headers.add("Cookie", "token-refresh="+ tokens[1]);
 		
 		HttpEntity<Tbl_user[]> ent = new HttpEntity<Tbl_user[]>(headers);
 		
@@ -159,35 +146,19 @@ public class DT_user {
 		String URL = Server.getHostname() + "me/";
 		Tbl_user user = null;
 		
-		boolean access = false;
-		boolean refresh = false;
-		String tok  = null;
-		String tok2 = null;
+		String[] tokens = Util.extractTokens(cookies);
 		
-		for(Cookie c : cookies)
-		{
-			if(c.getName().equals("token-access")) {
-				access = true;
-				tok = c.getValue();
-			}
+		if(tokens == null) {
 			
-			if(c.getName().equals("token-refresh")) {
-				refresh = true;
-				tok2 = c.getValue();
-			}
-		}
-		
-		if(!(access && refresh)) {
 			JSONObject retorno = new JSONObject();
 			retorno.put("code", 0);
-			retorno.put("user", user);
 			return retorno;
 		}
 		
         HttpHeaders headers = new HttpHeaders(); 
 		
-		headers.add("Cookie", "token-access="+ tok);
-		headers.add("Cookie", "token-refresh="+ tok2);
+		headers.add("Cookie", "token-access="+ tokens[0]);
+		headers.add("Cookie", "token-refresh="+ tokens[1]);
 		
 		HttpEntity<String> req = new HttpEntity<String>(headers);
 		
@@ -195,10 +166,13 @@ public class DT_user {
 			
 			ResponseEntity<MeResponse> response = restTemplate.exchange(URL, HttpMethod.GET, req, MeResponse.class);
 			MeResponse me = response.getBody();
+			
 			JSONObject retorno = new JSONObject();
 			retorno.put("code", response.getStatusCodeValue());
 			retorno.put("user", me.getData());
+			retorno.put("cookies", Util.parseCookie(response.getHeaders().get("Set-Cookie")));
 			return retorno;
+			
 		}catch(HttpClientErrorException e)
 		{
 			
@@ -213,15 +187,14 @@ public class DT_user {
 	
 public JSONObject guardarUser(Tbl_user user, Cookie[] cookies){
         
-    
-        
-        boolean access = false;
-        boolean refresh = false;
-        String tok  = null;
-        String tok2 = null;
-        
-        
-        
+    String[] tokens = Util.extractTokens(cookies);
+	
+	if(tokens == null) {
+		
+		JSONObject retorno = new JSONObject();
+		retorno.put("status", 0);
+		return retorno;
+	}
         
         JSONObject userJson = new JSONObject(user);
         Tbl_profile tb = null;
@@ -236,22 +209,6 @@ public JSONObject guardarUser(Tbl_user user, Cookie[] cookies){
         String base = userJson.toString();
         
         
-        for(Cookie c : cookies)
-        {
-            if(c.getName().equals("token-access")) {
-                access = true;
-                tok = c.getValue();
-            }
-            
-            if(c.getName().equals("token-refresh")) {
-                refresh = true;
-                tok2 = c.getValue();
-            }
-        }
-        
-        if(!(access && refresh)) {
-            return null;
-        }
         
         String URL = Server.getHostname() + "user/";
         
@@ -259,8 +216,8 @@ public JSONObject guardarUser(Tbl_user user, Cookie[] cookies){
         
         System.out.println(userJson.toString());
         
-        headers.add("Cookie", "token-access="+ tok);
-        headers.add("Cookie", "token-refresh="+ tok2);
+        headers.add("Cookie", "token-access="+ tokens[0]);
+        headers.add("Cookie", "token-refresh="+ tokens[1]);
         headers.setContentType(MediaType.APPLICATION_JSON);
         
         HttpEntity<String> resp = new HttpEntity<String>(userJson.toString(), headers);
@@ -269,18 +226,15 @@ public JSONObject guardarUser(Tbl_user user, Cookie[] cookies){
         
         try {
             ResponseEntity<Tbl_user> resul = restTemplate.exchange(URL, HttpMethod.POST,resp, Tbl_user.class);
-            //String res = restTemplate.postForObject(URL, respuesta, String.class);
+            
             Tbl_user check = resul.getBody();
-            
-            
-            //System.out.println("Status: " + resul.getStatusCodeValue());
-            //return check;
             
             
             
             JSONObject retorno = new JSONObject();
             retorno.put("status", resul.getStatusCodeValue());
             retorno.put("user",check);
+            retorno.put("cookies", Util.parseCookie(resul.getHeaders().get("Set-Cookie")));
             return retorno;
         }catch(HttpClientErrorException e)
         {
@@ -294,34 +248,19 @@ public JSONObject guardarUser(Tbl_user user, Cookie[] cookies){
 public JSONObject obtenerUser(int idUser, Cookie[] cookies) {
 	String URL = Server.getHostname() + "user/" + idUser + "/";
 	
-	boolean access = false;
-	boolean refresh = false;
-	String tok  = null;
-	String tok2 = null;
+    String[] tokens = Util.extractTokens(cookies);
 	
-	for(Cookie c : cookies)
-	{
-		if(c.getName().equals("token-access")) {
-			access = true;
-			tok = c.getValue();
-		}
+	if(tokens == null) {
 		
-		if(c.getName().equals("token-refresh")) {
-			refresh = true;
-			tok2 = c.getValue();
-		}
-	}
-	
-	if(!(access && refresh)) {
 		JSONObject retorno = new JSONObject();
-		retorno.put("code", 0);
+		retorno.put("status", 0);
 		return retorno;
 	}
 	
     HttpHeaders headers = new HttpHeaders(); 
 	
-	headers.add("Cookie", "token-access="+ tok);
-	headers.add("Cookie", "token-refresh="+ tok2);
+	headers.add("Cookie", "token-access="+ tokens[0]);
+	headers.add("Cookie", "token-refresh="+ tokens[1]);
 	
 	HttpEntity<String> req = new HttpEntity<String>(headers);
 	
@@ -332,7 +271,9 @@ public JSONObject obtenerUser(int idUser, Cookie[] cookies) {
 		JSONObject retorno = new JSONObject();
 		retorno.put("status", response.getStatusCodeValue());
 		retorno.put("user", usr);
+		retorno.put("cookies", Util.parseCookie(response.getHeaders().get("Set-Cookie")));
 		return retorno;
+		
 	}catch(HttpClientErrorException e) {
 		JSONObject retorno = new JSONObject();
 		retorno.put("status", e.getStatusCode().value());
@@ -343,30 +284,16 @@ public JSONObject obtenerUser(int idUser, Cookie[] cookies) {
 
 public JSONObject updateUser(Tbl_user usr, Cookie[] cookies) {
     String URL = Server.getHostname() + "user/" +usr.getId() +"/";
+    
+    String[] tokens = Util.extractTokens(cookies);
 	
-	boolean access = false;
-	boolean refresh = false;
-	String tok  = null;
-	String tok2 = null;
-	
-	for(Cookie c : cookies)
-	{
-		if(c.getName().equals("token-access")) {
-			access = true;
-			tok = c.getValue();
-		}
+	if(tokens == null) {
 		
-		if(c.getName().equals("token-refresh")) {
-			refresh = true;
-			tok2 = c.getValue();
-		}
-	}
-	
-	if(!(access && refresh)) {
 		JSONObject retorno = new JSONObject();
-		retorno.put("code", 0);
+		retorno.put("status", 0);
 		return retorno;
 	}
+	
 	
 	JSONObject datos = new JSONObject(usr);
 	datos.remove("groups");
@@ -379,8 +306,8 @@ public JSONObject updateUser(Tbl_user usr, Cookie[] cookies) {
 	
     HttpHeaders headers = new HttpHeaders(); 
 	
-	headers.add("Cookie", "token-access="+ tok);
-	headers.add("Cookie", "token-refresh="+ tok2);
+	headers.add("Cookie", "token-access="+ tokens[0]);
+	headers.add("Cookie", "token-refresh="+ tokens[1]);
 	headers.setContentType(MediaType.APPLICATION_JSON);
 	HttpEntity<String> req = new HttpEntity<String>(datos.toString(),headers);
 	
@@ -391,6 +318,53 @@ public JSONObject updateUser(Tbl_user usr, Cookie[] cookies) {
 		JSONObject retorno = new JSONObject();
 		retorno.put("status", response.getStatusCodeValue());
 		retorno.put("str", str);
+		retorno.put("cookies", Util.parseCookie(response.getHeaders().get("Set-Cookie")));
+		return retorno;
+	}catch(HttpClientErrorException e) {
+	    System.err.println(e.getMessage());
+		JSONObject retorno = new JSONObject();
+		retorno.put("status", e.getStatusCode().value());
+		return retorno;
+	}
+}
+
+public JSONObject asignarRol(Tbl_user usr, Cookie[] cookies) {
+    String URL = Server.getHostname() + "user/" +usr.getId() +"/";
+    
+    String[] tokens = Util.extractTokens(cookies);
+	
+	if(tokens == null) {
+		
+		JSONObject retorno = new JSONObject();
+		retorno.put("status", 0);
+		return retorno;
+	}
+	
+	
+	JSONObject datos = new JSONObject(usr);
+	datos.remove("password");
+	datos.remove("id");
+	datos.remove("is_staff");
+	datos.remove("is_superuser");
+	datos.remove("name");
+	datos.remove("date_joined");
+	datos.remove("profile");
+	
+    HttpHeaders headers = new HttpHeaders(); 
+	
+	headers.add("Cookie", "token-access="+ tokens[0]);
+	headers.add("Cookie", "token-refresh="+ tokens[1]);
+	headers.setContentType(MediaType.APPLICATION_JSON);
+	HttpEntity<String> req = new HttpEntity<String>(datos.toString(),headers);
+	
+	try {
+		ResponseEntity<String> response = restTemplate.exchange(URL, HttpMethod.PUT, req, String.class);
+		String str = response.getBody();
+		
+		JSONObject retorno = new JSONObject();
+		retorno.put("status", response.getStatusCodeValue());
+		retorno.put("str", str);
+		retorno.put("cookies", Util.parseCookie(response.getHeaders().get("Set-Cookie")));
 		return retorno;
 	}catch(HttpClientErrorException e) {
 	    System.err.println(e.getMessage());
@@ -404,27 +378,12 @@ public JSONObject updateUser(Tbl_user usr, Cookie[] cookies) {
 public JSONObject deleteUser(Tbl_user usr, Cookie[] cookies) {
 	String URL = Server.getHostname() + "user/" + usr.getId() +"/";
 	
-	boolean access = false;
-	boolean refresh = false;
-	String tok  = null;
-	String tok2 = null;
+    String[] tokens = Util.extractTokens(cookies);
 	
-	for(Cookie c : cookies)
-	{
-		if(c.getName().equals("token-access")) {
-			access = true;
-			tok = c.getValue();
-		}
+	if(tokens == null) {
 		
-		if(c.getName().equals("token-refresh")) {
-			refresh = true;
-			tok2 = c.getValue();
-		}
-	}
-	
-	if(!(access && refresh)) {
 		JSONObject retorno = new JSONObject();
-		retorno.put("code", 0);
+		retorno.put("status", 0);
 		return retorno;
 	}
 	
@@ -444,8 +403,8 @@ public JSONObject deleteUser(Tbl_user usr, Cookie[] cookies) {
 
 	HttpHeaders headers = new HttpHeaders(); 
 	
-	headers.add("Cookie", "token-access="+ tok);
-	headers.add("Cookie", "token-refresh="+ tok2);
+	headers.add("Cookie", "token-access="+ tokens[0]);
+	headers.add("Cookie", "token-refresh="+ tokens[1]);
 	headers.setContentType(MediaType.APPLICATION_JSON);
 	HttpEntity<String> req = new HttpEntity<String>(datos.toString(),headers);
 	
@@ -456,6 +415,7 @@ public JSONObject deleteUser(Tbl_user usr, Cookie[] cookies) {
 		JSONObject retorno = new JSONObject();
 		retorno.put("status", response.getStatusCodeValue());
 		retorno.put("str", str);
+		retorno.put("cookies", Util.parseCookie(response.getHeaders().get("Set-Cookie")));
 		return retorno;
 	} catch(HttpClientErrorException e) {
 	    System.err.println(e.getMessage());

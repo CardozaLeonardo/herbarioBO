@@ -1,6 +1,7 @@
 package entidades.fichas_tecnicas;
 
 public class Tbl_family {
+	private int id;
 	private String name;
 	private String type;
 	public String getName() {
@@ -14,5 +15,11 @@ public class Tbl_family {
 	}
 	public void setType(String type) {
 		this.type = type;
+	}
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
 	}
 }

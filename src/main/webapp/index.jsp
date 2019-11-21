@@ -1,6 +1,6 @@
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8" import="datos.*, entidades.*, org.json.JSONObject"%>
+    pageEncoding="UTF-8" import="datos.*, entidades.*, org.json.JSONObject, util.*"%>
     <%
     
     //Limpia la CACHE del navegador
@@ -18,6 +18,8 @@
     	response.sendRedirect(request.getContextPath() + "/login");
     	return;
     }
+    String[] cks = (String[]) obj.get("cookies");
+	Util.setTokenCookies(request, response, cks);
     
     %>
    

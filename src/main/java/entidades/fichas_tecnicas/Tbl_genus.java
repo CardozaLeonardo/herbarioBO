@@ -1,6 +1,7 @@
 package entidades.fichas_tecnicas;
 
 public class Tbl_genus {
+	private int id;
 	private String name;
 	private Tbl_family family;
 	private String type;
@@ -21,5 +22,11 @@ public class Tbl_genus {
 	}
 	public void setType(String type) {
 		this.type = type;
+	}
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
 	}
 }

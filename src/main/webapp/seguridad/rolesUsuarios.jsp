@@ -1,7 +1,7 @@
 <%@page import="com.fasterxml.jackson.databind.ObjectMapper"%>
 <%@page import="org.json.JSONObject"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1" import="entidades.*, java.util.ArrayList,datos.*"%>
+    pageEncoding="ISO-8859-1" import="entidades.*, java.util.ArrayList,datos.*, util.*"%>
    <!-- 
        AUTOR:  Leonardo Cardoza
        FIN:    29/10/2019
@@ -15,7 +15,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>Herbario Nacional - Roles-Usuarios</title>
+  <title><%=Server.getAppName() %> - Roles-Usuarios</title>
 
   <!-- Custom fonts for this template -->
   <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -95,8 +95,11 @@
 		 if(us.getInt("status") == 200)
 		 {
 			 usr = (Tbl_user) us.get("user");
+			 String[] cks = (String[]) us.get("cookies");
+			 Util.setTokenCookies(request, response, cks);
 		 }
 		 //usr = dtus.obtenerUser(idUser);
+		 withUser = true;
 		 if(usr == null){
 	 response.sendRedirect("rolesUsuarios?error=1");
 	 return;
@@ -190,7 +193,7 @@
             <h3>Seleccione un registro de la tabla antes de empezar</h3>
             <%} %>
             
-            <form role="form" method="POST" class="col-6" action="../SL_asignarRol">
+            <form role="form" method="POST" class="col-6" action="../asigarRol">
               
             <input type="hidden" id="idUser" name="idUser" value="<%=id_user%>">
             <div class="form-group">
@@ -220,12 +223,14 @@
 		   <select name="currentRoles" id="currentRoles" class="form-control">
 		      <option value="" selected>Elegir</option>
 		      <%
-		      	if(1 == 0){
-		        //for(VW_user_rol r: rolesUser) {
+		      	for(int r: usr.getGroups()){
+		          for(Tbl_rol rl : listaRoles){
+		        	if(r == rl.getId()){
 		      %>
-		      <option class="cr-" value=""></option>
+		         <option class="cr-" value="<%=rl.getId()%>"><%=rl.getName()%></option>
 		      <%
-		      	//}
+		        	}
+		        	}
 		        }
 		      %>
 		   </select>

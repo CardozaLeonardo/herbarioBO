@@ -1,10 +1,9 @@
-package com.example.demo;
+package controlador;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Collection;
 import java.util.Locale;
-
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -98,6 +97,8 @@ public class MainController {
 		}*/
 		return "login.jsp";
     }
+	
+	
 	
 
 }

@@ -26,7 +26,7 @@
           <i class="fas fa-fw fa-tachometer-alt"></i>
           <span>Dashboard</span>
          </a>
-        <a class="nav-link" href="<%=basePath%>/seguridad/rolesOpciones.jsp">
+        <a class="nav-link" href="<%=basePath%>/seguridad/rolesOpciones">
           <i class="fas fa-fw fa-tasks"></i>
           <span>Gestión de Opciones</span>
          </a>

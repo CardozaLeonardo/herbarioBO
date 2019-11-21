@@ -1,4 +1,4 @@
-package com.example.demo;
+package controlador;
 
 import java.io.IOException;
 
@@ -16,6 +16,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import datos.DT_rol;
 import entidades.Tbl_rol;
 import negocio.NG_rol;
+import util.Util;
 
 @Controller
 public class RolController {
@@ -29,6 +30,11 @@ public class RolController {
 	@GetMapping("/seguridad/rolesUsuarios")
 	public String showRolesUsuarios() {
 		return "/seguridad/rolesUsuarios.jsp";
+	}
+	
+	@GetMapping("/seguridad/rolesOpciones")
+	public String showRolesOpciones() {
+		return "/seguridad/rolesOpciones.jsp";
 	}
 	
 	
@@ -54,6 +60,8 @@ public class RolController {
 				redir.addFlashAttribute("error", 1);
 				redir.addFlashAttribute("type", "success");
 				redir.addFlashAttribute("msg", "¡Rol creado <strong>exitósamete</strong>!");
+				String[] cks = (String[]) obj.get("cookies");
+				Util.setTokenCookies(req, res, cks);
 				return rv;
 			}else if(obj.getInt("status") == 401){
 				RedirectView rv = new RedirectView(req.getContextPath() + "/login");
@@ -112,6 +120,8 @@ public class RolController {
 				redir.addFlashAttribute("error", 1);
 				redir.addFlashAttribute("type", "success");
 				redir.addFlashAttribute("msg", "¡Rol actualizado <strong>exitosamente</strong>!");
+				String[] cks = (String[]) obj.get("cookies");
+				Util.setTokenCookies(req, res, cks);
 			}
 			
 		}else if(validacion == 2) {
@@ -144,6 +154,8 @@ public class RolController {
 			redir.addFlashAttribute("error", 1);
 			redir.addFlashAttribute("type", "success");
 			redir.addFlashAttribute("msg", "¡Rol eliminado <strong>exitosamente</strong>!");
+			String[] cks = (String[]) respuesta.get("cookies");
+			Util.setTokenCookies(req, res, cks);
 			 
 		}else if(respuesta.getInt("code") == 401) {
 			rv = new RedirectView(req.getContextPath() + "/login");
