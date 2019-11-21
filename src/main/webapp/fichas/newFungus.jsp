@@ -1,10 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1" import="entidades.*, datos.*, java.util.ArrayList"%>
+    
+<%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Nuevo Hongo</title>
+<title><%=Server.getAppName() %> Nuevo Hongo</title>
 <!-- Tell the browser to be responsive to screen width -->
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="shortcut icon" href="../img/Logo.png" type="image/x-icon">
@@ -93,15 +95,25 @@ jAlert css
 
                             <div class="form-group">
                                 <label for="family">Familia</label>
-                                <select class="form-control" id="family">
-
+                                <select class="form-control" id="family" name="family" required>
+                                   <option value="">Seleccione...</option>
+                                   <c:if test="${families != null}">
+                                     <c:forEach items="${families}" var="fam">
+                                         <option value="${fam.id}">${fam.name}</option>
+                                     </c:forEach>
+                                   </c:if>
                                 </select>
                             </div>
 
                             <div class="form-group">
                                 <label for="genus">Género</label>
-                                <select class="form-control" id="genus">
-
+                                <select class="form-control" id="genus" name="genus">
+                                   <option value="">Seleccione...</option>
+                                   <c:if test="${genus != null}">
+                                     <c:forEach items="${genus}" var="gen">
+                                         <option value="${gen.id}">${gen.name}</option>
+                                     </c:forEach>
+                                   </c:if>
                                 </select>
                             </div>
 
@@ -174,8 +186,13 @@ jAlert css
 
                             <div class="form-group">
                                 <label for="country">País</label>
-                                <select class="form-control" id="country">
-
+                                <select class="form-control" id="country" name="country" required>
+                                  <option value="">Seleccione...</option>
+                                   <c:if test="${countries != null}">
+                                     <c:forEach items="${countries}" var="cou">
+                                         <option value="${cou.id}">${cou.name}</option>
+                                     </c:forEach>
+                                   </c:if>
                                 </select>
                             </div>
 

@@ -25,3 +25,8 @@ $("a.deleteRole").click(function(){
     });
 });
 
+$("#cancelRoleBTN").click(function(){
+	$("#roleForm").attr("action", "../nuevoRol");
+	$("#opcIndicador").text("Operaci\u00F3n actual: guardar");
+});
+

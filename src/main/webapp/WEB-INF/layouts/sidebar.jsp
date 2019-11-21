@@ -26,7 +26,7 @@
           <i class="fas fa-fw fa-tachometer-alt"></i>
           <span>Dashboard</span>
          </a>
-        <a class="nav-link" href="<%=basePath%>/seguridad/rolesOpciones.jsp">
+        <a class="nav-link" href="<%=basePath%>/seguridad/rolesOpciones">
           <i class="fas fa-fw fa-tasks"></i>
           <span>Gestión de Opciones</span>
          </a>
@@ -44,7 +44,7 @@
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Custom Utilities:</h6>
             <a class="collapse-item" href="<%=basePath%>/seguridad/roles">Roles</a>
-            <a class="collapse-item" href="<%=basePath%>/seguridad/rolesUsuarios.jsp">Asignar</a>
+            <a class="collapse-item" href="<%=basePath%>/seguridad/rolesUsuarios">Asignar</a>
           </div>
         </div>
          </li>

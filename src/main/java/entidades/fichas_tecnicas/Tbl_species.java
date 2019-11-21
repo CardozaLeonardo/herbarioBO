@@ -1,6 +1,7 @@
 package entidades.fichas_tecnicas;
 
 public class Tbl_species {
+	private int id;
 	private String commonName;
 	private String scientificName;
 	private Tbl_family family;
@@ -50,6 +51,12 @@ public class Tbl_species {
 	}
 	public void setType(String type) {
 		this.type = type;
+	}
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
 	}
 	
 }

@@ -77,10 +77,6 @@ mensaje = mensaje==null?"":mensaje;
     <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
 
-		
-
-     
-
         <!-- Topbar -->
         <jsp:include page="../WEB-INF/layouts/header.jsp"></jsp:include>
         <!-- End of Topbar -->
@@ -154,7 +150,7 @@ mensaje = mensaje==null?"":mensaje;
 	                  	  
 	                  	  <c:when test="${usr.is_active == false}">
 	                  	      
-	                  	      <a href="" onclick="deleteUser('${usr.id}');"><i class="far fa-trash-alt" title="Eliminar"></i> </a>
+	                  	      <!--  <a href="" onclick="deleteUser('${usr.id}');"><i class="far fa-trash-alt" title="Eliminar"></i> </a> -->
 	                  	      
 	                  	  </c:when>
 	                  	</c:choose>

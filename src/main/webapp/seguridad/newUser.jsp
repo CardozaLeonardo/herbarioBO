@@ -84,7 +84,7 @@ jAlert css
               </div>
               <!-- /.card-header -->
               <!-- form start -->
-              <form role="form" action="../SLguardarUsuario" method="post">
+              <form role="form" action="../newUser" method="post">
                 <div class="card-body">
                   <input name="opc" id="opc" type="hidden" value="1"> <!-- ESTE INPUT ES UTILIZADO PARA EL CASE DEL SERVLET -->
                   <div class="form-group">

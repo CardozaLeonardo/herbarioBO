@@ -1,6 +1,7 @@
-package com.example.demo;
+package controlador;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -22,6 +23,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import datos.DT_user;
 import entidades.Tbl_user;
+import util.Util;
 
 @Controller
 public class UserController {
@@ -48,7 +50,7 @@ public class UserController {
         String email = request.getParameter("email");
         //String date_joined = "2019-11-15";
         boolean is_staff = true;
-        boolean is_active = false;
+        boolean is_active = true;
         String name = null;
         
         Tbl_user user = new Tbl_user();
@@ -62,10 +64,9 @@ public class UserController {
         user.setEmail(email);
         user.setIs_staff(is_staff);
         user.setIs_active(is_active);
-        user.setDate_joined("2012-09-04 06:00:00.000000-08:00");
+        user.setDate_joined(null);
         user.setName(name);
-        
-      
+        user.setGroups(new int[0]);
         
         
         DT_user dtu= new DT_user();
@@ -75,6 +76,8 @@ public class UserController {
             map.addAttribute("exito", 1);
             map.addAttribute("type", "success");
             map.addAttribute("msg", "Se ha logrado agregar correctamente");
+            String[] cks = (String[]) respuesta.get("cookies");
+			Util.setTokenCookies(request, response, cks);
             return new ModelAndView("redirect:/seguridad/usuarios");
             //response.sendRedirect("/seguridad/usuarios");
         }else {
@@ -92,8 +95,12 @@ public class UserController {
 		JSONObject respuesta = dtu.obtenerUser(idUser, request.getCookies());
 		
 		if(respuesta.getInt("status") == 200) {
+			
 			model.addAttribute("user", respuesta.get("user"));
+			String[] cks = (String[]) respuesta.get("cookies");
+			Util.setTokenCookies(request, response, cks);
 			return "/seguridad/updateUser.jsp";
+			
 		}else if(respuesta.getInt("status") == 0 || respuesta.getInt("status") == 401) {
 			model.addAttribute("error", "Ingrese primero");
 			return request.getContextPath() + "/login";
@@ -121,18 +128,22 @@ public class UserController {
 			String [] parts2 = cookies[1].split("=");
 			Cookie ck = new Cookie(parts[0],parts[1]);
 			Cookie ck2 = new Cookie(parts2[0],parts2[1]);
-			ck.setMaxAge(300);
-			ck2.setMaxAge(300);
+			ck.setMaxAge(1800);
+			ck.setPath("/");
+			ck2.setMaxAge(1800);
+			ck2.setPath("/");
 			res.addCookie(ck);
 			res.addCookie(ck2);
 			
-			 JSONObject obj = dtu.obtenerUsuarioIngresado(req.getCookies());
+			 Cookie [] cks = new Cookie[]{ck, ck2};
+			 JSONObject obj = dtu.obtenerUsuarioIngresado(cks);
 			 if(obj.getInt("code") == 200)
 			 {
 				 HttpSession hts = req.getSession(true);
 				 Tbl_user us = (Tbl_user) obj.get("user");
 				 System.out.println("valor: " +us.getUsername() + " " + obj.getInt("code"));
 				 hts.setAttribute("user", us);
+				 hts.setMaxInactiveInterval(1800);
 			 }
 			RedirectView rv = new RedirectView(req.getContextPath()+"/");
 			
@@ -179,7 +190,11 @@ public class UserController {
         JSONObject respuesta = dtu.updateUser(user, request.getCookies());
         
         if(respuesta.getInt("status") == 200) {
+        	
+        	String[] cookies = (String[]) respuesta.get("cookies");
+        	Util.setTokenCookies(request, response, cookies);
         	response.sendRedirect( request.getContextPath() + "/seguridad/usuarios");
+        	
         }else if(respuesta.getInt("status") == 0 || respuesta.getInt("status") == 401){
         	response.sendRedirect( request.getContextPath() + "/login");
         }else if(respuesta.getInt("status") == 500) {
@@ -189,9 +204,10 @@ public class UserController {
     }
 	
 	@GetMapping("/deleteUser")
-    public void deleteUser(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public RedirectView deleteUser(HttpServletRequest request, HttpServletResponse response,
+        RedirectAttributes redir) throws IOException {
     	boolean is_active = false;
-       
+    	RedirectView rv = new RedirectView(request.getContextPath() + "/seguridad/usuarios");
         Tbl_user user = new Tbl_user();
        
         user.setIs_active(is_active);
@@ -201,12 +217,28 @@ public class UserController {
         JSONObject respuesta = dtu.deleteUser(user, request.getCookies());
         
         if (respuesta.getInt("status") == 200) {
-        	response.sendRedirect( request.getContextPath() + "/seguridad/usuarios");
+        	
+			redir.addFlashAttribute("error", 1);
+			redir.addFlashAttribute("type", "success");
+			redir.addFlashAttribute("msg", "¡El usuarios se ha eliminado <strong>correctamente</strong>!");
+			String[] cks = (String[]) respuesta.get("cookies");
+			Util.setTokenCookies(request, response, cks);
+			
         } else if(respuesta.getInt("status") == 0 || respuesta.getInt("status") == 401){
-        	response.sendRedirect( request.getContextPath() + "/login");
+        	
+        	rv = new RedirectView(request.getContextPath() + "/login");
+        	redir.addFlashAttribute("error", 1);
+			redir.addFlashAttribute("type", "info");
+			redir.addFlashAttribute("msg", "¡Debe iniciar sessión primero!");
+        	
         } else if(respuesta.getInt("status") == 500) {
-        	response.sendRedirect( request.getContextPath() + "/login?status=500");
+        	
+        	redir.addFlashAttribute("error", 1);
+			redir.addFlashAttribute("type", "danger");
+			redir.addFlashAttribute("msg", "¡Ha ocurrido un error y se canceló la operación!");
         }
+        
+        return rv;
     
     }
 	
@@ -216,13 +248,71 @@ public class UserController {
 		ta.setMaxAge(0);
 		Cookie tr = new Cookie("token-refresh", "-");
 		tr.setMaxAge(0);
-		res.addCookie(ta);
+		res.addCookie(ta); 
 		
 		req.getSession().invalidate();
 		
 		res.sendRedirect(req.getContextPath() + "/login");
 		return;
 		
+	}
+	
+	@PostMapping("/asignarRol")
+	public RedirectView asignarRolUsuario(HttpServletRequest req, HttpServletResponse res, RedirectAttributes redir) {
+		RedirectView rv = new RedirectView(req.getContextPath() + "/seguridad/rolesUsuarios");
+		
+		String userId = req.getParameter("idUser");
+		String rolId = req.getParameter("rolUser");
+		Tbl_user usr = new Tbl_user();
+		DT_user dtu = new DT_user();
+		ArrayList<Integer> ids = new ArrayList<Integer>();
+		 
+		
+		try
+		{
+			int user = Integer.parseInt(userId);
+			int rol = Integer.parseInt(rolId);
+			
+			JSONObject jso = dtu.obtenerUser(user, req.getCookies());
+			if(jso.getInt("status") == 200) {
+				usr = (Tbl_user) jso.get("user");
+			}else if(jso.getInt("status") == 401 || jso.getInt("status") == 0) {
+				return rv;
+			}
+			
+			int[] valoresViejos = usr.getGroups();
+			
+			for(int i : valoresViejos) {
+				Integer va = new Integer(i);
+				ids.add(va);
+			}
+			
+			Integer nuevo = new Integer(rol);
+			ids.add(nuevo);
+			
+			int[] actualizacion = new int[ids.size()];
+			int index = 0;
+			for(Integer i:ids) {
+				actualizacion[index] = i.intValue();
+				index++;
+			}
+			
+			usr.setGroups(actualizacion);
+			
+			JSONObject obj = dtu.asignarRol(usr, req.getCookies());
+			
+			if(obj.getInt("status") == 200) {
+				res.sendRedirect(req.getContextPath() + "/seguridad/rolesUsuarios?user="+ user);
+			}
+			
+			
+			
+		}catch(Exception e) {
+			//System.err.println("Error en sevlet SL_asignarRol: ");
+			e.printStackTrace();
+		}
+		
+		return rv;
 	}
 	
 	

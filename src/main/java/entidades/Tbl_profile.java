@@ -1,11 +1,13 @@
 package entidades;
 
 public class Tbl_profile {
-    private int id;
-    private int number_id;
-    private int phone;
-    private String photo;
-    public int getId() {
+  
+	private int id;
+	private int number_id;
+	private String phone;
+	private String photo;
+	private int user;
+	public int getId() {
 		return id;
 	}
 	public void setId(int id) {
@@ -17,10 +19,11 @@ public class Tbl_profile {
 	public void setNumber_id(int number_id) {
 		this.number_id = number_id;
 	}
-	public int getPhone() {
+
+ public String getPhone() {
 		return phone;
 	}
-	public void setPhone(int phone) {
+	public void setPhone(String phone) {
 		this.phone = phone;
 	}
 	public String getPhoto() {
@@ -35,5 +38,5 @@ public class Tbl_profile {
 	public void setUser(int user) {
 		this.user = user;
 	}
-	private int user;
+
 }
