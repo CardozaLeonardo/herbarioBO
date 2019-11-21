@@ -3,7 +3,7 @@ package entidades;
 public class Tbl_user {
 	
 	private int id;
-    private int profile;
+    private Tbl_profile profile;
     private String last_login;
     private boolean is_superuser;
     private String username;
@@ -22,10 +22,10 @@ public class Tbl_user {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public int getProfile() {
+	public Tbl_profile getProfile() {
 		return profile;
 	}
-	public void setProfile(int profile) {
+	public void setProfile(Tbl_profile profile) {
 		this.profile = profile;
 	}
 	public String getLast_login() {
@@ -99,6 +99,11 @@ public class Tbl_user {
 	}
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	
+	public String getFullName() {
+		String fullname = first_name + " " + last_name;
+		return fullname;
 	}
     
     

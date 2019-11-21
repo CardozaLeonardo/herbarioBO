@@ -5,6 +5,14 @@ import java.util.Date;
 import entidades.Tbl_user;
 
 public class Tbl_specimen {
+	private int id;
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	private Tbl_user user;
 	private String photo;
 	private Date dateReceived;
