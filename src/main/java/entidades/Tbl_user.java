@@ -100,6 +100,11 @@ public class Tbl_user {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	
+	public String getFullName() {
+		String fullname = first_name + " " + last_name;
+		return fullname;
+	}
     
     
 }

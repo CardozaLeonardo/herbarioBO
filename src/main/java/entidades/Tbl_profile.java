@@ -1,6 +1,7 @@
 package entidades;
 
 public class Tbl_profile {
+  
 	private int id;
 	private int number_id;
 	private String phone;
@@ -18,7 +19,8 @@ public class Tbl_profile {
 	public void setNumber_id(int number_id) {
 		this.number_id = number_id;
 	}
-	public String getPhone() {
+
+ public String getPhone() {
 		return phone;
 	}
 	public void setPhone(String phone) {
@@ -36,6 +38,5 @@ public class Tbl_profile {
 	public void setUser(int user) {
 		this.user = user;
 	}
-	
-	
+
 }
