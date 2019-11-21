@@ -1,4 +1,4 @@
-package entidades;
+package entidades.fichas_tecnicas;
 
 public class Tbl_country {
 	private int id;

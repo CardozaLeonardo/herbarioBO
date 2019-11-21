@@ -11,8 +11,8 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import entidades.MeResponse;
-import entidades.Tbl_country;
 import entidades.Tbl_user;
+import entidades.fichas_tecnicas.Tbl_country;
 import util.Util;
 
 public class DT_country {

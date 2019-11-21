@@ -2,7 +2,6 @@ package entidades.fichas_tecnicas;
 
 import java.util.Date;
 
-import entidades.Tbl_country;
 import entidades.Tbl_user;
 
 public class Tbl_specimen {

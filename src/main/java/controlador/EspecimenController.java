@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import datos.DT_country;
 import datos.DT_family;
 import datos.DT_genus;
-import entidades.Tbl_country;
+import entidades.fichas_tecnicas.Tbl_country;
 import entidades.fichas_tecnicas.Tbl_family;
 import entidades.fichas_tecnicas.Tbl_genus;
 

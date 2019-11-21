@@ -1,7 +1,5 @@
 package entidades.fichas_tecnicas;
 
-import entidades.Tbl_country;
-
 public class Tbl_state {
 	private int id;
 	private String name;
