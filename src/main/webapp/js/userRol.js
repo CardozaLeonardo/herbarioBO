@@ -7,7 +7,7 @@ $("#removeRoleBTN").click(function(){
         confirm(function(){
             idUser = $("#idUser").val();
             rolUser = $("#currentRoles").val();
-            window.location.replace(`../SL_asignarRol?delete=${rolUser}&idUser=${idUser}`);
+            window.location.replace(`../removerRol?delete=${rolUser}&idUser=${idUser}`);
 
         },function(){
 
@@ -30,7 +30,7 @@ $("#removeOpcBTN").click(function(){
         { 	
             idRol = $("#idRol").val();
             opcion = $("#currentOpc").val();
-            window.location.replace(`../SL_asignarOpciones?delete=${opcion}&idRol=${idRol}`);
+            window.location.replace(`../removerOpcion?delete=${opcion}&idRol=${idRol}`);
         }, 
         function(e,btn)
         {

@@ -1,7 +1,9 @@
+<%@page import="java.util.Arrays"%>
 <%@page import="com.fasterxml.jackson.databind.ObjectMapper"%>
 <%@page import="org.json.JSONObject"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1" import="entidades.*, java.util.ArrayList,datos.*, util.*"%>
+<%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
    <!-- 
        AUTOR:  Leonardo Cardoza
        FIN:    29/10/2019
@@ -16,7 +18,7 @@
   <meta name="author" content="">
 
   <title><%=Server.getAppName() %> - Roles-Usuarios</title>
-
+   <link rel="shortcut icon" href="../img/Logo.png" type="image/x-icon">
   <!-- Custom fonts for this template -->
   <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
@@ -83,6 +85,7 @@
  String id_user ="";
  String errorMsg = "";
  boolean error = false; // Para indicar cualquier error a notificar
+ String grupos = "";
  
  
  if(request.getParameter("user") != null)
@@ -96,6 +99,7 @@
 		 {
 			 usr = (Tbl_user) us.get("user");
 			 String[] cks = (String[]) us.get("cookies");
+			 grupos = Arrays.toString(usr.getGroups());
 			 Util.setTokenCookies(request, response, cks);
 		 }
 		 //usr = dtus.obtenerUser(idUser);
@@ -148,40 +152,14 @@
         <!-- Begin Page Content -->
         <div class="container-fluid">
         
-        <%if(request.getParameter("del") != null) {%>
-	       <div class="alert alert-success alert-dismissible fade show" role="alert">
-			  ¡Se ha removido el rol<strong> correctamente</strong>!
+        <c:if test="${msg != null}">
+		    <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+			  ${cont}
 			  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
 			    <span aria-hidden="true">&times;</span>
 			  </button>
 			</div>
-		  <%} %>
-        
-          <%
-          	if(request.getParameter("saved") != null) {
-          %>
-          <div class="alert alert-success alert-dismissible fade show" role="alert">
-			  ¡El rol se ha asignado<strong> correctamente</strong>!
-			  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-			    <span aria-hidden="true">&times;</span>
-			  </button>
-			</div>
-		  <%
-		  	}
-		  %>
-		  
-		  <%
-		  		  	if(error) {
-		  		  %>
-          <div class="alert alert-danger alert-dismissible fade show" role="alert">
-			  <%=errorMsg%>
-			  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-			    <span aria-hidden="true">&times;</span>
-			  </button>
-			</div>
-		  <%
-		  	}
-		  %>
+		 </c:if>
 
           <!-- Page Heading -->
           <h1 class="h3 mb-2 text-gray-800">Roles - Usuario</h1>
@@ -193,9 +171,10 @@
             <h3>Seleccione un registro de la tabla antes de empezar</h3>
             <%} %>
             
-            <form role="form" method="POST" class="col-6" action="../asigarRol">
+            <form role="form" method="POST" class="col-6" action="../asignarRol">
               
             <input type="hidden" id="idUser" name="idUser" value="<%=id_user%>">
+            <input type="hidden" id="grupos" name="grupos" value="<%=grupos%>">
             <div class="form-group">
 		    <label for="listaRoles">Roles: </label>
 		    <select name="rolUser" required class="form-control" id="listaRoles">

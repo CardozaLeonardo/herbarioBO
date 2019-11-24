@@ -331,8 +331,6 @@ public class DT_rol {
 		datos.remove("id");
 		//datos.remove("permissions");
 		
-	    System.out.println(datos.toString());
-		
         HttpHeaders headers = new HttpHeaders(); 
 		
 		headers.add("Cookie", "token-access="+ tokens[0]);

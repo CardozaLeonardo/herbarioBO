@@ -34,7 +34,7 @@
           <i class="fas fa-fw fa-tachometer-alt"></i>
           <span>Gestión de Usuarios</span>
          </a>
-         <li class="nav-item">
+         <li class="nav-item" style="cursor:pointer;">
          <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
           <i class="fas fa-fw fa-user-tag"></i>
           <span>Gestión de Roles</span>
@@ -59,7 +59,7 @@
       Fichas
       </div>
       
-       <li class="nav-item">
+       <li class="nav-item" style="cursor:pointer;">
          <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapseSpecimen" aria-expanded="true" aria-controls="collapseUtilities">
           <i class="fas fa-seedling"></i>
           <span>Gestión de espécimenes</span>

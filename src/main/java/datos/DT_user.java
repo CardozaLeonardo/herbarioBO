@@ -349,6 +349,7 @@ public JSONObject asignarRol(Tbl_user usr, Cookie[] cookies) {
 	datos.remove("name");
 	datos.remove("date_joined");
 	datos.remove("profile");
+	datos.remove("username");
 	
     HttpHeaders headers = new HttpHeaders(); 
 	

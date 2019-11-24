@@ -18,10 +18,6 @@ import entidades.fichas_tecnicas.Tbl_genus;
 @Controller
 public class EspecimenController {
 	
-	@GetMapping("/fichas/newPlant")
-	public String nuevaPlanta() {
-		return "/fichas/newPlant.jsp";
-	}
 	
 	@GetMapping("/fichas/newFungus")
 	public String nuevoHongo(HttpServletRequest req, HttpServletResponse res,Model model) {

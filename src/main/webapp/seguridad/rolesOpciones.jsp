@@ -2,6 +2,7 @@
     pageEncoding="ISO-8859-1" import="entidades.*, datos.*, java.util.ArrayList, util.*"%>
     <%@page import="org.json.JSONObject, java.util.Arrays"%>
 <%@page import="com.fasterxml.jackson.databind.ObjectMapper"%>
+<%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
 <!-- 
        AUTOR:  Leonardo Cardoza
        FIN:    29/10/2019
@@ -21,7 +22,7 @@
   <!-- Custom fonts for this template -->
   <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
-
+  <link rel="shortcut icon" href="../img/Logo.png" type="image/x-icon">
   <!-- Custom styles for this template -->
   <link href="../css/sb-admin-2.min.css" rel="stylesheet">
 
@@ -85,10 +86,11 @@ Tbl_opcion[] permisos = (Tbl_opcion[]) opc.get("permissions");
 	    	 role = (Tbl_rol) rol.get("rol");
 	    	 String[] cookies =  Util.extractTokens(request.getCookies());
 	    	 
-	    	 //JSONObject json = new JSONObject(role.getPermissions());
-	    	 //System.out.println(Arrays.toString(role.getPermissions()));
+	    	 
 	    	 str = Arrays.toString(role.getPermissions());
-	    	 //Util.setTokenCookies(request, response, cookies);
+	    	 
+	    	 
+	    	 Util.setTokenCookiesJsp(request, response, cookies);
 	    	 
 	     }
 	     
@@ -139,40 +141,14 @@ Tbl_opcion[] permisos = (Tbl_opcion[]) opc.get("permissions");
 
         <!-- Begin Page Content -->
         <div class="container-fluid">
-        <%if(request.getParameter("del") != null) {%>
-	       <div class="alert alert-success alert-dismissible fade show" role="alert">
-			  ¡Se ha removido la opción<strong> correctamente</strong>!
+        <c:if test="${msg != null}">
+		    <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+			  ${cont}
 			  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
 			    <span aria-hidden="true">&times;</span>
 			  </button>
 			</div>
-		  <%} %>
-        
-          <%
-          	if(request.getParameter("saved") != null) {
-          %>
-          <div class="alert alert-success alert-dismissible fade show" role="alert">
-			  ¡La opción se ha asignado<strong> correctamente</strong>!
-			  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-			    <span aria-hidden="true">&times;</span>
-			  </button>
-			</div>
-		  <%
-		  	}
-		  %>
-		  
-		  <%
-		  		  	if(error) {
-		  		  %>
-          <div class="alert alert-danger alert-dismissible fade show" role="alert">
-			  <%=errorMsg%>
-			  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-			    <span aria-hidden="true">&times;</span>
-			  </button>
-			</div>
-		  <%
-		  	}
-		  %>
+		 </c:if>
 
           <!-- Page Heading -->
           <h1 class="h3 mb-2 text-gray-800">Roles - Opciones</h1>

@@ -25,6 +25,19 @@ public class Util {
 		res.addCookie(ck2);
 	}
 	
+public static void setTokenCookiesJsp(HttpServletRequest req, HttpServletResponse res, String[] cookies) {
+		
+		//String cookies[] =  (String[]) respuesta.get("cookies");
+		Cookie ck = new Cookie("token-access",cookies[0]);
+		Cookie ck2 = new Cookie("token-refresh", cookies[1]);
+		ck.setMaxAge(1800);
+		ck.setPath("/");
+		ck2.setMaxAge(1800);
+		ck2.setPath("/");
+		res.addCookie(ck);
+		res.addCookie(ck2);
+	}
+	
 	public static String[] parseCookie(List<String> cookies) {
 		
 		String[] cks = new String[2];

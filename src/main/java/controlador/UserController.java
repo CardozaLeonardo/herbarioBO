@@ -21,6 +21,8 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import datos.DT_user;
 import entidades.Tbl_user;
 import util.Util;
@@ -257,12 +259,13 @@ public class UserController {
 		
 	}
 	
-	@PostMapping("/asignarRol")
+	@RequestMapping(method = RequestMethod.POST,value = "/asignarRol")
 	public RedirectView asignarRolUsuario(HttpServletRequest req, HttpServletResponse res, RedirectAttributes redir) {
 		RedirectView rv = new RedirectView(req.getContextPath() + "/seguridad/rolesUsuarios");
 		
 		String userId = req.getParameter("idUser");
 		String rolId = req.getParameter("rolUser");
+		String grupos = req.getParameter("grupos");
 		Tbl_user usr = new Tbl_user();
 		DT_user dtu = new DT_user();
 		ArrayList<Integer> ids = new ArrayList<Integer>();
@@ -273,36 +276,32 @@ public class UserController {
 			int user = Integer.parseInt(userId);
 			int rol = Integer.parseInt(rolId);
 			
-			JSONObject jso = dtu.obtenerUser(user, req.getCookies());
+			/*JSONObject jso = dtu.obtenerUser(user, req.getCookies());
 			if(jso.getInt("status") == 200) {
 				usr = (Tbl_user) jso.get("user");
 			}else if(jso.getInt("status") == 401 || jso.getInt("status") == 0) {
 				return rv;
-			}
+			}*/
 			
-			int[] valoresViejos = usr.getGroups();
+            ObjectMapper om = new ObjectMapper();
 			
-			for(int i : valoresViejos) {
-				Integer va = new Integer(i);
-				ids.add(va);
-			}
+			int[]groupAct = om.readValue(grupos, int[].class);
 			
-			Integer nuevo = new Integer(rol);
-			ids.add(nuevo);
-			
-			int[] actualizacion = new int[ids.size()];
+			int[] act = new int[groupAct.length + 1];
 			int index = 0;
-			for(Integer i:ids) {
-				actualizacion[index] = i.intValue();
+			for(int i : groupAct) {
+				act[index] = i;
 				index++;
 			}
+			act[groupAct.length] = rol;
 			
-			usr.setGroups(actualizacion);
+			usr.setId(user);
+			usr.setGroups(act);
 			
 			JSONObject obj = dtu.asignarRol(usr, req.getCookies());
 			
 			if(obj.getInt("status") == 200) {
-				res.sendRedirect(req.getContextPath() + "/seguridad/rolesUsuarios?user="+ user);
+				rv = new RedirectView(req.getContextPath() + "/seguridad/rolesUsuarios?user="+user);
 			}
 			
 			
@@ -310,6 +309,68 @@ public class UserController {
 		}catch(Exception e) {
 			//System.err.println("Error en sevlet SL_asignarRol: ");
 			e.printStackTrace();
+		}
+		
+		return rv;
+	}
+	
+	@GetMapping("/removerRol")
+	public RedirectView removerRol(HttpServletRequest req, HttpServletResponse res, RedirectAttributes redir) {
+		RedirectView rv = new RedirectView(req.getContextPath() + "/seguridad/rolesUsuarios");
+		
+		String idUser = req.getParameter("idUser");
+		String delete = req.getParameter("delete");
+		DT_user dtu = new DT_user();
+		Tbl_user usr = new Tbl_user();
+		
+		int user = Integer.parseInt(idUser);
+		int rol = Integer.parseInt(delete);
+		
+		JSONObject jso = dtu.obtenerUser(user, req.getCookies());
+		if(jso.getInt("status") == 200) {
+			usr = (Tbl_user) jso.get("user");
+		}else if(jso.getInt("status") == 401 || jso.getInt("status") == 0) {
+			return rv;
+		}
+		
+		int[] grupos = usr.getGroups();
+		
+		ArrayList<Integer> actualizacion = new ArrayList<Integer>();
+		
+		for(int i:grupos) {
+			if(i != rol) {
+				Integer in = new Integer(i);
+				actualizacion.add(in);
+			}
+		}
+		
+		int[] act = new int[actualizacion.size()];
+		int index = 0;
+		for(Integer a:actualizacion) {
+			
+			act[index] = a.intValue();
+			index++;
+		}
+		
+		usr.setGroups(act);
+		JSONObject obj = dtu.asignarRol(usr, req.getCookies());
+		
+		
+		if(obj.getInt("status") == 200) {
+			rv = new RedirectView(req.getContextPath() + "/seguridad/rolesUsuarios?user="+user);
+			redir.addFlashAttribute("msg", 1);
+			redir.addFlashAttribute("type", "success");
+			redir.addFlashAttribute("cont", "¡Rol retirado existosamente!");
+		}else if(obj.getInt("status") == 401 || obj.getInt("status") == 0) {
+			rv = new RedirectView(req.getContextPath() + "/login");
+			redir.addFlashAttribute("msg", 1);
+			redir.addFlashAttribute("type", "info");
+			redir.addFlashAttribute("cont", "¡Debe iniciar sesión primero!");
+		}else if(obj.getInt("status") == 500) {
+			rv = new RedirectView(req.getContextPath() + "/seguridad/rolesUsuarios?user="+user);
+			redir.addFlashAttribute("msg", 1);
+			redir.addFlashAttribute("type", "danger");
+			redir.addFlashAttribute("cont", "¡Ha ocurrido un <strong>error</strong> en al realizar la tarea!");
 		}
 		
 		return rv;

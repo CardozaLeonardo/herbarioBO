@@ -1,6 +1,7 @@
 package controlador;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,8 +17,10 @@ import org.springframework.web.servlet.view.RedirectView;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import datos.DT_rol;
+import datos.DT_user;
 import entidades.Tbl_opcion;
 import entidades.Tbl_rol;
+import entidades.Tbl_user;
 import negocio.NG_rol;
 import util.Util;
 
@@ -223,9 +226,66 @@ public class RolController {
 		return null;
 	}
 	
-	//@GetMapping("/removerOpcion")
-	/*public RedirectView removerRol(HttpServletRequest req, HttpServletResponse res, RedirectAttributes redir) {
+	@GetMapping("/removerOpcion")
+	public RedirectView removerRol(HttpServletRequest req, HttpServletResponse res, RedirectAttributes redir) {
+		RedirectView rv = new RedirectView(req.getContextPath() + "/seguridad/rolesOpciones");
 		
-	}*/
+		String idRol = req.getParameter("idRol");
+		String delete = req.getParameter("delete");
+		DT_rol dtr = new DT_rol();
+		Tbl_rol role = new Tbl_rol();
+		
+		int rol = Integer.parseInt(idRol);
+		int permiso = Integer.parseInt(delete);
+		
+		JSONObject jso = dtr.obtenerRol(rol, req.getCookies());
+		if(jso.getInt("status") == 200) {
+			role = (Tbl_rol) jso.get("rol");
+		}else if(jso.getInt("status") == 401 || jso.getInt("status") == 0) {
+			return rv;
+		}
+		
+		int[] permisos = role.getPermissions();
+		
+		ArrayList<Integer> actualizacion = new ArrayList<Integer>();
+		
+		for(int i:permisos) {
+			if(i != permiso) {
+				Integer in = new Integer(i);
+				actualizacion.add(in);
+			}
+		}
+		
+		int[] act = new int[actualizacion.size()];
+		int index = 0;
+		for(Integer a:actualizacion) {
+			
+			act[index] = a.intValue();
+			index++;
+		}
+		
+		role.setPermissions(act);
+		JSONObject obj = dtr.asignarOpc(role, req.getCookies());
+		
+		
+		if(obj.getInt("status") == 200) {
+			rv = new RedirectView(req.getContextPath() + "/seguridad/rolesOpciones?rol="+rol);
+			redir.addFlashAttribute("msg", 1);
+			redir.addFlashAttribute("type", "success");
+			redir.addFlashAttribute("cont", "¡Opción  retirada existosamente!");
+		}else if(obj.getInt("status") == 401 || obj.getInt("status") == 0) {
+			rv = new RedirectView(req.getContextPath() + "/login");
+			redir.addFlashAttribute("msg", 1);
+			redir.addFlashAttribute("type", "info");
+			redir.addFlashAttribute("cont", "¡Debe iniciar sesión primero!");
+		}else if(obj.getInt("status") == 500) {
+			rv = new RedirectView(req.getContextPath() + "/seguridad/rolesOpciones?rol="+rol);
+			redir.addFlashAttribute("msg", 1);
+			redir.addFlashAttribute("type", "danger");
+			redir.addFlashAttribute("cont", "¡Ha ocurrido un <strong>error</strong> en al realizar la tarea!");
+		}
+		
+		return rv;
+	}
 	
 }
