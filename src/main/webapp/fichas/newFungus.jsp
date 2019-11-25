@@ -2,6 +2,16 @@
     pageEncoding="ISO-8859-1" import="entidades.*, datos.*, java.util.ArrayList"%>
     
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
+
+<%
+if(request.getAttribute("pass") == null){
+	response.sendRedirect("./newFungus");
+	return;
+}
+
+%>
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -39,6 +49,14 @@ jAlert css
 
 <%
  String mensaje = "Se ha guardado";
+
+ String idUser = "";
+
+ if(request.getSession().getAttribute("user") != null){
+	 Tbl_user user = (Tbl_user) request.getSession().getAttribute("user");
+	 idUser += user.getId();
+ }
+
 
 %>
 <body class="hold-transition sidebar-mini">
@@ -85,7 +103,8 @@ jAlert css
                         <h3 class="card-title">Nuevo Hongo</h3>
                     </div>
 
-                    <form role="form" action="" method="POST">
+                    <form role="form" action="../guardarHongo" method="POST" enctype="multipart/form-data">
+                        <input type="hidden" name="idUser" id="idUser" value="<%=idUser%>">
                         <div class="card-body">
                             <h5>Datos de Espécimen</h5>
                             <div class="form-group">
@@ -133,8 +152,10 @@ jAlert css
 
                             <div class="form-group">
                                 <label for="crust">¿Tiene costras?</label>
-                                <select class="form-control" id="crust">
-
+                                <select class="form-control" id="crust" name="crust" required>
+                                  <option value="">Seleccione...</option>
+                                  <option value="true">Sí</option>
+                                  <option value="false">No</option>
                                 </select>
                             </div>
 
@@ -244,12 +265,21 @@ jAlert css
 
                             <div class="form-group">
                                 <label for="biostatus">Bioestado</label>
-                                <select class="form-control" id="biostatus">Bio
-
+                                <select class="form-control" id="biostatus">
+                                  <option></option>
                                 </select>
                             </div>
 
                         </div>
+                        
+                        <div class="form-group">
+                           <input type="file" id="photo" name="photo" class="form-control-file">
+                           <div class="card bg-light" style="min-height: 400px; width:90%;margin-left: auto;margin-right:auto;">
+                             <img id="imagePreview" src="" alt="image preview" width="60%" height="auto" 
+                             style="margin-left: auto;margin-right:auto;"/>
+                           </div>
+                        </div>
+                        
                         <div class="card-footer">
                             <button type="submit" class="btn btn-primary">Submit</button>
 
@@ -275,10 +305,14 @@ jAlert css
   <!-- jQuery -->
   <script src="../vendor/jquery/jquery.min.js"></script>
   <!-- <script src="../../plugins/jquery/jquery.min.js"></script> -->
+  <!-- Custom scripts for all pages-->
+  <script src="../js/sb-admin-2.min.js"></script>
 
  <!-- jAlert js -->
   <script src="../vendor/jAlert/dist/jAlert.min.js"></script>
   <script src="../vendor/jAlert/dist/jAlert-functions.min.js"> </script>
+  <script src="../js/showImage.js"></script>
+  
   
 </body>
 </html>

@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
  
 
-  <title><%=Server.getAppName() %>-Usuarios</title> 
+  <title><%=Server.getAppName() %>-Hongos</title> 
 
   <!-- Custom fonts for this template -->
   <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -31,36 +31,12 @@
 
 <%
 
-
-if(request.getAttribute("right") == null){
-	response.sendRedirect("./usuarios");
+if(request.getAttribute("pass") == null){
+	response.sendRedirect("./fungus");
 	return;
 }
 
-Cookie[] cookies = request.getCookies();
-if(cookies == null){
-	response.sendRedirect("../login");
-}
-String token = null;
-String tokenRefresh = null;
 
-for(Cookie c : cookies)
-{
-	if(c.getName().equals("token-access")){
-		token = c.getValue();
-	}
-	
-	if(c.getName().equals("token-refresh")){
-		tokenRefresh = c.getValue();
-	}
-}
-
-if(token == null && tokenRefresh == null){
-	response.sendRedirect("../login");
-}
-
-DT_user dtus = new DT_user();
-Tbl_user[] users = dtus.getUsers(token, tokenRefresh);
 
 ///////////
 
@@ -91,12 +67,12 @@ mensaje = mensaje==null?"":mensaje;
 	      <div class="container-fluid">
 	        <div class="row mb-2">
 	          <div class="col-sm-6">
-	            <h1>DataTables</h1>
+	            <h1>Hongos</h1>
 	          </div>
 	          <div class="col-sm-6">
 	            <ol class="breadcrumb float-sm-right">
-	              <li class="breadcrumb-item"><a href="#">Seguridad</a></li>
-	              <li class="breadcrumb-item active">DataTables</li>
+	              <li class="breadcrumb-item"><a href="#">Fichas técnicas</a></li>
+	              <li class="breadcrumb-item active">Hongos</li>
 	            </ol>
 	          </div>
 	        </div>
@@ -112,11 +88,11 @@ mensaje = mensaje==null?"":mensaje;
           <p class="mb-4">DataTables is a third party plugin that is used to generate the demo table below. For more information about DataTables, please visit the <a target="_blank" href="https://datatables.net">official DataTables documentation</a>.</p> -->
 
             <h2>Usuarios</h2>
-                <a href="<%=request.getContextPath()%>/seguridad/newUser" class="btn btn-primary btn-icon-split">
+                <a href="<%=request.getContextPath()%>/fichas/newFungus" class="btn btn-primary btn-icon-split">
                     <span class="icon text-white-50">
-                      <i class="fas fa-user-plus"></i>
+                      <i class="fas fa-plus"></i>
                     </span>
-                    <span class="text">Agregar Usuario</span>
+                    <span class="text">Agregar Hongo</span>
                   </a>
                   <br>
                   <br>
@@ -125,19 +101,19 @@ mensaje = mensaje==null?"":mensaje;
                    <thead>
                     <tr>
                       <th>ID</th>
-                      <th>Nombres</th>
-                      <th>Apellidos</th>
-                      <th>Username</th>
-                      <th>Email</th>
+                      <th>Nombre</th>
+                      <th>Familia</th>
+                      <th>Género</th>
+                      <th>Especie</th>
                       <th>Estado</th>
                       <th>Opciones</th>
                     </tr>
                   </thead>
                   <tbody>
                     
-	                <c:if test="<%=users != null %>">
+	                <c:if test="${fungus != null}">
 	                
-	                <c:forEach items="<%=users%>" var="usr">
+	                <c:forEach items="${fungus}" var="usr">
 	                <tr>
 	                   
 	                  <td>${usr.id}</td>
@@ -147,11 +123,11 @@ mensaje = mensaje==null?"":mensaje;
 	                  <td>${usr.email}</td>
 	                  <td>${(usr.is_active)?"Activo":"Inactivo"}</td>
 	                  <td>
-	                  	<a href="./updateUser?id=${usr.id}" onclick="linkEditUser('${usr.id}');"><i class="far fa-edit" title="Editar"></i></a>&nbsp;&nbsp;
+	                  	<a href="./updateFungus?id=${usr.id}" onclick="linkEditUser('${usr.id}');"><i class="far fa-edit" title="Editar"></i></a>&nbsp;&nbsp;
 	                  	<c:choose>
 	                  	  <c:when test="${usr.is_active}">
 	                  	     
-	                  	<a href="" onclick="deleteUser('${usr.id}');"><i class="far fa-trash-alt" title="Eliminar"></i> </a>
+	                  	<a href="" onclick="deleteFungus('${usr.id}');"><i class="far fa-trash-alt" title="Eliminar"></i> </a>
 	                  	  </c:when>
 	                  	  
 	                  	  <c:when test="${usr.is_active == false}">
@@ -173,10 +149,10 @@ mensaje = mensaje==null?"":mensaje;
                    <tfoot>
                     <tr>
                       <th>ID</th>
-                      <th>Nombres</th>
-                      <th>Apellidos</th>
-                      <th>Username</th>
-                      <th>Email</th>
+                      <th>Nombre</th>
+                      <th>Familia</th>
+                      <th>Género</th>
+                      <th>Especie</th>
                       <th>Estado</th>
                       <th>Opciones</th>
                     </tr>

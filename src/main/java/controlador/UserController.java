@@ -31,7 +31,8 @@ import util.Util;
 public class UserController {
 	
 	@GetMapping("/seguridad/usuarios")
-	public String usuarios() {
+	public String usuarios(Model model) {
+		model.addAttribute("right", 1);
 		return "/seguridad/usuarios.jsp";
 	}
 	
