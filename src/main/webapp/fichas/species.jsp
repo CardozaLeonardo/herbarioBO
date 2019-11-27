@@ -134,7 +134,7 @@ mensaje = mensaje==null?"":mensaje;
 	                  <td>
 	                  	<a href="./updateSpecie?id=<%=specie.getId() %>" onclick="linkEditUser('<%=specie.getId() %>');"><i class="far fa-edit" title="Editar"></i></a>&nbsp;&nbsp;
 	                  	  
-	                  	<a href="./viewSpecie?id<%=specie.getId()%>" onclick="linkEditUser('<%=specie.getId()%>');"><i class="far fa-eye" title="View"></i></a>&nbsp;&nbsp;
+	                  	<a href="./viewSpecie?id=<%=specie.getId()%>" onclick="linkEditUser('<%=specie.getId()%>');"><i class="far fa-eye" title="View"></i></a>&nbsp;&nbsp;
 	                  	     
 	                  	<a href="#" class="deleteSpecie" id="<%=specie.getId()%>"><i class="far fa-trash-alt" title="Eliminar"></i> </a>
 	                  	  
@@ -150,11 +150,10 @@ mensaje = mensaje==null?"":mensaje;
                    <tfoot>
                     <tr>
                       <th>ID</th>
-                      <th>Nombre</th>
+                      <th>Nombre Común</th>
+                      <th>Nombre Cientifico</th>
                       <th>Familia</th>
                       <th>Género</th>
-                      <th>Especie</th>
-                      <th>Estado</th>
                       <th>Opciones</th>
                     </tr>
                   </tfoot>

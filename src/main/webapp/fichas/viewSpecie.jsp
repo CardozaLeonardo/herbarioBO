@@ -6,15 +6,8 @@
 
 <%
 if(request.getAttribute("pass") == null){
-	response.sendRedirect("./newSpecie");
+	response.sendRedirect("./viewSpecie");
 	return;
-}
-
-Tbl_family[] families = null;
-
-if(request.getAttribute("families") != null){
-families = (Tbl_family[]) request.getAttribute("families");
-	
 }
 
 
@@ -24,7 +17,7 @@ families = (Tbl_family[]) request.getAttribute("families");
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title><%=Server.getAppName() %> Nueva Especie</title>
+<title><%=Server.getAppName() %> - Ver Especie</title>
 <!-- Tell the browser to be responsive to screen width -->
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="shortcut icon" href="../img/Logo.png" type="image/x-icon">
@@ -118,74 +111,60 @@ jAlert css
             <!-- general form elements -->
             <div class="card card-primary">
                     <div class="card-header">
-                        <h3 class="card-title">Nueva Especie</h3>
+                        <h3 class="card-title">Ver Especie</h3>
                     </div>
 
-                    <form role="form" action="../saveSpecie" method="POST" enctype="multipart/form-data">
+                    <form role="form" action="" method="POST" enctype="multipart/form-data">
                         <input type="hidden" name="idUser" id="idUser" value="<%=idUser%>">
                         <div class="card-body">
                             <h5>Datos de Especie</h5>
                             
                             <div class="form-group">
                                 <label for="common_name">Nombre Común</label>
-                                <input type="text" class="form-control" id="common_name" placeholder="Nombre Común" name="common_name" required>
+                                <input disabled type="text" class="form-control" id="common_name" placeholder="Nombre Común" 
+                                name="common_name" value="${specie.common_name}">
                             </div>
                             
                             <div class="form-group">
                                 <label for="scientific_name">Nombre Científico</label>
-                                <input type="text" class="form-control" id="scientific_name" placeholder="Nombre Científico" 
-                                name="scientific_name" required>
+                                <input disabled type="text" class="form-control" id="scientific_name" placeholder="Nombre Científico" 
+                                name="scientific_name" value="${specie.scientific_name}">
                             </div>
                             
                             
                             <div class="form-group">
                                 <label for="Description">Descripción</label>
-                                <textarea class="form-control" id="description" rows="3"
-                                    placeholder="Descripción" name="description"></textarea>
+                                <textarea disabled class="form-control" id="description" rows="3"
+                                    placeholder="Descripción" name="description">${specie.description}</textarea>
                             </div>
 
                             <div class="form-group">
                                 <label for="family">Familia</label>
-                                <select class="form-control" id="family" name="family" required>
-                                   <option value="">Seleccione...</option>
-                                   <%if(families != null) {%>
-                                     <%for(Tbl_family fam : families){ %>
-                                         <option value="<%=fam.getId()%>"><%=fam.getName()%></option>
-                                     <% }%>
-                                   <%} %>
-                                </select>
+                                <input disabled type="text" class="form-control" id="family" placeholder="" 
+                                name="" value="${specie.family.name}">
                             </div>
 
                             <div class="form-group">
                                 <label for="genus">Género</label>
-                                <select class="form-control" id="genus" name="genus">
-                                   <option value="">Seleccione...</option>
-                                   <c:if test="${genus != null}">
-                                     <c:forEach items="${genus}" var="gen">
-                                         <option value="${gen.id}">${gen.name}</option>
-                                     </c:forEach>
-                                   </c:if>
-                                </select>
+                                <input disabled type="text" class="form-control" id="genus" placeholder="" 
+                                name="" value="${specie.genus.name}">
                             </div>
 
                             
                             <div class="form-group">
                                 <label for="type">Tipo</label>
-                                <select class="form-control" id="type" name="type" required>
-                                  <option value="">Seleccione...</option>
-                                  <option value="planta">Planta</option>
-                                  <option value="hongo">Hongo</option>
-                                </select>
+                                <input disabled type="text" class="form-control" id="genus" placeholder="" 
+                                name="" value="${specie.type}">
                             </div>
 
                             
                         
                         <div class="card-footer">
-                            <button type="submit" class="btn btn-primary">Submit</button>
+                           <!--   <button type="submit" class="btn btn-primary">Submit</button>
 
                             <a href="" class="btn btn-danger btn-icon-split">
                                 <span class="text">Cancelar</span>
-                            </a>
+                            </a> -->
                         </div>
                     </form>
                 </div>

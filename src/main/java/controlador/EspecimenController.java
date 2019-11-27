@@ -449,7 +449,7 @@ public class EspecimenController {
 		
 		JSONObject response = dtm.deleteFungus(id, req.getCookies());
 		
-		if(response.getInt("status") == 200) {
+		if(response.getInt("status") == 200 || response.getInt("status") == 204) {
 			redir.addFlashAttribute("msg", 1);
 			redir.addFlashAttribute("type", "success");
 			redir.addFlashAttribute("cont", "¡Registro eliminado correctamente!");
