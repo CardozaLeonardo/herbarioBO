@@ -1,4 +1,7 @@
-<%@page import="entidades.fichas_tecnicas.Tbl_family"%>
+<%@page import="entidades.fichas_tecnicas.Tbl_plantSpecimen"%>
+<%@page import="entidades.fichas_tecnicas.Tbl_formType"%>
+<%@page import="entidades.fichas_tecnicas.Tbl_genus"%>
+<%@page import="entidades.fichas_tecnicas.Tbl_mushroomSpecimen"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1" import="entidades.*, datos.*, java.util.ArrayList"%>
     
@@ -6,17 +9,29 @@
 
 <%
 if(request.getAttribute("pass") == null){
-	response.sendRedirect("./newFungus");
+	response.sendRedirect("./updateFungus");
 	return;
 }
 
-Tbl_family[] families = null;
+Tbl_genus[] genus = null;
 
-if(request.getAttribute("families") != null){
-families = (Tbl_family[]) request.getAttribute("families");
-	
+if(request.getAttribute("genus") != null){
+	genus = (Tbl_genus[]) request.getAttribute("genus");
 }
 
+Tbl_mushroomSpecimen mus = null;
+
+
+
+if(request.getAttribute("mus") != null){
+	mus = (Tbl_mushroomSpecimen) request.getAttribute("mus");
+}
+
+Tbl_formType[] forms = null;
+
+if(request.getAttribute("forms") != null){
+	forms = (Tbl_formType[]) request.getAttribute("forms");
+}
 
 %>
 
@@ -25,7 +40,7 @@ families = (Tbl_family[]) request.getAttribute("families");
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title><%=Server.getAppName() %> Nuevo Hongo</title>
+<title><%=Server.getAppName() %> Actualizar Hongo</title>
 <!-- Tell the browser to be responsive to screen width -->
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="shortcut icon" href="../img/Logo.png" type="image/x-icon">
@@ -65,6 +80,12 @@ jAlert css
 	 Tbl_user user = (Tbl_user) request.getSession().getAttribute("user");
 	 idUser += user.getId();
  }
+ 
+ /*Tbl_mushroomSpecimen mus = null;
+ 
+ if(request.getAttribute("mus") != null){
+	 mus = (Tbl_mushroomSpecimen) request.getAttribute("mus");
+ }*/
 
 
 %>
@@ -103,16 +124,6 @@ jAlert css
 	<!-- Main content -->
     <section class="content">
       <div class="container-fluid">
-       
-       
-	      <c:if test="${msg != null}">
-		    <div class="alert alert-${type} alert-dismissible fade show" role="alert">
-			  ${cont}
-			  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-			    <span aria-hidden="true">&times;</span>
-			  </button>
-			</div>
-		 </c:if>
         <div class="row">
           <!-- left column -->
           <div class="col-md-12">
@@ -122,21 +133,21 @@ jAlert css
                         <h3 class="card-title">Nuevo Hongo</h3>
                     </div>
 
-                    <form role="form" action="../guardarHongo" method="POST" enctype="multipart/form-data">
-                        <input type="hidden" name="idUser" id="idUser" value="<%=idUser%>">
+                    <form role="form" action="../actualizarHongo" method="POST" enctype="multipart/form-data">
+                        <input type="hidden" name="idUser" id="idUser" value="<%=mus.getUser().getId()%>">
+                        <input type="hidden" name="fungusID" value="<%=request.getParameter("id")%>">
                         <div class="card-body">
                             <h5>Datos de Espécimen</h5>
                             
-
                             <div class="form-group">
                                 <label for="family">Familia</label>
                                 <select class="form-control" id="family" name="family" required>
                                    <option value="">Seleccione...</option>
-                                   <%if(families != null) {%>
-                                     <%for(Tbl_family fam : families){ %>
-                                         <option value="<%=fam.getId()%>"><%=fam.getName()%></option>
-                                     <% }%>
-                                   <%} %>
+                                   <c:if test="${families != null}">
+                                     <c:forEach items="${families}" var="fam">
+                                         <option value="${fam.id}" ${mus.family.id == fam.id?"selected":""}>${fam.name}</option>
+                                     </c:forEach>
+                                   </c:if>
                                 </select>
                             </div>
 
@@ -146,7 +157,7 @@ jAlert css
                                    <option value="">Seleccione...</option>
                                    <c:if test="${genus != null}">
                                      <c:forEach items="${genus}" var="gen">
-                                         <option value="${gen.id}">${gen.name}</option>
+                                         <option value="${gen.id}" ${mus.genus.id == gen.id?"selected":""}>${gen.name}</option>
                                      </c:forEach>
                                    </c:if>
                                 </select>
@@ -158,7 +169,7 @@ jAlert css
                                    <option value="">Seleccione...</option>
                                    <c:if test="${species != null}">
                                      <c:forEach items="${species}" var="specie">
-                                         <option value="${specie.id}">${specie.common_name}</option>
+                                         <option value="${specie.id}" ${mus.species.id == specie.id?"selected":""}>${specie.common_name}</option>
                                      </c:forEach>
                                    </c:if>
                                 </select>
@@ -168,15 +179,15 @@ jAlert css
                             <div class="form-group">
                                 <label for="specimenDescription">Descripción del espécimen</label>
                                 <textarea class="form-control" id="specimenDescription" rows="3"
-                                    placeholder="Descripción del espécimen" name="description"></textarea>
+                                    placeholder="Descripción del espécimen" name="description" value="<%=mus.getDescription()%>"></textarea>
                             </div>
 
                             <div class="form-group">
                                 <label for="crust">¿Tiene costras?</label>
                                 <select class="form-control" id="crust" name="crust" required>
                                   <option value="">Seleccione...</option>
-                                  <option value="true">Sí</option>
-                                  <option value="false">No</option>
+                                  <option value="true" ${mus.crust?"selected":""}>Sí</option>
+                                  <option value="false" ${!mus.crust?"selected":""}>No</option>
                                 </select>
                             </div>
 
@@ -186,7 +197,7 @@ jAlert css
                                   <option value="">Seleccione...</option>
                                    <c:if test="${caps != null}">
                                      <c:forEach items="${caps}" var="cap">
-                                         <option value="${cap.id}">${cap.name}</option>
+                                         <option value="${cap.id}" ${mus.cap.id == cap.id?"selected":""}>${cap.name}</option>
                                      </c:forEach>
                                    </c:if>
                                 </select>
@@ -196,29 +207,34 @@ jAlert css
                                 <label for="formType">Tipo de forma</label>
                                 <select class="form-control" id="formType" name="forms" required>
                                   <option value="">Seleccione...</option>
-                                   <c:if test="${forms != null}">
-                                     <c:forEach items="${forms}" var="form">
-                                         <option value="${form.id}">${form.name}</option>
-                                     </c:forEach>
-                                   </c:if>
+                                   <%if(forms != null) {%>
+                                     <%for(Tbl_formType form: forms) {%>
+                                         <%if(mus.getForms().getId() == form.getId()) {%>
+                                         <option value="<%=form.getId()%>" selected><%=form.getName()%></option>
+                                         <% } else{%>
+                                           <option value="<%=form.getId()%>"><%=form.getName()%></option>
+                                         <%} %>
+                                         
+                                     <%} %>
+                                   <%} %>
                                 </select>
                             </div>
 
                             <div class="form-group">
                                 <label for="color">Color</label>
-                                <input type="text" class="form-control" id="color" placeholder="Color" name="color" required>
+                                <input type="text" class="form-control" id="color" placeholder="Color" value="<%=mus.getColor()%>" name="color" required>
                             </div>
 
                             <div class="form-group">
                                 <label for="changeOfColor">Cambios de color</label>
                                 <textarea class="form-control" id="changeOfColor" rows="2"
-                                    placeholder="Cambios de color" name="change_of_color"></textarea>
+                                    placeholder="Cambios de color" name="change_of_color" value=""><%=mus.getChange_of_color()%></textarea>
                             </div>
 
                             <div class="form-group">
                                 <label for="smell">Olor</label>
                                 <textarea class="form-control" id="smell" rows="2"
-                                    placeholder="Olor" name="smell"></textarea>
+                                    placeholder="Olor" name="smell" ><%=mus.getSmell()%></textarea>
                             </div>
 
                             <div class="form-group">
@@ -231,7 +247,7 @@ jAlert css
                             <div class="form-group">
                                 <label for="numberSpecimens">Número de especímenes colectados</label>
                                 <input type="number" class="form-control" id="numberSpecimens"
-                                    placeholder="Número de especímenes" name="number_of_samples">
+                                    placeholder="Número de especímenes" name="number_of_samples" value="<%=mus.getNumber_of_samples()%>">
                             </div>
 
                             <h5>Datos de Ubicación</h5>
@@ -242,7 +258,7 @@ jAlert css
                                   <option value="">Seleccione...</option>
                                    <c:if test="${countries != null}">
                                      <c:forEach items="${countries}" var="cou">
-                                         <option value="${cou.id}">${cou.name}</option>
+                                         <option value="${cou.id}" ${mus.country.id == cou.id?"selected":""}>${cou.name}</option>
                                      </c:forEach>
                                    </c:if>
                                 </select>
@@ -254,7 +270,7 @@ jAlert css
                                   <option value="">Seleccione...</option>
                                    <c:if test="${states != null}">
                                      <c:forEach items="${states}" var="state">
-                                         <option value="${state.id}">${state.name}</option>
+                                         <option value="${state.id}" ${mus.state.id == state.id?"selected":""}>${state.name}</option>
                                      </c:forEach>
                                    </c:if>
                                 </select>
@@ -266,7 +282,7 @@ jAlert css
                                   <option value="">Seleccione...</option>
                                    <c:if test="${cities != null}">
                                      <c:forEach items="${cities}" var="city">
-                                         <option value="${city.id}">${city.name}</option>
+                                         <option value="${city.id}" ${mus.city.id == city.id?"selected":""}>${city.name}</option>
                                      </c:forEach>
                                    </c:if>
                                 </select>
@@ -278,7 +294,7 @@ jAlert css
                                   <option value="">Seleccione...</option>
                                    <c:if test="${reco != null}">
                                      <c:forEach items="${reco}" var="rec">
-                                         <option value="${rec.id}">${rec.name}</option>
+                                         <option value="${rec.id}" ${mus.recolection_area_status.id == rec.id?"selected":""}>${rec.name}</option>
                                      </c:forEach>
                                    </c:if>
                                 </select>
@@ -288,13 +304,13 @@ jAlert css
 
                             <div class="form-group">
                                 <label for="latitude">Latitud</label>
-                                <input type="text" class="form-control" id="latitude"
-                                    placeholder="Latitud" name="latitude">
+                                <input type="number" class="form-control" id="latitude
+                                    placeholder="Latitud" name="latitude" value="<%=mus.getLatitude()%>">
                             </div>
 
                             <div class="form-group">
                                 <label for="longitude">Longitud</label>
-                                <input type="text" class="form-control" id="longitude" placeholder="Longitud" name="longitude">
+                                <input type="number" class="form-control" id="longitude" placeholder="Longitud" name="longitude" value="<%=mus.getLongitude()%>">
                             </div>
 
                             <h5>Datos de Hábitat</h5>
@@ -305,7 +321,7 @@ jAlert css
                                   <option value="">Seleccione...</option>
                                    <c:if test="${ecosystems != null}">
                                      <c:forEach items="${ecosystems}" var="ecosystem">
-                                         <option value="${ecosystem.id}">${ecosystem.name}</option>
+                                         <option value="${ecosystem.id}" ${mus.ecosystem.id == ecosystem.id?"selected":""}>${ecosystem.name}</option>
                                      </c:forEach>
                                    </c:if>
                                 </select>
@@ -330,8 +346,14 @@ jAlert css
                         <div class="form-group">
                            <input type="file" id="photo" name="photo" class="form-control-file">
                            <div class="card bg-light" style="min-height: 400px; width:90%;margin-left: auto;margin-right:auto;">
-                             <img id="imagePreview" src="" alt="image preview" width="60%" height="auto" 
+                             <%if(mus.getPhoto() != null) {%>
+                             <img id="imagePreview" src="<%=request.getContextPath() + mus.getPhoto() %>" alt="image preview" width="60%" height="auto" 
                              style="margin-left: auto;margin-right:auto;"/>
+                             <%}else{ %>
+                              <img id="imagePreview" src="" alt="image preview" width="60%" height="auto" 
+                             style="margin-left: auto;margin-right:auto;"/>
+                             <%} %>
+                             
                            </div>
                         </div>
                         

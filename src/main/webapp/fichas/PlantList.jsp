@@ -154,7 +154,7 @@ System.out.println(specimenJson);
                     <tr>
                       <td id="cl-id-<%=plant.getId()%>"><%=plant.getId() %></td>
                       <td id="cl-name-<%=plant.getId()%>"><%=plant.getUser().getFirst_name() %></td>
-                       <td id="cl-name-<%=plant.getId()%>"><%=plant.getSpecies().getCommonName() %></td>
+                       <td id="cl-name-<%=plant.getId()%>"><%=plant.getSpecies().getCommon_name() %></td>
                       <td id="cl-genus-<%=plant.getId()%>"><%=plant.getGenus().getName() %></td>
                       <td id="cl-ecosystem-<%=plant.getId()%>"><%=plant.getEcosystem().getName() %></td>
                       

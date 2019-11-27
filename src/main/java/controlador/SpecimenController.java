@@ -11,7 +11,7 @@ public class SpecimenController {
 		return "/fichas/newPlant.jsp";
 	}
 	
-	@GetMapping("/fichas/especimen-planta")
+	@GetMapping("/fichas/PlantList")
 	public String SpecimenPlant() {
 		return "/fichas/PlantList.jsp";
 	}

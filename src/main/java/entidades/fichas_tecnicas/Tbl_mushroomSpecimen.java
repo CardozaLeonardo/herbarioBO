@@ -1,27 +1,18 @@
 package entidades.fichas_tecnicas;
 
 public class Tbl_mushroomSpecimen extends Tbl_specimen {
-	private Tbl_capType capType;
-	private Tbl_formType form;
-	private Boolean crust;
+	private Tbl_capType cap;
+	private Tbl_formType forms;
+	private boolean crust;
 	private String color;
-	private String changeOfColor;
+	private String change_of_color;
 	private String smell;
 	private String aditionalInfo;
 	
-	public Tbl_capType getCapType() {
-		return capType;
-	}
-	public void setCapType(Tbl_capType capType) {
-		this.capType = capType;
-	}
-	public Tbl_formType getForm() {
-		return form;
-	}
-	public void setForm(Tbl_formType form) {
-		this.form = form;
-	}
-	public Boolean getCrust() {
+	
+	
+	
+	public boolean getCrust() {
 		return crust;
 	}
 	public void setCrust(Boolean crust) {
@@ -33,12 +24,7 @@ public class Tbl_mushroomSpecimen extends Tbl_specimen {
 	public void setColor(String color) {
 		this.color = color;
 	}
-	public String getChangeOfColor() {
-		return changeOfColor;
-	}
-	public void setChangeOfColor(String changeOfColor) {
-		this.changeOfColor = changeOfColor;
-	}
+	
 	public String getSmell() {
 		return smell;
 	}
@@ -51,6 +37,25 @@ public class Tbl_mushroomSpecimen extends Tbl_specimen {
 	public void setAditionalInfo(String aditionalInfo) {
 		this.aditionalInfo = aditionalInfo;
 	}
-
-
+	public Tbl_capType getCap() {
+		return cap;
+	}
+	public void setCap(Tbl_capType cap) {
+		this.cap = cap;
+	}
+	public String getChange_of_color() {
+		return change_of_color;
+	}
+	public void setChange_of_color(String change_of_color) {
+		this.change_of_color = change_of_color;
+	}
+	public Tbl_formType getForms() {
+		return forms;
+	}
+	public void setForms(Tbl_formType forms) {
+		this.forms = forms;
+	}
+	
+	
+	
 }

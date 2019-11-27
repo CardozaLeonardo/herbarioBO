@@ -1,7 +1,5 @@
 package entidades.fichas_tecnicas;
 
-import java.util.Date;
-
 import entidades.Tbl_user;
 
 public class Tbl_specimen {
@@ -15,12 +13,12 @@ public class Tbl_specimen {
 
 	private Tbl_user user;
 	private String photo;
-	private Date dateReceived;
+	private String date_received;
 	private Tbl_family family;
 	private Tbl_genus genus;
 	private Tbl_species species;
 	private Tbl_status status;
-	private int numberOfSamples;
+	private int number_of_samples;
 	private String description;
 	private Tbl_ecosystem ecosystem;
 	
@@ -36,12 +34,7 @@ public class Tbl_specimen {
 	public void setPhoto(String photo) {
 		this.photo = photo;
 	}
-	public Date getDateReceived() {
-		return dateReceived;
-	}
-	public void setDateReceived(Date dateReceived) {
-		this.dateReceived = dateReceived;
-	}
+	
 	public Tbl_family getFamily() {
 		return family;
 	}
@@ -66,11 +59,12 @@ public class Tbl_specimen {
 	public void setStatus(Tbl_status status) {
 		this.status = status;
 	}
-	public int getNumberOfSamples() {
-		return numberOfSamples;
+	
+	public int getNumber_of_samples() {
+		return number_of_samples;
 	}
-	public void setNumberOfSamples(int numberOfSamples) {
-		this.numberOfSamples = numberOfSamples;
+	public void setNumber_of_samples(int number_of_samples) {
+		this.number_of_samples = number_of_samples;
 	}
 	public String getDescription() {
 		return description;
@@ -84,12 +78,7 @@ public class Tbl_specimen {
 	public void setEcosystem(Tbl_ecosystem ecosystem) {
 		this.ecosystem = ecosystem;
 	}
-	public Tbl_recolectionAreaStatus getRecolectionAreaStatus() {
-		return recolectionAreaStatus;
-	}
-	public void setRecolectionAreaStatus(Tbl_recolectionAreaStatus recolectionAreaStatus) {
-		this.recolectionAreaStatus = recolectionAreaStatus;
-	}
+	
 	public Tbl_country getCountry() {
 		return country;
 	}
@@ -127,7 +116,21 @@ public class Tbl_specimen {
 		this.location = location;
 	}
 	
-	private Tbl_recolectionAreaStatus recolectionAreaStatus;
+	public String getDate_received() {
+		return date_received;
+	}
+	public void setDate_received(String date_received) {
+		this.date_received = date_received;
+	}
+
+	public Tbl_recolectionAreaStatus getRecolection_area_status() {
+		return recolection_area_status;
+	}
+	public void setRecolection_area_status(Tbl_recolectionAreaStatus recolection_area_status) {
+		this.recolection_area_status = recolection_area_status;
+	}
+
+	private Tbl_recolectionAreaStatus recolection_area_status;
 	
 	private Tbl_country country;
 	private Tbl_state state;

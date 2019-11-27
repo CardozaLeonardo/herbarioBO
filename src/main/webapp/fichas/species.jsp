@@ -1,4 +1,5 @@
-<%@page import="entidades.fichas_tecnicas.Tbl_mushroomSpecimen"%>
+
+<%@page import="entidades.fichas_tecnicas.Tbl_species"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1" import="entidades.*, datos.*, java.util.*"%>
 <!DOCTYPE html>
@@ -9,7 +10,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
  
 
-  <title><%=Server.getAppName() %>-Hongos</title> 
+  <title><%=Server.getAppName() %>- Especies</title> 
 
   <!-- Custom fonts for this template -->
   <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -33,11 +34,11 @@
 <%
 
 if(request.getAttribute("pass") == null){
-	response.sendRedirect("./fungus");
+	response.sendRedirect("./species");
 	return;
 }
 
-Tbl_mushroomSpecimen[] fungus =(Tbl_mushroomSpecimen[]) request.getAttribute("fungus");
+Tbl_species[] species =(Tbl_species[]) request.getAttribute("species");
 
 ///////////
 
@@ -77,12 +78,12 @@ mensaje = mensaje==null?"":mensaje;
 	      
 	        <div class="row mb-2">
 	          <div class="col-sm-6">
-	            <h1>Hongos</h1>
+	            <h1>Especies</h1>
 	          </div>
 	          <div class="col-sm-6">
 	            <ol class="breadcrumb float-sm-right">
-	              <li class="breadcrumb-item"><a href="#">Fichas técnicas</a></li>
-	              <li class="breadcrumb-item active">Hongos</li>
+	              <li class="breadcrumb-item"><a href="#">Catálogo</a></li>
+	              <li class="breadcrumb-item active">Especies</li>
 	            </ol>
 	          </div>
 	        </div>
@@ -97,12 +98,12 @@ mensaje = mensaje==null?"":mensaje;
           <!-- <h1 class="h3 mb-2 text-gray-800">Roles</h1>
           <p class="mb-4">DataTables is a third party plugin that is used to generate the demo table below. For more information about DataTables, please visit the <a target="_blank" href="https://datatables.net">official DataTables documentation</a>.</p> -->
 
-            <h2>Usuarios</h2>
-                <a href="<%=request.getContextPath()%>/fichas/newFungus" class="btn btn-primary btn-icon-split">
+            <h2>Especies</h2>
+                <a href="<%=request.getContextPath()%>/fichas/newSpecie" class="btn btn-primary btn-icon-split">
                     <span class="icon text-white-50">
                       <i class="fas fa-plus"></i>
                     </span>
-                    <span class="text">Agregar Hongo</span>
+                    <span class="text">Agregar Especie</span>
                   </a>
                   <br>
                   <br>
@@ -111,33 +112,31 @@ mensaje = mensaje==null?"":mensaje;
                    <thead>
                     <tr>
                       <th>ID</th>
-                      <th>Nombre</th>
+                      <th>Nombre Común</th>
+                      <th>Nombre Cientifico</th>
                       <th>Familia</th>
                       <th>Género</th>
-                      <th>Especie</th>
-                      <th>Estado</th>
                       <th>Opciones</th>
                     </tr>
                   </thead>
                   <tbody>
                     
-	                <%if(fungus != null) {%>
+	                <%if(species != null) {%>
 	                
-	                <%for(Tbl_mushroomSpecimen fus : fungus){ %>
+	                <%for(Tbl_species specie : species){ %>
 	                <tr>
 	                   
-	                  <td><%=fus.getId() %></td>
-	                  <td><%=fus.getSpecies().getCommon_name()%></td>
-	                  <td><%=fus.getSpecies().getFamily().getName()%></td>
-	                  <td><%=fus.getSpecies().getGenus().getName()%></td>
-	                  <td><%=fus.getSpecies().getCommon_name()%></td>
-	                  <td><%=fus.getStatus().getName()%></td>
+	                  <td><%=specie.getId() %></td>
+	                  <td><%=specie.getCommon_name()%></td>
+	                  <td><%=specie.getScientific_name()%></td>
+	                  <td><%=specie.getFamily().getName()%></td>
+	                  <td><%=specie.getGenus().getName()%></td>
 	                  <td>
-	                  	<a href="./updateFungus?id=<%=fus.getId() %>" onclick="linkEditUser('<%=fus.getId() %>');"><i class="far fa-edit" title="Editar"></i></a>&nbsp;&nbsp;
+	                  	<a href="./updateSpecie?id=<%=specie.getId() %>" onclick="linkEditUser('<%=specie.getId() %>');"><i class="far fa-edit" title="Editar"></i></a>&nbsp;&nbsp;
 	                  	  
-	                  	<a href="./viewFungus?id<%=fus.getId()%>" onclick="linkEditUser('<%=fus.getId()%>');"><i class="far fa-eye" title="View"></i></a>&nbsp;&nbsp;
+	                  	<a href="./viewSpecie?id<%=specie.getId()%>" onclick="linkEditUser('<%=specie.getId()%>');"><i class="far fa-eye" title="View"></i></a>&nbsp;&nbsp;
 	                  	     
-	                  	<a href="#" class="deleteFungus" id="<%=fus.getId()%>"><i class="far fa-trash-alt" title="Eliminar"></i> </a>
+	                  	<a href="#" class="deleteSpecie" id="<%=specie.getId()%>"><i class="far fa-trash-alt" title="Eliminar"></i> </a>
 	                  	  
 	                  	      <!--  <a href="" onclick="deleteUser('${usr.id}');"><i class="far fa-trash-alt" title="Eliminar"></i> </a> -->
 	                  	    
