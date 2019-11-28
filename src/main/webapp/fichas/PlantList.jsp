@@ -169,7 +169,7 @@ System.out.println(specimenJson);
                        <a href="./viewPlant?id=<%=plant.getId()%>" >
                        <i class="far fa-eye" title="View"></i></a>&nbsp;&nbsp;
                        
-                       <a href="#" id="<%=plant.getId()%>" class="deleteSpecimen">
+                       <a href="#" id="<%=plant.getId()%>" onclick="deletePlant('<%=plant.getId()%>')" class="deletePlant">
                         <i class="fas fa-trash-alt"></i>
                        </a>
                       </td>
@@ -221,10 +221,23 @@ System.out.println(specimenJson);
   
   <script src="../jAlert/dist/jAlert.min.js"></script>
   <script src="../jAlert/dist/jAlert-functions.min.js"> </script>
-  <script src="../js/roles.js"></script>
+  <!--  <script src="../js/roles.js"></script> -->
   
   <script>
-  
+  function deletePlant(id){
+	    idPlant = id;
+	    url = '../deletePlant?id=' + idPlant;
+	    console.log(url);
+	    confirm(function()
+	    { 	
+	        window.location.replace(url);
+	    }, 
+	    function(e,btn)
+	    {
+	    
+	    });
+	  
+}
   </script>
 
 </body>

@@ -410,5 +410,41 @@ public class SpecimenController {
 		
 		return rv;
 	}
+	
+	@GetMapping("/deletePlant")
+	public RedirectView eliminarPlanta(HttpServletRequest req, HttpServletResponse res, RedirectAttributes redir) {
+		RedirectView rv = new RedirectView(req.getContextPath() + "/fichas/PlantList");
+		
+		int id;
+		
+		try {
+			id = Integer.parseInt(req.getParameter("id"));
+			
+		}catch(NumberFormatException e) {
+			return rv;
+		}
+		
+		DT_plantSpecimen dtm = new DT_plantSpecimen();
+		
+		JSONObject response = dtm.deletePlant(id, req.getCookies());
+		
+		if(response.getInt("status") == 200 || response.getInt("status") == 204) {
+			redir.addFlashAttribute("msg", 1);
+			redir.addFlashAttribute("type", "success");
+			redir.addFlashAttribute("cont", "¡Registro eliminado correctamente!");
+		}else if(response.getInt("status") == 401 || response.getInt("status") == 0)
+		{
+			rv = new RedirectView(req.getContextPath() + "/login");
+			redir.addFlashAttribute("error", 1);
+			redir.addFlashAttribute("type", "info");
+			redir.addFlashAttribute("cont", "¡Debe iniciar sesión!");
+		}else if(response.getInt("status") == 500) {
+			redir.addFlashAttribute("msg", 1);
+			redir.addFlashAttribute("type", "danger");
+			redir.addFlashAttribute("cont", "¡Ha ocurrido un error en el servidor y falló el proceso!");
+		}
+		
+		return rv;
+	}
 }
 
