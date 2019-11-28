@@ -134,6 +134,7 @@ System.out.println(specimenJson);
                       <th>Especie</th>
                       <th>Género</th>
                       <th>Ecosistema</th>
+                      <th>Opciones</th>
                     </tr>
                   </thead>
                   <tfoot>
@@ -143,6 +144,7 @@ System.out.println(specimenJson);
                       <th>Especie</th>
                       <th>Género</th>
                       <th>Ecosistema</th>
+                      <th>Opciones</th>
                     </tr>
                   </tfoot>
                   <tbody>
@@ -159,11 +161,14 @@ System.out.println(specimenJson);
                       <td id="cl-ecosystem-<%=plant.getId()%>"><%=plant.getEcosystem().getName() %></td>
                       
                       <td>
-                       <a href="#" id="<%=plant.getId()%>" class="editSpecimen">
+                       <a href="./updatePlant?id=<%=plant.getId()%>" id="<%=plant.getId()%>" class="editSpecimen">
                        
                        <i class="fas fa-edit editRole"></i>
                        </a>
                        &nbsp;&nbsp;
+                       <a href="./viewPlant?id=<%=plant.getId()%>" >
+                       <i class="far fa-eye" title="View"></i></a>&nbsp;&nbsp;
+                       
                        <a href="#" id="<%=plant.getId()%>" class="deleteSpecimen">
                         <i class="fas fa-trash-alt"></i>
                        </a>
