@@ -86,9 +86,9 @@ System.out.println(specimenJson);
         <!-- Begin Page Content -->
         <div class="container-fluid">
           
-		  <c:if test="${error != null}">
+		  <c:if test="${msg != null}">
 		    <div class="alert alert-${type} alert-dismissible fade show" role="alert">
-			  ${msg}
+			  ${cont}
 			  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
 			    <span aria-hidden="true">&times;</span>
 			  </button>

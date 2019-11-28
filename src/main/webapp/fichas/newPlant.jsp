@@ -138,7 +138,7 @@ families = (Tbl_family[]) request.getAttribute("families");
 
                             <div class="form-group">
                                 <label for="specie">Especie</label>
-                                <select class="form-control" id="specie" name="species">
+                                <select class="form-control" id="specie" name="species" required>
                                    <option value="">Seleccione...</option>
                                    <c:if test="${species != null}">
                                      <c:forEach items="${species}" var="specie">
@@ -155,9 +155,11 @@ families = (Tbl_family[]) request.getAttribute("families");
                             </div>
 
                             <div class="form-group">
-                                <label for="specimenStatus">Estado</label>
-                                <select class="form-control" id="specimenStatus">
-
+                                <label for="complete">¿Completo?</label>
+                                <select class="form-control" id="complete" name="complete" required>
+                                  <option value="">Seleccione...</option>
+                                  <option value="true">Sí</option>
+                                  <option value="false">No</option>
                                 </select>
                             </div>
 

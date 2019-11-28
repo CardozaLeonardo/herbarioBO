@@ -23,6 +23,7 @@ import datos.DT_mushroom;
 import datos.DT_recolection_area;
 import datos.DT_species;
 import datos.DT_state;
+import datos.fichas_tecnicas.DT_plantSpecimen;
 import entidades.fichas_tecnicas.Tbl_biostatus;
 import entidades.fichas_tecnicas.Tbl_city;
 import entidades.fichas_tecnicas.Tbl_country;
@@ -128,7 +129,7 @@ public class SpecimenController {
 	public RedirectView guardarPlanta(@RequestParam("photo") MultipartFile file, HttpServletRequest req, HttpServletResponse res,
 			RedirectAttributes redir) {
 		RedirectView rv = new RedirectView(req.getContextPath() + "/fichas/newFungus");
-		DT_mushroom dtm = new DT_mushroom();
+		DT_plantSpecimen dtp = new DT_plantSpecimen();
 		JSONObject newFungus = new JSONObject();
 		
 		int idUser = Integer.parseInt(req.getParameter("idUser"));
@@ -142,6 +143,7 @@ public class SpecimenController {
 		int country = Integer.parseInt(req.getParameter("country"));
 		int state = Integer.parseInt(req.getParameter("state"));
 		int city = Integer.parseInt(req.getParameter("city"));
+		boolean complete = Boolean.parseBoolean(req.getParameter("complete"));
 		int biostatus = Integer.parseInt(req.getParameter("biostatus"));
 		
 		
@@ -154,6 +156,7 @@ public class SpecimenController {
 		newFungus.put("aditional_info", req.getParameter("aditional_info"));
 		newFungus.put("user", idUser);
 		newFungus.put("family", family);
+		newFungus.put("complete", complete);
 		newFungus.put("genus", genus);
 		newFungus.put("species", species);
 		newFungus.put("status", status);
@@ -180,10 +183,10 @@ public class SpecimenController {
 			
 			newFungus.put("photo","/storage/" + file.getOriginalFilename());
 		}*/
-		JSONObject respuesta = dtm.guardarHongo(newFungus, req.getCookies());
+		JSONObject respuesta = dtp.guardarPlanta(newFungus, req.getCookies());
 		
-		if(respuesta.getInt("status") == 201) {
-			rv = new RedirectView(req.getContextPath() + "/fichas/fungus");
+		if(respuesta.getInt("status") == 201 || respuesta.getInt("status") == 200) {
+			rv = new RedirectView(req.getContextPath() + "/fichas/PlantList");
 			redir.addFlashAttribute("msg", 1);
 			redir.addFlashAttribute("type", "success");
 			redir.addFlashAttribute("cont", "¡Se ha guardado correctamente!");
