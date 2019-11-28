@@ -3,10 +3,7 @@ package datos;
 import javax.servlet.http.Cookie;
 
 import org.json.JSONObject;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
@@ -55,6 +52,102 @@ public class DT_capType {
 		{
 			
 			
+			JSONObject retorno = new JSONObject();
+			retorno.put("status", e.getStatusCode().value());
+			//retorno.put("user", user);
+			return retorno;
+		}
+	}
+
+	public JSONObject saveCap(Tbl_capType cap, Cookie[] cookies) {
+
+		String URL = Server.getHostname() + "mushroom_cap_type/";
+
+		//Tbl_user user = null;
+
+		JSONObject data = new JSONObject(cap);
+		data.remove("id");
+
+		String[] tokens = Util.extractTokens(cookies);
+
+		if(tokens == null) {
+
+			JSONObject retorno = new JSONObject();
+			retorno.put("status", 0);
+			return retorno;
+		}
+
+		HttpHeaders headers = new HttpHeaders();
+
+		headers.add("Cookie", "token-access="+ tokens[0]);
+		headers.add("Cookie", "token-refresh="+ tokens[1]);
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		System.out.println(data.toString());
+
+		HttpEntity<String> req = new HttpEntity<String>(data.toString(),headers);
+
+		try {
+
+			ResponseEntity<String> response = restTemplate.exchange(URL, HttpMethod.POST, req, String.class);
+			String caps = response.getBody();
+
+			JSONObject retorno = new JSONObject();
+			retorno.put("status", response.getStatusCodeValue());
+			retorno.put("cap", caps);
+			retorno.put("cookies", Util.parseCookie(response.getHeaders().get("Set-Cookie")));
+			return retorno;
+
+		}catch(HttpClientErrorException e)
+		{
+
+
+			System.err.println(e.getMessage());
+			e.printStackTrace();
+			JSONObject retorno = new JSONObject();
+			retorno.put("status", e.getStatusCode().value());
+			//retorno.put("user", user);
+			return retorno;
+		}
+	}
+
+	public JSONObject deleteCap(int id, Cookie[] cookies) {
+
+		String URL = Server.getHostname() + "mushroom_cap_type/" + id + "/";
+
+		//Tbl_user user = null;
+
+		String[] tokens = Util.extractTokens(cookies);
+
+		if(tokens == null) {
+
+			JSONObject retorno = new JSONObject();
+			retorno.put("status", 0);
+			return retorno;
+		}
+
+		HttpHeaders headers = new HttpHeaders();
+
+		headers.add("Cookie", "token-access="+ tokens[0]);
+		headers.add("Cookie", "token-refresh="+ tokens[1]);
+
+		HttpEntity<String> req = new HttpEntity<String>(headers);
+
+		try {
+
+			ResponseEntity<String> response = restTemplate.exchange(URL, HttpMethod.DELETE, req, String.class);
+			String family = response.getBody();
+
+			JSONObject retorno = new JSONObject();
+			retorno.put("status", response.getStatusCodeValue());
+			retorno.put("family", family);
+			retorno.put("cookies", Util.parseCookie(response.getHeaders().get("Set-Cookie")));
+			return retorno;
+
+		}catch(HttpClientErrorException e)
+		{
+
+
 			JSONObject retorno = new JSONObject();
 			retorno.put("status", e.getStatusCode().value());
 			//retorno.put("user", user);

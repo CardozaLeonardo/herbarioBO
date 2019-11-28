@@ -85,8 +85,10 @@
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Custom Utilities:</h6>
             <a class="collapse-item" href="<%=basePath%>/fichas/species">Especies</a>
-            <a class="collapse-item" href="#">--</a>
-            <a class="collapse-item" href="#">--</a>
+            <a class="collapse-item" href="<%=basePath%>/fichas/families">Familias</a>
+            <a class="collapse-item" href="<%=basePath%>/fichas/ecosystems">Ecosistemas</a>
+            <a class="collapse-item" href="<%=basePath%>/fichas/capsType">Sombreros (Hongos)</a>
+            <a class="collapse-item" href="<%=basePath%>/fichas/fungusForms">Formas (Hongos)</a>
           </div>
         </div>
          </li>

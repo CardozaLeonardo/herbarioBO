@@ -135,7 +135,7 @@ mensaje = mensaje==null?"":mensaje;
 	                  <td>
 	                  	<a href="./updateFungus?id=<%=fus.getId() %>" onclick="linkEditUser('<%=fus.getId() %>');"><i class="far fa-edit" title="Editar"></i></a>&nbsp;&nbsp;
 	                  	  
-	                  	<a href="./viewFungus?id<%=fus.getId()%>" onclick="linkEditUser('<%=fus.getId()%>');"><i class="far fa-eye" title="View"></i></a>&nbsp;&nbsp;
+	                  	<a href="./viewFungus?id=<%=fus.getId()%>" onclick="linkEditUser('<%=fus.getId()%>');"><i class="far fa-eye" title="View"></i></a>&nbsp;&nbsp;
 	                  	     
 	                  	<a href="#" class="deleteFungus" id="<%=fus.getId()%>"><i class="far fa-trash-alt" title="Eliminar"></i> </a>
 	                  	  

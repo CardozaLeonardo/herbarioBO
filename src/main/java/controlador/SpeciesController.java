@@ -193,7 +193,7 @@ public class SpeciesController {
 		}else if(response.getInt("status") == 401 || response.getInt("status") == 0) {
 			rv = new RedirectView(req.getContextPath() + "/login");
 			redir.addFlashAttribute("error", 1);
-			redir.addFlashAttribute("type", "success");
+			redir.addFlashAttribute("type", "info");
 			redir.addFlashAttribute("msg", "¡Debe Iniciar Sesión!");
 		}
 		
@@ -220,7 +220,7 @@ public class SpeciesController {
 		}else if(response.getInt("status") == 401 || response.getInt("status") == 0) {
 			rv = new RedirectView(req.getContextPath() + "/login");
 			redir.addFlashAttribute("error", 1);
-			redir.addFlashAttribute("type", "success");
+			redir.addFlashAttribute("type", "info");
 			redir.addFlashAttribute("msg", "¡Debe Iniciar Sesión!");
 		}
 		
