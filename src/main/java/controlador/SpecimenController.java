@@ -345,7 +345,7 @@ public class SpecimenController {
 		int family = Integer.parseInt(req.getParameter("family"));
 		int genus = Integer.parseInt(req.getParameter("genus"));
 		int species = Integer.parseInt(req.getParameter("species"));
-		int status = 2;
+		int status;
 		int ecosystem = Integer.parseInt(req.getParameter("ecosystem"));
 		int recolection_area_status = Integer.parseInt(req.getParameter("recolection_area_status"));
 		int country = Integer.parseInt(req.getParameter("country"));
@@ -367,13 +367,21 @@ public class SpecimenController {
 		newFungus.put("complete", complete);
 		newFungus.put("genus", genus);
 		newFungus.put("species", species);
-		newFungus.put("status", status);
+		
 		newFungus.put("ecosystem", ecosystem);
 		newFungus.put("recolection_area_status", recolection_area_status);
 		newFungus.put("country", country);
 		newFungus.put("state", state);
+		newFungus.put("status", 4);
 		newFungus.put("city", city);
 		newFungus.put("biostatus", biostatus);
+		
+		if(req.getParameter("opt") != null) {
+			status = Integer.parseInt(req.getParameter("opt"));
+			newFungus.put("status", status);
+		}else {
+			newFungus.put("status", 2);
+		}
 		
 		
 		
@@ -445,6 +453,38 @@ public class SpecimenController {
 		}
 		
 		return rv;
+	}
+	
+	@GetMapping("/fichas/receivedPlants")
+	public String showReceivedPlants(HttpServletRequest req, HttpServletResponse res,Model model) {
+		
+		return "/fichas/FichasList.jsp";
+	}
+	
+	@GetMapping("/fichas/checkPlant")
+	public String checkPlant(HttpServletRequest req, HttpServletResponse res,Model model) {
+		
+		int id;
+		try {
+			id = Integer.parseInt(req.getParameter("id"));
+		}catch(NumberFormatException e) {
+			return "/fichas/PlantList.jsp";
+		}
+		
+		DT_plantSpecimen dtp = new DT_plantSpecimen();
+		JSONObject response = dtp.getPlant(id, req.getCookies());
+		Tbl_plantSpecimen mus = null;
+		
+		if(response.getInt("status") == 200) {
+			mus = (Tbl_plantSpecimen) response.get("plant");
+			String[] cookies = (String[]) response.get("cookies");
+			Util.setTokenCookies(req, res, cookies);
+			model.addAttribute("mus", mus);
+		}
+		
+		model.addAttribute("pass", 1);
+		
+		return "/fichas/checkPlant.jsp";
 	}
 }
 

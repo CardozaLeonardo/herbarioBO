@@ -68,8 +68,23 @@
           <div id="collapseSpecimen" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Custom Utilities:</h6>
-            <a class="collapse-item" href="<%=basePath%>/fichas/PlantList">Espécimen de planta</a>
-            <a class="collapse-item" href="<%=basePath%>/fichas/newPlant">Asignar</a>
+            <a class="collapse-item" href="<%=basePath%>/fichas/PlantList">Plantas</a>
+            <a class="collapse-item" href="<%=basePath%>/fichas/fungus">Hongos</a>
+          </div>
+        </div>
+         </li>
+         
+         
+         <li class="nav-item" style="cursor:pointer;">
+         <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapseCheck" aria-expanded="true" aria-controls="collapseUtilities">
+          <i class="fas fa-seedling"></i>
+          <span>Fichas Recibidas</span>
+          
+         </a>
+          <div id="collapseCheck" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Custom Utilities:</h6>
+            <a class="collapse-item" href="<%=basePath%>/fichas/receivedPlants">Plantas</a>
             <a class="collapse-item" href="<%=basePath%>/fichas/fungus">Hongos</a>
           </div>
         </div>
