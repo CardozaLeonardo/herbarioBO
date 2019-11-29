@@ -11045,6 +11045,10 @@ body.sidebar-toggled footer.sticky-footer {
 	width:100%;
 }
 
+.logo-image{
+	width:80px;	
+}
+
 
 .slider-card{
 	width:50vw;
@@ -11055,7 +11059,8 @@ background-color: #00BC73 !important;
 }
 
 .slider-row{
-	flex-wrap:no-wrap;
+	flex-wrap:nowrap;
+	width: 100%;
 }
 .
 

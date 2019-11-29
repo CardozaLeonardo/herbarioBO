@@ -94,7 +94,7 @@
                   <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
                       <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Cantidad de plantas:</div>
-                      <div class="h5 mb-0 font-weight-bold text-gray-800">$215,000</div>
+                      <div class="h5 mb-0 font-weight-bold text-gray-800" id="plant-number" >$215,000</div>
                     </div>
                     <div class="col-auto">
                        <!--  <i class="fas fa-calendar fa-2x text-gray-300"></i> -->
@@ -111,8 +111,8 @@
                 <div class="card-body">
                   <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
-                      <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Cantidad de hongos:</div>
-                      <div class="h5 mb-0 font-weight-bold text-gray-800">$40,000</div>
+                      <div class="text-xs font-weight-bold text-primary text-uppercase mb-1" >Cantidad de hongos:</div>
+                      <div class="h5 mb-0 font-weight-bold text-gray-800" id="mushroom-number">$40,000</div>
                     </div>
                     <div class="col-auto">
                       <!--  <i class="fas fa-calendar fa-2x text-gray-300"></i> -->
@@ -130,7 +130,7 @@
                   <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
                       <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Cantidad de recolectores:</div>
-                      <div class="h5 mb-0 font-weight-bold text-gray-800">$40,000</div>
+                      <div class="h5 mb-0 font-weight-bold text-gray-800" id="user-number" >$40,000</div>
                     </div>
                     <div class="col-auto">
                       <!--  <i class="fas fa-calendar fa-2x text-gray-300"></i> -->
@@ -215,13 +215,13 @@
               <!-- Illustrations -->
               <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                  <h6 class="m-0 font-weight-bold text-primary">=Acerca de:</h6>
+                  <h6 class="m-0 font-weight-bold text-primary">=cerca de:</h6>
                 </div>
                 <div class="card-body">
                   <div class="text-center">
                     <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 25rem;" src="img/woman-plant.jpg" alt="">
                   </div>
-                  <p>Add some quality, svg illustrations to your project courtesy of <a target="_blank" rel="nofollow" href="https://undraw.co/">unDraw</a>, a constantly updated collection of beautiful svg images that you can use completely free and without attribution!</p>
+                  <p>Este es el sistema de administración del Herbario nacional.</p>
                   <a target="_blank" rel="nofollow" href="https://undraw.co/">Browse Illustrations on unDraw &rarr;</a>
                 </div>
               </div>
@@ -288,6 +288,30 @@
 		  slidesToShow: 1,
 	  });
 	});
+  	
+  fetch("https://django-acacia.herokuapp.com/api/stats/")
+  .then(response => {
+    var status = response.json();
+    return status
+  })
+  .then(data => {
+    console.log(data);
+  	
+    var user = document.getElementById("user-number");
+    var plant = document.getElementById("plant-number");
+    var mushroom = document.getElementById("mushroom-number"); 
+    
+    user.innerHTML = data.result.user_number;
+    plant.innerHTML = data.result.plant_number;
+    mushroom.innerHTML = data.result.mushroom_number;	
+    
+  
+  })
+  .catch(function(error){
+    console.log(error);
+  });
+  
+  
   </script>
   
   
