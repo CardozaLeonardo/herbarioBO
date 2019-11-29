@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
  
 
-  <title>Herbario Nacional-Especimenes</title> 
+  <title><%=Server.getAppName() %> - Hongos Sin Revisar</title> 
 
 
   <jsp:include page="../WEB-INF/layouts/meta.jsp"></jsp:include>
@@ -29,25 +29,25 @@ if(token == null && tokenRefresh == null){
 	response.sendRedirect("../login");
 }
 
-DT_plantSpecimen dtPlantspecimen = new DT_plantSpecimen();
-JSONObject specimenJson  = dtPlantspecimen.getPlantSpecimens(request.getCookies());
+DT_mushroom dth = new DT_mushroom();
+JSONObject specimenJson  = dth.getCountries(request.getCookies());
 
-Tbl_plantSpecimen[] listSpecimens = null;
+Tbl_mushroomSpecimen[] fungus = null;
 
 if(specimenJson.getInt("status") == 200){
-  listSpecimens = (Tbl_plantSpecimen[]) specimenJson.get("plant_specimens");
+  fungus = (Tbl_mushroomSpecimen[]) specimenJson.get("fungus");
 	
 }else if(specimenJson.getInt("status") == 401){
 	response.sendRedirect("../login");
 	return;
 }
 
-if(listSpecimens == null){
+if(fungus == null){
 	response.sendRedirect("../login");
 	return;
 }
  
-System.out.println(specimenJson);
+//System.out.println(specimenJson);
  
  /*Tbl_plantSpecimen  tbl_specimen = null;*/
  
@@ -86,9 +86,9 @@ System.out.println(specimenJson);
         <!-- Begin Page Content -->
         <div class="container-fluid">
           
-		  <c:if test="${msg != null}">
+		  <c:if test="${error != null}">
 		    <div class="alert alert-${type} alert-dismissible fade show" role="alert">
-			  ${cont}
+			  ${msg}
 			  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
 			    <span aria-hidden="true">&times;</span>
 			  </button>
@@ -98,39 +98,10 @@ System.out.println(specimenJson);
 		  
 
           <!-- Page Heading -->
-          <h1 class="h3 mb-2 text-gray-800">Roles</h1>
-          <p class="mb-4">Cree, edite y elimine especimenes</p>
+          <h1 class="h3 mb-2 text-gray-800">Aprobación de Fichas Técnicas</h1>
+          <p class="mb-4">Ficha Técnica de Plantas </p>
 
             
-            
-            <form role="form" method="POST" id="especimenForm" class="col-6" action="../nuevoEspecimen">
-              <h4 id="opcIndicador" class="text-gray-800">Operación actual: creación</h4>
-            <input type="hidden" id="idEspecimen" name="idEspecimen" value="">
-            <input type="hidden" id="opc" name="opc" value="1">
-            
-            <div class="form-group">
-		    <label for="rolName">Especimen: </label>
-		    <input type="text" class="form-control" id="rolName" value="" name="rolName" required>
-		  </div>
-		  
-		  
-            <div class="form-group">
-		    <label for="rolDesc">Descripción: </label>
-		    <input type="text" class="form-control" name="rolDesc" id="rolDesc" value="">
-		  </div>
-		  
-		    <button id="submitRole" type="submit" class="btn btn-success">Guardar</button>
-		    <button type="reset" id="cancelRoleBTN" class="btn btn-danger">Cancelar</button>
-            </form>
-            <br>
-            <a href="<%=request.getContextPath()%>/fichas/newPlant" class="btn btn-primary btn-icon-split">
-                <span class="icon text-white-50">
-                  <i class="fas fa-plus"></i>
-                </span>
-                <span class="text">Agregar Planta</span>
-              </a>
-            <br>
-            <br>
            
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                   
@@ -138,51 +109,44 @@ System.out.println(specimenJson);
                     <tr>
                       <th>ID</th>
                       <th>Recolector</th>
-                      <th>Especie</th>
-                      <th>Género</th>
-                      <th>Ecosistema</th>
-                      <th>Opciones</th>
+                      <th>Nombre Común</th>
+                      <th>Opcion</th>
+                     
                     </tr>
                   </thead>
                   <tfoot>
                     <tr>
                     <th>ID</th>
                        <th>Recolector</th>
-                      <th>Especie</th>
-                      <th>Género</th>
-                      <th>Ecosistema</th>
-                      <th>Opciones</th>
+                      <th>Nombre Común</th>
+                      <th>Opcion</th>
+                      
                     </tr>
                   </tfoot>
                   <tbody>
-                    <%http://localhost:8000/admin
-                    	for(Tbl_plantSpecimen plant: listSpecimens) {
+                    <%
+                    	for(Tbl_mushroomSpecimen fus: fungus) {
                     %>
-                    <%if(plant.getStatus().getId() != 3 && plant.getStatus().getId() != 4) {%>
                     
+                    <%if(fus.getStatus().getId() == 4){%>
                     <tr>
-                      <td id="cl-id-<%=plant.getId()%>"><%=plant.getId() %></td>
-                      <td id="cl-name-<%=plant.getId()%>"><%=plant.getUser().getFirst_name() %></td>
-                       <td id="cl-name-<%=plant.getId()%>"><%=plant.getSpecies().getCommon_name() %></td>
-                      <td id="cl-genus-<%=plant.getId()%>"><%=plant.getGenus().getName() %></td>
-                      <td id="cl-ecosystem-<%=plant.getId()%>"><%=plant.getEcosystem().getName() %></td>
+                      <td id="cl-id-<%=fus.getId()%>"><%=fus.getId() %></td>
+                      <td id="cl-name-<%=fus.getId()%>"><%=fus.getUser().getFirst_name() %></td>
+                       <td id="cl-name-<%=fus.getId()%>"><%=fus.getSpecies().getCommon_name() %></td>
+                      
                       
                       <td>
-                       <a href="./updatePlant?id=<%=plant.getId()%>" id="<%=plant.getId()%>" class="editSpecimen">
+                       <a href="/fichas/checkFungus?id=<%=fus.getId()%>" class="btn btn-info btn-icon-split">
+                  		  <span class="icon text-white-50">
+                  		  <i class="fas fa-info"></i>
+                    		</span>
+                  		  <span class="text">Revisar Ficha</span>
+                  	   </a>
                        
-                       <i class="fas fa-edit editRole"></i>
-                       </a>
-                       &nbsp;&nbsp;
-                       <a href="./viewPlant?id=<%=plant.getId()%>" >
-                       <i class="far fa-eye" title="View"></i></a>&nbsp;&nbsp;
-                       
-                       <a href="#" id="<%=plant.getId()%>" onclick="deletePlant('<%=plant.getId()%>')" class="deletePlant">
-                        <i class="fas fa-trash-alt"></i>
-                       </a>
                       </td>
                     </tr>
-                    <%} %>
-                    <%} %>
+                    <%}%>
+                    <%}%>
                     
                   </tbody>
                 </table>
@@ -229,23 +193,10 @@ System.out.println(specimenJson);
   
   <script src="../jAlert/dist/jAlert.min.js"></script>
   <script src="../jAlert/dist/jAlert-functions.min.js"> </script>
-  <!--  <script src="../js/roles.js"></script> -->
+  <script src="../js/roles.js"></script>
   
   <script>
-  function deletePlant(id){
-	    idPlant = id;
-	    url = '../deletePlant?id=' + idPlant;
-	    console.log(url);
-	    confirm(function()
-	    { 	
-	        window.location.replace(url);
-	    }, 
-	    function(e,btn)
-	    {
-	    
-	    });
-	  
-}
+  
   </script>
 
 </body>

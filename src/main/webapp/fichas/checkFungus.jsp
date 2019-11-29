@@ -1,14 +1,46 @@
 <%@page import="entidades.fichas_tecnicas.Tbl_plantSpecimen"%>
+<%@page import="entidades.fichas_tecnicas.Tbl_formType"%>
+<%@page import="entidades.fichas_tecnicas.Tbl_genus"%>
+<%@page import="entidades.fichas_tecnicas.Tbl_mushroomSpecimen"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1" import="entidades.*, datos.*, java.util.ArrayList"%>
- <%@page import="entidades.fichas_tecnicas.Tbl_family"%>
- 
- <%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
+    
+<%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
+
+<%
+if(request.getAttribute("pass") == null){
+	response.sendRedirect("./checkFungus");
+	return;
+}
+
+Tbl_genus[] genus = null;
+
+if(request.getAttribute("genus") != null){
+	genus = (Tbl_genus[]) request.getAttribute("genus");
+}
+
+Tbl_mushroomSpecimen mus = null;
+
+
+
+if(request.getAttribute("mus") != null){
+	mus = (Tbl_mushroomSpecimen) request.getAttribute("mus");
+}
+
+Tbl_formType[] forms = null;
+
+if(request.getAttribute("forms") != null){
+	forms = (Tbl_formType[]) request.getAttribute("forms");
+}
+
+%>
+
+
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title><%=Server.getAppName() %> Verificar Planta</title>
+<title><%=Server.getAppName() %> Actualizar Hongo</title>
 <!-- Tell the browser to be responsive to screen width -->
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="shortcut icon" href="../img/Logo.png" type="image/x-icon">
@@ -40,29 +72,20 @@ jAlert css
 </head>
 
 <%
+ String mensaje = "Se ha guardado";
 
-String idUser = "";
+ String idUser = "";
 
-  if(request.getAttribute("pass") == null){
-	  response.sendRedirect("./checkPlant");
-	  return;
-  }
-
-if(request.getSession().getAttribute("user") != null){
+ if(request.getSession().getAttribute("user") != null){
 	 Tbl_user user = (Tbl_user) request.getSession().getAttribute("user");
 	 idUser += user.getId();
-}
-
-Tbl_family[] families = null;
-
-if(request.getAttribute("families") != null){
-families = (Tbl_family[]) request.getAttribute("families");
-	
-}
-
-Tbl_plantSpecimen mus = (Tbl_plantSpecimen) request.getAttribute("mus");
-
-
+ }
+ 
+ /*Tbl_mushroomSpecimen mus = null;
+ 
+ if(request.getAttribute("mus") != null){
+	 mus = (Tbl_mushroomSpecimen) request.getAttribute("mus");
+ }*/
 
 
 %>
@@ -86,12 +109,12 @@ Tbl_plantSpecimen mus = (Tbl_plantSpecimen) request.getAttribute("mus");
 	      <div class="container-fluid">
 	        <div class="row mb-2">
 	          <div class="col-sm-6">
-	            <h1>Registro [Verificar Planta]</h1>
+	            <h1>Ver hongo</h1>
 	          </div>
 	          <div class="col-sm-6">
 	            <ol class="breadcrumb float-sm-right">
 	              <li class="breadcrumb-item"><a href="">Gestión de Fichas Técnicas</a></li>
-	              <li class="breadcrumb-item active">Planta</li>
+	              <li class="breadcrumb-item active">Ver Hongo</li>
 	            </ol>
 	          </div>
 	        </div>
@@ -107,15 +130,13 @@ Tbl_plantSpecimen mus = (Tbl_plantSpecimen) request.getAttribute("mus");
             <!-- general form elements -->
             <div class="card card-primary">
                     <div class="card-header">
-                        <h3 class="card-title">Actualizar Planta</h3>
+                        <h3 class="card-title">Ver Hongo</h3>
                     </div>
 
-                    <form role="form" action="../parsePlant" method="POST" enctype="multipart/form-data">
-                    <input type="hidden" name="idUser" id="idUser" value="<%=mus.getUser().getId()%>">
-                    <input type="hidden" name="idPlant" id="idPlant" value="<%=mus.getId()%>">
-                    
+                    <form role="form" action="../actualizarHongo" method="POST" enctype="multipart/form-data">
+                        <input type="hidden" name="idUser" id="idUser" value="<%=mus.getUser().getId()%>">
+                        <input type="hidden" name="fungusID" value="<%=request.getParameter("id")%>">
                         <div class="card-body">
-                            
                             <h5>Datos de Recolector</h5>
                             
                             <div class="form-group">
@@ -131,11 +152,8 @@ Tbl_plantSpecimen mus = (Tbl_plantSpecimen) request.getAttribute("mus");
                                 
                             </div>
                             
-                            
-                            
                             <h5>Datos de Espécimen</h5>
                             
-
                             <div class="form-group">
                                 <label for="family">Familia</label>
                                 <input disabled class="form-control" id="family" name="family" value="<%=mus.getFamily().getName()%>">
@@ -160,12 +178,46 @@ Tbl_plantSpecimen mus = (Tbl_plantSpecimen) request.getAttribute("mus");
                             </div>
 
                             <div class="form-group">
-                                <label for="complete">¿Completo?</label>
-                                <%if(mus.getComplete() == true) {%>
-                                  <input disabled class="form-control" id="complete" name="complete" value="Sí">
+                                <label for="crust">¿Tiene costras?</label>
+                                <%if(mus.getCrust() == true) {%>
+                                  <input disabled class="form-control" id="crust" name="crust" value="Sí">
                                 <%}else{ %>
-                                 <input disabled class="form-control" id="complete" name="complete" value="No">
+                                 <input disabled class="form-control" id="crust" name="crust" value="No">
                                 <%} %>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="capType">Tipo de sombrero</label>
+                                <input disabled class="form-control" id="capType" name="capType" value="<%=mus.getCap().getName()%>">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="formType">Tipo de forma</label>
+                                <input disabled class="form-control" id="formType" name="formType" value="<%=mus.getForms().getName()%>">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="color">Color</label>
+                                <input disabled type="text" class="form-control" id="color" placeholder="Color" value="<%=mus.getColor()%>" name="color">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="changeOfColor">Cambios de color</label>
+                                <textarea disabled class="form-control" id="changeOfColor" rows="2"
+                                    placeholder="Cambios de color" name="change_of_color" ><%=mus.getChange_of_color()%></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="smell">Olor</label>
+                                <textarea disabled class="form-control" id="smell" rows="2"
+                                    placeholder="Olor" name="smell" ><%=mus.getSmell()%></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="specimenStatus">Estado</label>
+                                <select class="form-control" id="specimenStatus">
+
+                                </select>
                             </div>
 
                             <div class="form-group">
@@ -209,6 +261,7 @@ Tbl_plantSpecimen mus = (Tbl_plantSpecimen) request.getAttribute("mus");
                                 <label for="longitude">Longitud</label>
                                 <input disabled type="number" class="form-control" id="longitude" placeholder="Longitud" name="longitude" 
                                 value="<%=mus.getLongitude()%>">
+                            </div>
 
                             <h5>Datos de Hábitat</h5>
 
@@ -217,25 +270,26 @@ Tbl_plantSpecimen mus = (Tbl_plantSpecimen) request.getAttribute("mus");
                                 <input disabled class="form-control" id="habitat" name="habitat" value="<%=mus.getEcosystem().getName()%>">
                             </div>
 
-                            <div class="form-group">
+                            <!--  <div class="form-group">
                                 <label for="habitatDescription">Descripción de hábitat</label>
-                                <select class="form-control" id="habitatDescription" disabled>
+                                <select class="form-control" id="habitatDescription">
 
                                 </select>
                             </div>
 
                             <div class="form-group">
                                 <label for="biostatus">Bioestado</label>
-                                <input class="form-control" id="biostatus" name="biostatus" value="<%=mus.getBiostatus().getName() %>" disabled>
-                                  
-                            </div>
+                                <select class="form-control" id="biostatus">
+                                  <option></option>
+                                </select>
+                            </div>-->
 
                         </div>
                         
                         <div class="form-group">
-                           <input type="file" id="photo" name="photo" class="form-control-file">
+                             <input disabled type="file" id="photo" name="photo" class="form-control-file">
                            <div class="card bg-light" style="min-height: 400px; width:90%;margin-left: auto;margin-right:auto;">
-                             <img id="imagePreview" src="" alt="image preview" width="60%" height="auto" 
+                             <img id="imagePreview" src="<%=request.getContextPath() + mus.getPhoto() %>" alt="image preview" width="60%" height="auto" 
                              style="margin-left: auto;margin-right:auto;"/>
                            </div>
                         </div>
@@ -252,6 +306,7 @@ Tbl_plantSpecimen mus = (Tbl_plantSpecimen) request.getAttribute("mus");
 
                             <!--  <a href="" class="btn btn-danger btn-icon-split">
                                 <span class="text">Cancelar</span> -->
+                            </a>
                         </div>
                     </form>
                 </div>
@@ -271,11 +326,14 @@ Tbl_plantSpecimen mus = (Tbl_plantSpecimen) request.getAttribute("mus");
   <!-- jQuery -->
   <script src="../vendor/jquery/jquery.min.js"></script>
   <!-- <script src="../../plugins/jquery/jquery.min.js"></script> -->
+  <!-- Custom scripts for all pages-->
+  <script src="../js/sb-admin-2.min.js"></script>
 
  <!-- jAlert js -->
   <script src="../vendor/jAlert/dist/jAlert.min.js"></script>
   <script src="../vendor/jAlert/dist/jAlert-functions.min.js"> </script>
-   <script src="../js/showImage.js"></script>
+  <script src="../js/showImage.js"></script>
+  
   
 </body>
 </html>

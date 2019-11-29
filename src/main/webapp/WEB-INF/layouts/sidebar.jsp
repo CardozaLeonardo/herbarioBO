@@ -77,7 +77,7 @@
          
          <li class="nav-item" style="cursor:pointer;">
          <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapseCheck" aria-expanded="true" aria-controls="collapseUtilities">
-          <i class="fas fa-seedling"></i>
+          <i class="fas fa-share-square"></i>
           <span>Fichas Recibidas</span>
           
          </a>
@@ -85,15 +85,15 @@
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Custom Utilities:</h6>
             <a class="collapse-item" href="<%=basePath%>/fichas/receivedPlants">Plantas</a>
-            <a class="collapse-item" href="<%=basePath%>/fichas/fungus">Hongos</a>
+            <a class="collapse-item" href="<%=basePath%>/fichas/receivedFungus">Hongos</a>
           </div>
         </div>
          </li>
          
          <li class="nav-item" style="cursor:pointer;">
          <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapseCat" aria-expanded="true" aria-controls="collapseUtilities">
-          <i class="fas fa-seedling"></i>
-          <span>Catálogos</span>
+          <i class="fas fa-list"></i>
+          <span>Extra</span>
           
          </a>
           <div id="collapseCat" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">

@@ -106,12 +106,14 @@
                     <tr>
                       <th>ID</th>
                       <th>Tipo de Sombrero</th>
+                      <th>Opciones</th>
                     </tr>
                   </thead>
                   <tfoot>
                     <tr>
                       <th>ID</th>
                       <th>Tipo de Sombrero</th>
+                      <th>Opciones</th>
                     </tr>
                   </tfoot>
                   <tbody>
@@ -185,9 +187,10 @@
   
   function deleteCap(id){
 	    idCap = id;
+	    url = '../deleteCap?id=' + id;
 	    confirm(function()
 	    { 	
-	        window.location.replace(`../deleteCap?id=${idCap}`);
+	        window.location.replace(url);
 	    }, 
 	    function(e,btn)
 	    {

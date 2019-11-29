@@ -372,7 +372,7 @@ public class SpecimenController {
 		newFungus.put("recolection_area_status", recolection_area_status);
 		newFungus.put("country", country);
 		newFungus.put("state", state);
-		newFungus.put("status", 4);
+		//newFungus.put("status", 4);
 		newFungus.put("city", city);
 		newFungus.put("biostatus", biostatus);
 		
@@ -486,5 +486,71 @@ public class SpecimenController {
 		
 		return "/fichas/checkPlant.jsp";
 	}
+	
+	@PostMapping("/parsePlant")
+	public RedirectView parsePlanta( HttpServletRequest req, HttpServletResponse res,
+			RedirectAttributes redir) {
+		RedirectView rv = new RedirectView(req.getContextPath() + "/fichas/receivedPlants");
+		
+		int idUser = Integer.parseInt(req.getParameter("idUser"));
+		int idPlant = Integer.parseInt(req.getParameter("idPlant"));
+		JSONObject newFungus = new JSONObject();
+		
+		DT_plantSpecimen dtp = new DT_plantSpecimen();
+		JSONObject response = dtp.getPlant(idPlant, req.getCookies());
+		Tbl_plantSpecimen spe = null;
+		
+		if(response.getInt("status") == 200) {
+			spe = (Tbl_plantSpecimen) response.get("plant");
+		}else {
+			return rv;
+		}
+		
+		newFungus.put("date_received", "2019-11-25");
+		newFungus.put("number_of_samples", spe.getNumber_of_samples());
+		newFungus.put("description", spe.getDescription());
+		newFungus.put("latitude", spe.getLatitude());
+		newFungus.put("longitude", spe.getLongitude());
+		newFungus.put("location", "Nicaragua");
+		newFungus.put("aditional_info", "-");
+		newFungus.put("user", idUser);
+		newFungus.put("family", spe.getFamily().getId());
+		newFungus.put("complete", spe.getComplete());
+		newFungus.put("genus", spe.getGenus().getId());
+		newFungus.put("species", spe.getSpecies().getId());
+		newFungus.put("id", idPlant);
+		newFungus.put("ecosystem", spe.getEcosystem().getId());
+		newFungus.put("recolection_area_status", spe.getRecolection_area_status().getId());
+		newFungus.put("country", spe.getCountry().getId());
+		newFungus.put("state", spe.getState().getId());
+		//newFungus.put("status", 4);
+		newFungus.put("city", spe.getCity().getId());
+		newFungus.put("biostatus",spe.getBiostatus().getId());
+		
+		if(req.getParameter("opt") != null) {
+			int status = Integer.parseInt(req.getParameter("opt"));
+			newFungus.put("status", status);
+		}else {
+			newFungus.put("status", 2);
+		}
+		
+       JSONObject respuesta = dtp.actualizarPlanta(newFungus, req.getCookies());
+		
+		if(respuesta.getInt("status") == 201 || respuesta.getInt("status") == 200) {
+			//rv = new RedirectView(req.getContextPath() + "/fichas/PlantList");
+			redir.addFlashAttribute("msg", 1);
+			redir.addFlashAttribute("type", "success");
+			redir.addFlashAttribute("cont", "¡Se ha procesado correctamente!");
+		}else if(respuesta.getInt("status") == 401 	|| respuesta.getInt("status") == 0)
+		{
+			rv = new RedirectView(req.getContextPath() + "/login");
+			redir.addFlashAttribute("error", 1);
+			redir.addFlashAttribute("type", "info");
+			redir.addFlashAttribute("cont", "¡Debe iniciar sesión!");
+		}
+		
+		return rv;
+	}
+	
 }
 

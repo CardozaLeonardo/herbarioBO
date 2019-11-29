@@ -369,7 +369,7 @@ public class EspecimenController {
 		int family = Integer.parseInt(req.getParameter("family"));
 		int genus = Integer.parseInt(req.getParameter("genus"));
 		int species = Integer.parseInt(req.getParameter("species"));
-		int status = 2;
+		int status;
 		int ecosystem = Integer.parseInt(req.getParameter("ecosystem"));
 		int recolection_area_status = Integer.parseInt(req.getParameter("recolection_area_status"));
 		int country = Integer.parseInt(req.getParameter("country"));
@@ -395,14 +395,18 @@ public class EspecimenController {
 		newFungus.put("family", family);
 		newFungus.put("genus", genus);
 		newFungus.put("species", species);
-		newFungus.put("status", status);
 		newFungus.put("ecosystem", ecosystem);
 		newFungus.put("recolection_area_status", recolection_area_status);
 		newFungus.put("country", country);
 		newFungus.put("state", state);
 		newFungus.put("city", city);
 		
-		
+		if(req.getParameter("opt") != null) {
+			status = Integer.parseInt(req.getParameter("opt"));
+			newFungus.put("status", status);
+		}else {
+			newFungus.put("status", 2);
+		}
 		
 		/*if(file.getContentType() != null) {
 			
@@ -468,5 +472,34 @@ public class EspecimenController {
 		return rv;
 	}
 	
+	@GetMapping("/fichas/receivedFungus")
+	public String showReceivedFungus(HttpServletRequest req, HttpServletResponse res,Model model) {
+		return "/fichas/FungusList.jsp";
+	}
 	
+	@GetMapping("/fichas/checkFungus")
+	public String checkPlant(HttpServletRequest req, HttpServletResponse res, Model model) {
+		
+		int id;
+		try {
+			id = Integer.parseInt(req.getParameter("id"));
+		}catch(NumberFormatException e) {
+			return "/fichas/FungusList.jsp";
+		}
+		
+		DT_mushroom dtm = new DT_mushroom();
+		JSONObject response = dtm.getFungus(id, req.getCookies());
+		Tbl_mushroomSpecimen mus = null;
+		
+		if(response.getInt("status") == 200) {
+			mus = (Tbl_mushroomSpecimen) response.get("fungus");
+			String[] cookies = (String[]) response.get("cookies");
+			Util.setTokenCookies(req, res, cookies);
+			model.addAttribute("mus", mus);
+		}
+		
+		model.addAttribute("pass", 1);
+		
+		return "/fichas/checkFungus.jsp";
+	}
 }
