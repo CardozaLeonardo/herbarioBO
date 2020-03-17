@@ -126,7 +126,7 @@ public class UserController {
 		JSONObject respuesta = dtu.comprobarLogin(usr, pass);
 		
 		if(respuesta.getInt("code") == 200) {
-			String cookies[] =  (String[]) respuesta.get("cookies");
+			String[] cookies =  (String[]) respuesta.get("cookies");
 			String [] parts = cookies[0].split("=");
 			String [] parts2 = cookies[1].split("=");
 			Cookie ck = new Cookie(parts[0],parts[1]);
