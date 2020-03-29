@@ -107,7 +107,7 @@ Tbl_plantSpecimen mus = (Tbl_plantSpecimen) request.getAttribute("mus");
             <!-- general form elements -->
             <div class="card card-primary">
                     <div class="card-header">
-                        <h3 class="card-title">Actualizar Planta</h3>
+                        <h3 class="card-title">Ver Planta</h3>
                     </div>
 
                     <form role="form" action="../parsePlant" method="POST" enctype="multipart/form-data">

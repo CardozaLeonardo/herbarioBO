@@ -8,7 +8,7 @@ import java.util.List;
 public class PlantRepository extends GenericRepository<Tbl_plantSpecimen>{
 
     public PlantRepository() {
-        super("/plant", new ParameterizedTypeReference<Tbl_plantSpecimen>(){},
+        super("/plant_specimen", new ParameterizedTypeReference<Tbl_plantSpecimen>(){},
                 new ParameterizedTypeReference<List<Tbl_plantSpecimen>>(){});
     }
 }

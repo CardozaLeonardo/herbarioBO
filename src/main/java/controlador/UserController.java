@@ -8,6 +8,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import datos.DT_permissions;
+import entidades.PermissionRecep;
+import entidades.Tbl_opcion;
 import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -119,6 +122,7 @@ public class UserController {
 		String usr = req.getParameter("username");
 		String pass = req.getParameter("password");
 		DT_user dtu = new DT_user();
+		DT_permissions dtpp = new DT_permissions();
 		System.out.println(usr);
 		
 		ModelAndView ma = new ModelAndView();
@@ -140,11 +144,15 @@ public class UserController {
 			
 			 Cookie [] cks = new Cookie[]{ck, ck2};
 			 JSONObject obj = dtu.obtenerUsuarioIngresado(cks);
+			 Tbl_user us = (Tbl_user) obj.get("user");
+			 JSONObject permissionsData = dtpp.getUserPermissions(us.getId(), cks);
+			Tbl_opcion[] permissions = (Tbl_opcion[]) permissionsData.get("permissions");
 			 if(obj.getInt("code") == 200)
 			 {
 				 HttpSession hts = req.getSession(true);
-				 Tbl_user us = (Tbl_user) obj.get("user");
+
 				 System.out.println("valor: " +us.getUsername() + " " + obj.getInt("code"));
+				 hts.setAttribute("user_permissions", permissions);
 				 hts.setAttribute("user", us);
 				 hts.setMaxInactiveInterval(1800);
 			 }

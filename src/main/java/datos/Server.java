@@ -6,8 +6,13 @@ import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 public class Server {
 	
 	private static String hostname = "https://django-acacia.herokuapp.com/api/";
+	private static String hostnameOp = "https://django-acacia.herokuapp.com";
 	private static String appName = "Herbario Nacional";
 	
+	public static String getHostnameOp() {
+		return hostnameOp;
+	}
+
 	public static String getHostname() {
 		return hostname;
 	}

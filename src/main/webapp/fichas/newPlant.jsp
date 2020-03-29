@@ -59,8 +59,22 @@ families = (Tbl_family[]) request.getAttribute("families");
 	
 }
 
+// Permission
+HttpSession hts = request.getSession();
+boolean addPermission = false;
 
+Tbl_opcion[] permisions = (Tbl_opcion[]) hts.getAttribute("user_permissions");
 
+for(Tbl_opcion p: permisions) {
+    if(p.getCodename().equals("add_plantspecimen")) {
+        addPermission = true;
+    }
+}
+
+    if(!addPermission) {
+        response.sendRedirect(request.getContextPath() + "/accesoDenegado.jsp");
+        return;
+    }
 %>
 <body class="hold-transition sidebar-mini">
 
@@ -187,11 +201,7 @@ families = (Tbl_family[]) request.getAttribute("families");
                                 <label for="state">Estado/Provincia/Condado</label>
                                 <select class="form-control" id="state" name="state" required>
                                   <option value="">Seleccione...</option>
-                                   <c:if test="${states != null}">
-                                     <c:forEach items="${states}" var="state">
-                                         <option value="${state.id}">${state.name}</option>
-                                     </c:forEach>
-                                   </c:if>
+
                                 </select>
                             </div>
 
@@ -199,11 +209,7 @@ families = (Tbl_family[]) request.getAttribute("families");
                                 <label for="city">Ciudad</label>
                                 <select class="form-control" id="city" name="city" required>
                                   <option value="">Seleccione...</option>
-                                   <c:if test="${cities != null}">
-                                     <c:forEach items="${cities}" var="city">
-                                         <option value="${city.id}">${city.name}</option>
-                                     </c:forEach>
-                                   </c:if>
+
                                 </select>
                             </div>
 
@@ -305,6 +311,9 @@ families = (Tbl_family[]) request.getAttribute("families");
   <script src="../vendor/jAlert/dist/jAlert.min.js"></script>
   <script src="../vendor/jAlert/dist/jAlert-functions.min.js"> </script>
    <script src="../js/showImage.js"></script>
+  <script src="../js/axios/axios.min.js"></script>
+   <script src="../js/js_cookie/js.cookie.min.js"></script>
+  <script src="../js/zoneFetcher.js"></script>
   
 </body>
 </html>

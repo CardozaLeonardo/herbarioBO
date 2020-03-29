@@ -295,6 +295,7 @@
                   <tbody>
                     <%
                     	for(Tbl_user user: usuarios) {
+                    	    if(user.isIs_active()) {
                     %>
                     <tr>
                       <td><%=user.getId() %></td>
@@ -307,7 +308,7 @@
                        class="btn btn-primary">Aceptar</a>
                       </td>
                     </tr>
-                    <%} %>
+                    <%} }%>
                     
                   </tbody>
                 </table>

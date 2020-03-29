@@ -332,6 +332,7 @@ public JSONObject asignarRol(Tbl_user usr, Cookie[] cookies) {
     String URL = Server.getHostname() + "user/" +usr.getId() +"/";
     
     String[] tokens = Util.extractTokens(cookies);
+    usr.setIs_active(true);
 	
 	if(tokens == null) {
 		

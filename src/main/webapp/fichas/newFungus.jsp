@@ -17,6 +17,22 @@ families = (Tbl_family[]) request.getAttribute("families");
 	
 }
 
+// Permission
+    HttpSession hts = request.getSession();
+    boolean addPermission = false;
+
+    Tbl_opcion[] permisions = (Tbl_opcion[]) hts.getAttribute("user_permissions");
+
+    for(Tbl_opcion p: permisions) {
+        if(p.getCodename().equals("add_mushroomspecimen")) {
+            addPermission = true;
+        }
+    }
+
+    if(!addPermission) {
+        response.sendRedirect(request.getContextPath() + "/accesoDenegado.jsp");
+        return;
+    }
 
 %>
 

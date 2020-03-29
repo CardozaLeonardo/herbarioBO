@@ -5,8 +5,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -39,6 +43,8 @@ import entidades.fichas_tecnicas.Tbl_species;
 import entidades.fichas_tecnicas.Tbl_state;
 import util.ServicioArchivo;
 import util.Util;
+
+import java.io.IOException;
 
 @Controller
 public class EspecimenController {
@@ -277,7 +283,7 @@ public class EspecimenController {
 			RedirectAttributes redir) {
 		RedirectView rv = new RedirectView(req.getContextPath() + "/fichas/newFungus");
 		DT_mushroom dtm = new DT_mushroom();
-		JSONObject newFungus = new JSONObject();
+		MultiValueMap<String, Object> newFungus = new LinkedMultiValueMap<>();
 		
 		int idUser = Integer.parseInt(req.getParameter("idUser"));
 		int cap = Integer.parseInt(req.getParameter("cap"));
@@ -294,29 +300,30 @@ public class EspecimenController {
 		int city = Integer.parseInt(req.getParameter("city"));
 		boolean crust = Boolean.parseBoolean(req.getParameter("crust"));
 		
-		newFungus.put("cap", cap);
-		newFungus.put("forms", forms);
-		newFungus.put("date_received", "2019-11-25");
-		newFungus.put("number_of_samples", number_of_samples);
-		newFungus.put("description", req.getParameter("description"));
-		newFungus.put("latitude", req.getParameter("latitude"));
-		newFungus.put("longitude", req.getParameter("longitude"));
-		newFungus.put("location", "Nicaragua");
-		newFungus.put("crust", crust);
-		newFungus.put("color", req.getParameter("color"));
-		newFungus.put("change_of_color", req.getParameter("change_of_color"));
-		newFungus.put("smell", req.getParameter("smell"));
-		newFungus.put("aditional_info", req.getParameter("aditional_info"));
-		newFungus.put("user", idUser);
-		newFungus.put("family", family);
-		newFungus.put("genus", genus);
-		newFungus.put("species", species);
-		newFungus.put("status", status);
-		newFungus.put("ecosystem", ecosystem);
-		newFungus.put("recolection_area_status", recolection_area_status);
-		newFungus.put("country", country);
-		newFungus.put("state", state);
-		newFungus.put("city", city);
+		newFungus.add("cap", cap);
+		newFungus.add("forms", forms);
+		newFungus.add("date_received", "2019-11-25");
+		newFungus.add("number_of_samples", number_of_samples);
+		newFungus.add("description", req.getParameter("description"));
+		newFungus.add("latitude", req.getParameter("latitude"));
+		newFungus.add("longitude", req.getParameter("longitude"));
+		newFungus.add("location", "Nicaragua");
+		newFungus.add("crust", crust);
+		newFungus.add("color", req.getParameter("color"));
+		newFungus.add("change_of_color", req.getParameter("change_of_color"));
+		newFungus.add("smell", req.getParameter("smell"));
+		newFungus.add("aditional_info", req.getParameter("aditional_info"));
+		newFungus.add("user", idUser);
+		newFungus.add("family", family);
+		newFungus.add("genus", genus);
+		newFungus.add("species", species);
+		newFungus.add("status", status);
+		newFungus.add("ecosystem", ecosystem);
+		newFungus.add("recolection_area_status", recolection_area_status);
+		newFungus.add("country", country);
+		newFungus.add("state", state);
+		newFungus.add("city", city);
+		newFungus.add("photo", file.getResource());
 		
 		
 		
@@ -359,7 +366,6 @@ public class EspecimenController {
 			RedirectAttributes redir) {
 		RedirectView rv = new RedirectView(req.getContextPath() + "/fichas/newFungus");
 		DT_mushroom dtm = new DT_mushroom();
-		JSONObject newFungus = new JSONObject();
 		
 		int idUser = Integer.parseInt(req.getParameter("idUser"));
 		int id = Integer.parseInt(req.getParameter("fungusID"));
@@ -376,53 +382,58 @@ public class EspecimenController {
 		int state = Integer.parseInt(req.getParameter("state"));
 		int city = Integer.parseInt(req.getParameter("city"));
 		boolean crust = Boolean.parseBoolean(req.getParameter("crust"));
-		
-		newFungus.put("id", id);
-		newFungus.put("cap", cap);
-		newFungus.put("forms", forms);
-		newFungus.put("date_received", "2019-11-25");
-		newFungus.put("number_of_samples", number_of_samples);
-		newFungus.put("description", req.getParameter("description"));
-		newFungus.put("latitude", req.getParameter("latitude"));
-		newFungus.put("longitude", req.getParameter("longitude"));
-		newFungus.put("location", "Nicaragua");
-		newFungus.put("crust", crust);
-		newFungus.put("color", req.getParameter("color"));
-		newFungus.put("change_of_color", req.getParameter("change_of_color"));
-		newFungus.put("smell", req.getParameter("smell"));
-		newFungus.put("aditional_info", req.getParameter("aditional_info"));
-		newFungus.put("user", idUser);
-		newFungus.put("family", family);
-		newFungus.put("genus", genus);
-		newFungus.put("species", species);
-		newFungus.put("ecosystem", ecosystem);
-		newFungus.put("recolection_area_status", recolection_area_status);
-		newFungus.put("country", country);
-		newFungus.put("state", state);
-		newFungus.put("city", city);
-		
+
+
+		/*FileSystemResource fileSystemResource = null;
+		try {
+			fileSystemResource = new FileSystemResource(file.getInputStream());
+			fileSystemResource = file.getInputStream();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}*/
+
+		MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+		//body.add("id",id);
+		body.add("cap",cap);
+		body.add("forms", forms);
+		body.add("date_received", "2019-11-25");
+		body.add("number_of_samples", number_of_samples);
+		body.add("description", req.getParameter("description"));
+		body.add("latitude", req.getParameter("latitude"));
+		body.add("longitude", req.getParameter("longitude"));
+		body.add("location", "Nicaragua");
+		body.add("crust", crust);
+		body.add("color", req.getParameter("color"));
+		body.add("change_of_color", req.getParameter("change_of_color"));
+		body.add("smell", req.getParameter("smell"));
+		body.add("aditional_info", req.getParameter("aditional_info"));
+		body.add("user", idUser);
+		body.add("family", family);
+		body.add("genus", genus);
+		body.add("species", species);
+		body.add("ecosystem", ecosystem);
+		body.add("recolection_area_status", recolection_area_status);
+		body.add("country", country);
+		body.add("state", state);
+		body.add("city", city);
+		body.add("description", req.getParameter("description"));
+		body.add("photo", file.getResource());
+		/*try {
+			body.add("photo", new ClassPathResource(file.getResource().getFile().getPath()));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}*/
+
+
 		if(req.getParameter("opt") != null) {
 			status = Integer.parseInt(req.getParameter("opt"));
-			newFungus.put("status", status);
+			body.add("status", status);
 		}else {
-			newFungus.put("status", 2);
+			body.add("status", 2);
 		}
 		
-		/*if(file.getContentType() != null) {
-			
-			servicioArchivo = new ServicioArchivo();
-			
-			if(servicioArchivo.subirArchivo(file) == false) {
-				rv = new RedirectView(req.getContextPath() + "/fichas/newFungus");
-				redir.addFlashAttribute("msg", 1);
-				redir.addFlashAttribute("type", "danger");
-				redir.addFlashAttribute("cont", "¡Ha ocurrido un error guardando el registro!");
-				return rv;
-			}
-			
-			newFungus.put("photo","/storage/" + file.getOriginalFilename());
-		}*/
-		JSONObject respuesta = dtm.actualizarHongo(newFungus, req.getCookies());
+
+		JSONObject respuesta = dtm.actualizarHongo(body, req.getCookies(), id);
 		
 		if(respuesta.getInt("status") == 200) {
 			rv = new RedirectView(req.getContextPath() + "/fichas/fungus");

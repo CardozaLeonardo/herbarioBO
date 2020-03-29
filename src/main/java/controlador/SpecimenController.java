@@ -6,6 +6,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -259,7 +261,7 @@ public class SpecimenController {
 			RedirectAttributes redir) {
 		RedirectView rv = new RedirectView(req.getContextPath() + "/fichas/newFungus");
 		DT_plantSpecimen dtp = new DT_plantSpecimen();
-		JSONObject newFungus = new JSONObject();
+		MultiValueMap<String, Object> newFungus = new LinkedMultiValueMap<>();
 		
 		int idUser = Integer.parseInt(req.getParameter("idUser"));
 		int number_of_samples = Integer.parseInt(req.getParameter("number_of_samples"));
@@ -276,25 +278,26 @@ public class SpecimenController {
 		int biostatus = Integer.parseInt(req.getParameter("biostatus"));
 		
 		
-		newFungus.put("date_received", "2019-11-25");
-		newFungus.put("number_of_samples", number_of_samples);
-		newFungus.put("description", req.getParameter("description"));
-		newFungus.put("latitude", req.getParameter("latitude"));
-		newFungus.put("longitude", req.getParameter("longitude"));
-		newFungus.put("location", "Nicaragua");
-		newFungus.put("aditional_info", req.getParameter("aditional_info"));
-		newFungus.put("user", idUser);
-		newFungus.put("family", family);
-		newFungus.put("complete", complete);
-		newFungus.put("genus", genus);
-		newFungus.put("species", species);
-		newFungus.put("status", status);
-		newFungus.put("ecosystem", ecosystem);
-		newFungus.put("recolection_area_status", recolection_area_status);
-		newFungus.put("country", country);
-		newFungus.put("state", state);
-		newFungus.put("city", city);
-		newFungus.put("biostatus", biostatus);
+		newFungus.add("date_received", "2019-11-25");
+		newFungus.add("number_of_samples", number_of_samples);
+		newFungus.add("description", req.getParameter("description"));
+		newFungus.add("latitude", req.getParameter("latitude"));
+		newFungus.add("longitude", req.getParameter("longitude"));
+		newFungus.add("location", "Nicaragua");
+		newFungus.add("aditional_info", req.getParameter("aditional_info"));
+		newFungus.add("user", idUser);
+		newFungus.add("family", family);
+		newFungus.add("complete", complete);
+		newFungus.add("genus", genus);
+		newFungus.add("species", species);
+		newFungus.add("status", status);
+		newFungus.add("ecosystem", ecosystem);
+		newFungus.add("recolection_area_status", recolection_area_status);
+		newFungus.add("country", country);
+		newFungus.add("state", state);
+		newFungus.add("city", city);
+		newFungus.add("biostatus", biostatus);
+		newFungus.add("photo", file.getResource());
 		
 		
 		
@@ -337,7 +340,7 @@ public class SpecimenController {
 			RedirectAttributes redir) {
 		RedirectView rv = new RedirectView(req.getContextPath() + "/fichas/newFungus");
 		DT_plantSpecimen dtp = new DT_plantSpecimen();
-		JSONObject newFungus = new JSONObject();
+		MultiValueMap<String, Object> newFungus = new LinkedMultiValueMap<>();
 		
 		int idUser = Integer.parseInt(req.getParameter("idUser"));
 		int idPlant = Integer.parseInt(req.getParameter("idPlant"));
@@ -354,52 +357,38 @@ public class SpecimenController {
 		boolean complete = Boolean.parseBoolean(req.getParameter("complete"));
 		int biostatus = Integer.parseInt(req.getParameter("biostatus"));
 		
-		newFungus.put("id", idPlant);
-		newFungus.put("date_received", "2019-11-25");
-		newFungus.put("number_of_samples", number_of_samples);
-		newFungus.put("description", req.getParameter("description"));
-		newFungus.put("latitude", req.getParameter("latitude"));
-		newFungus.put("longitude", req.getParameter("longitude"));
-		newFungus.put("location", "Nicaragua");
-		newFungus.put("aditional_info", req.getParameter("aditional_info"));
-		newFungus.put("user", idUser);
-		newFungus.put("family", family);
-		newFungus.put("complete", complete);
-		newFungus.put("genus", genus);
-		newFungus.put("species", species);
+		newFungus.add("id", idPlant);
+		newFungus.add("date_received", "2019-11-25");
+		newFungus.add("number_of_samples", number_of_samples);
+		newFungus.add("description", req.getParameter("description"));
+		newFungus.add("latitude", req.getParameter("latitude"));
+		newFungus.add("longitude", req.getParameter("longitude"));
+		newFungus.add("location", "Nicaragua");
+		newFungus.add("aditional_info", req.getParameter("aditional_info"));
+		newFungus.add("user", idUser);
+		newFungus.add("family", family);
+		newFungus.add("complete", complete);
+		newFungus.add("genus", genus);
+		newFungus.add("species", species);
 		
-		newFungus.put("ecosystem", ecosystem);
-		newFungus.put("recolection_area_status", recolection_area_status);
-		newFungus.put("country", country);
-		newFungus.put("state", state);
+		newFungus.add("ecosystem", ecosystem);
+		newFungus.add("recolection_area_status", recolection_area_status);
+		newFungus.add("country", country);
+		newFungus.add("state", state);
 		//newFungus.put("status", 4);
-		newFungus.put("city", city);
-		newFungus.put("biostatus", biostatus);
+		newFungus.add("city", city);
+		newFungus.add("biostatus", biostatus);
+		newFungus.add("photo", file.getResource());
 		
 		if(req.getParameter("opt") != null) {
 			status = Integer.parseInt(req.getParameter("opt"));
-			newFungus.put("status", status);
+			newFungus.add("status", status);
 		}else {
-			newFungus.put("status", 2);
+			newFungus.add("status", 2);
 		}
 		
-		
-		
-		/*if(file.getContentType() != null) {
-			
-			servicioArchivo = new ServicioArchivo();
-			
-			if(servicioArchivo.subirArchivo(file) == false) {
-				rv = new RedirectView(req.getContextPath() + "/fichas/newFungus");
-				redir.addFlashAttribute("msg", 1);
-				redir.addFlashAttribute("type", "danger");
-				redir.addFlashAttribute("cont", "¡Ha ocurrido un error guardando el registro!");
-				return rv;
-			}
-			
-			newFungus.put("photo","/storage/" + file.getOriginalFilename());
-		}*/
-		JSONObject respuesta = dtp.actualizarPlanta(newFungus, req.getCookies());
+
+		JSONObject respuesta = dtp.actualizarPlanta(newFungus, req.getCookies(), idPlant);
 		
 		if(respuesta.getInt("status") == 201 || respuesta.getInt("status") == 200) {
 			rv = new RedirectView(req.getContextPath() + "/fichas/PlantList");
@@ -534,9 +523,9 @@ public class SpecimenController {
 			newFungus.put("status", 2);
 		}
 		
-       JSONObject respuesta = dtp.actualizarPlanta(newFungus, req.getCookies());
+       //JSONObject respuesta = dtp.actualizarPlanta(newFungus, req.getCookies());
 		
-		if(respuesta.getInt("status") == 201 || respuesta.getInt("status") == 200) {
+		/*if(respuesta.getInt("status") == 201 || respuesta.getInt("status") == 200) {
 			//rv = new RedirectView(req.getContextPath() + "/fichas/PlantList");
 			redir.addFlashAttribute("msg", 1);
 			redir.addFlashAttribute("type", "success");
@@ -547,7 +536,7 @@ public class SpecimenController {
 			redir.addFlashAttribute("error", 1);
 			redir.addFlashAttribute("type", "info");
 			redir.addFlashAttribute("cont", "¡Debe iniciar sesión!");
-		}
+		}*/
 		
 		return rv;
 	}

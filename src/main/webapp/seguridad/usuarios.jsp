@@ -68,6 +68,43 @@ Tbl_user[] users = dtus.getUsers(token, tokenRefresh);
 String mensaje = "";
 mensaje = request.getParameter("msj");
 mensaje = mensaje==null?"":mensaje;
+
+
+// Permissions
+HttpSession hts = request.getSession();
+
+Tbl_opcion[] permisions = (Tbl_opcion[]) hts.getAttribute("user_permissions");
+
+boolean viewPermission = false;
+boolean editPermission = false;
+boolean deletePermission = false;
+boolean addPermission = false;
+
+for(Tbl_opcion p: permisions) {
+    if (p.getCodename().equals("view_user")) {
+        viewPermission = true;
+    }
+
+    if (p.getCodename().equals("change_user")) {
+        editPermission = true;
+    }
+
+    if (p.getCodename().equals("delete_user")) {
+        deletePermission = true;
+    }
+
+    if (p.getCodename().equals("add_user")) {
+        addPermission = true;
+    }
+}
+
+if(!viewPermission) {
+    response.sendRedirect(request.getContextPath() + "/accesoDenegado.jsp");
+    return;
+}
+
+
+
 %>
 
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
@@ -147,12 +184,15 @@ mensaje = mensaje==null?"":mensaje;
 	                  <td>${usr.email}</td>
 	                  <td>${(usr.is_active)?"Activo":"Inactivo"}</td>
 	                  <td>
-	                  	<a href="./updateUser?id=${usr.id}" onclick="linkEditUser('${usr.id}');"><i class="far fa-edit" title="Editar"></i></a>&nbsp;&nbsp;
-	                  	<c:choose>
+	                  	<%if(editPermission){%>
+                          <a href="./updateUser?id=${usr.id}" onclick="linkEditUser('${usr.id}');"><i class="far fa-edit" title="Editar"></i></a>&nbsp;&nbsp;
+	                  	<%}%>
+                          <c:choose>
 	                  	  <c:when test="${usr.is_active}">
-	                  	     
-	                  	<a href="" onclick="deleteUser('${usr.id}');"><i class="far fa-trash-alt" title="Eliminar"></i> </a>
-	                  	  </c:when>
+                              <%if(deletePermission){%>
+	                  	  <a href="" onclick="deleteUser('${usr.id}');"><i class="far fa-trash-alt" title="Eliminar"></i> </a>
+                              <%}%>
+                          </c:when>
 	                  	  
 	                  	  <c:when test="${usr.is_active == false}">
 	                  	      

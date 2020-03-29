@@ -10,6 +10,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
@@ -122,7 +123,7 @@ public JSONObject getPlant(int id, Cookie[] cookies) {
 	}
 	
 	
-public JSONObject guardarPlanta(JSONObject newFungus, Cookie[] cookies) {
+public JSONObject guardarPlanta(MultiValueMap<String, Object> newFungus, Cookie[] cookies) {
 		
 		String URL = Server.getHostname() + "plant_specimen/";
 		
@@ -141,11 +142,13 @@ public JSONObject guardarPlanta(JSONObject newFungus, Cookie[] cookies) {
 		
 		headers.add("Cookie", "token-access="+ tokens[0]);
 		headers.add("Cookie", "token-refresh="+ tokens[1]);
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		
-		System.out.println(newFungus.toString());
-		
-		HttpEntity<String> req = new HttpEntity<String>(newFungus.toString(),headers);
+		//headers.setContentType(MediaType.APPLICATION_JSON);
+		headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+
+
+
+	HttpEntity<MultiValueMap<String, Object>> req =
+			new HttpEntity<>(newFungus,headers);
 		
 		try {
 			
@@ -170,9 +173,9 @@ public JSONObject guardarPlanta(JSONObject newFungus, Cookie[] cookies) {
 	}
 
 
-public JSONObject actualizarPlanta(JSONObject newFungus, Cookie[] cookies) {
+public JSONObject actualizarPlanta(MultiValueMap<String, Object> newFungus, Cookie[] cookies, int ID) {
 	
-	int id = newFungus.getInt("id");
+	int id = ID;
 	String URL = Server.getHostname() + "plant_specimen/" + id + "/";
 	
 	//Tbl_user user = null;
@@ -186,17 +189,18 @@ public JSONObject actualizarPlanta(JSONObject newFungus, Cookie[] cookies) {
 		return retorno;
 	}
 	
-	newFungus.remove("id");
+
 	
     HttpHeaders headers = new HttpHeaders(); 
 	
 	headers.add("Cookie", "token-access="+ tokens[0]);
 	headers.add("Cookie", "token-refresh="+ tokens[1]);
-	headers.setContentType(MediaType.APPLICATION_JSON);
+	headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 	
 	System.out.println(newFungus.toString());
-	
-	HttpEntity<String> req = new HttpEntity<String>(newFungus.toString(),headers);
+
+	HttpEntity<MultiValueMap<String, Object>> req =
+			new HttpEntity<>(newFungus,headers);
 	
 	try {
 		

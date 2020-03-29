@@ -17,6 +17,7 @@ public class Tbl_specimen {
 	private Tbl_family family;
 	private Tbl_genus genus;
 	private Tbl_species species;
+	private boolean approved;
 	private Tbl_status status;
 	private int number_of_samples;
 	private String description;
@@ -34,7 +35,15 @@ public class Tbl_specimen {
 	public void setPhoto(String photo) {
 		this.photo = photo;
 	}
-	
+
+	public boolean isApproved() {
+		return approved;
+	}
+
+	public void setApproved(boolean approved) {
+		this.approved = approved;
+	}
+
 	public Tbl_family getFamily() {
 		return family;
 	}

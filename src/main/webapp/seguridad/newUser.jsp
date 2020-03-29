@@ -38,6 +38,23 @@ jAlert css
 <%
  String mensaje = "Se ha guardado";
 
+    // Permission
+    HttpSession hts = request.getSession();
+    boolean addPermission = false;
+
+    Tbl_opcion[] permisions = (Tbl_opcion[]) hts.getAttribute("user_permissions");
+
+    for(Tbl_opcion p: permisions) {
+        if(p.getCodename().equals("add_user")) {
+            addPermission = true;
+        }
+    }
+
+    if(!addPermission) {
+        response.sendRedirect(request.getContextPath() + "/accesoDenegado.jsp");
+        return;
+    }
+
 %>
 <body class="hold-transition sidebar-mini">
 

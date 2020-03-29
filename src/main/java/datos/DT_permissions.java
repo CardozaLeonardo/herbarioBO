@@ -2,6 +2,7 @@ package datos;
 
 import javax.servlet.http.Cookie;
 
+import entidades.PermissionRecep;
 import org.json.JSONObject;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -53,6 +54,90 @@ private RestTemplate restTemplate = new RestTemplate();
 		{
 			
 			
+			JSONObject retorno = new JSONObject();
+			retorno.put("status", e.getStatusCode().value());
+			//retorno.put("user", user);
+			return retorno;
+		}
+	}
+
+	public JSONObject getUserPermissions(int idUser, Cookie[] cookies) {
+		String URL = Server.getHostname() + "user/"+idUser+ "/get_user_permissions/";
+
+
+		String[] tokens = Util.extractTokens(cookies);
+
+		if(tokens == null) {
+
+			JSONObject retorno = new JSONObject();
+			retorno.put("status", 0);
+			return retorno;
+		}
+
+		HttpHeaders headers = new HttpHeaders();
+
+		headers.add("Cookie", "token-access="+ tokens[0]);
+		headers.add("Cookie", "token-refresh="+ tokens[1]);
+
+		HttpEntity<String> req = new HttpEntity<String>(headers);
+
+		try {
+
+			ResponseEntity<Tbl_opcion[]> response = restTemplate.exchange(URL, HttpMethod.GET, req, Tbl_opcion[].class);
+			Tbl_opcion[] permissions = response.getBody();
+
+			JSONObject retorno = new JSONObject();
+			retorno.put("status", response.getStatusCodeValue());
+			retorno.put("permissions", permissions);
+			retorno.put("cookies", Util.parseCookie(response.getHeaders().get("Set-Cookie")));
+			return retorno;
+
+		}catch(HttpClientErrorException e)
+		{
+
+
+			JSONObject retorno = new JSONObject();
+			retorno.put("status", e.getStatusCode().value());
+			//retorno.put("user", user);
+			return retorno;
+		}
+	}
+
+	public JSONObject getGroupPermissions(int idGroup, Cookie[] cookies) {
+		String URL = Server.getHostname() + "group/"+idGroup+ "/get_group_permissions/";
+
+
+		String[] tokens = Util.extractTokens(cookies);
+
+		if(tokens == null) {
+
+			JSONObject retorno = new JSONObject();
+			retorno.put("status", 0);
+			return retorno;
+		}
+
+		HttpHeaders headers = new HttpHeaders();
+
+		headers.add("Cookie", "token-access="+ tokens[0]);
+		headers.add("Cookie", "token-refresh="+ tokens[1]);
+
+		HttpEntity<String> req = new HttpEntity<String>(headers);
+
+		try {
+
+			ResponseEntity<PermissionRecep> response = restTemplate.exchange(URL, HttpMethod.GET, req, PermissionRecep.class);
+			PermissionRecep permissions = response.getBody();
+
+			JSONObject retorno = new JSONObject();
+			retorno.put("status", response.getStatusCodeValue());
+			retorno.put("permissions", permissions);
+			retorno.put("cookies", Util.parseCookie(response.getHeaders().get("Set-Cookie")));
+			return retorno;
+
+		}catch(HttpClientErrorException e)
+		{
+
+
 			JSONObject retorno = new JSONObject();
 			retorno.put("status", e.getStatusCode().value());
 			//retorno.put("user", user);

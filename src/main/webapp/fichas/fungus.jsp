@@ -45,6 +45,40 @@ Tbl_mushroomSpecimen[] fungus =(Tbl_mushroomSpecimen[]) request.getAttribute("fu
 String mensaje = "";
 mensaje = request.getParameter("msj");
 mensaje = mensaje==null?"":mensaje;
+
+// Permissions
+HttpSession hts = request.getSession();
+
+Tbl_opcion[] permisions = (Tbl_opcion[]) hts.getAttribute("user_permissions");
+
+boolean viewPermission = false;
+boolean editPermission = false;
+boolean deletePermission = false;
+boolean addPermission = false;
+
+for(Tbl_opcion p: permisions) {
+    if (p.getCodename().equals("view_mushroomspecimen")) {
+        viewPermission = true;
+    }
+
+    if (p.getCodename().equals("change_mushroomspecimen")) {
+        editPermission = true;
+    }
+
+    if (p.getCodename().equals("delete_mushroomspecimen")) {
+        deletePermission = true;
+    }
+
+    if (p.getCodename().equals("add_mushroomspecimen")) {
+        addPermission = true;
+    }
+}
+
+if(!viewPermission) {
+    response.sendRedirect(request.getContextPath() + "/accesoDenegado.jsp");
+    return;
+}
+
 %>
 
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
@@ -98,12 +132,14 @@ mensaje = mensaje==null?"":mensaje;
           <p class="mb-4">DataTables is a third party plugin that is used to generate the demo table below. For more information about DataTables, please visit the <a target="_blank" href="https://datatables.net">official DataTables documentation</a>.</p> -->
 
             <h2>Usuarios</h2>
+            <%if(addPermission) {%>
                 <a href="<%=request.getContextPath()%>/fichas/newFungus" class="btn btn-primary btn-icon-split">
                     <span class="icon text-white-50">
                       <i class="fas fa-plus"></i>
                     </span>
                     <span class="text">Agregar Hongo</span>
                   </a>
+            <%}%>
                   <br>
                   <br>
             <table id="example2" class="display">
@@ -133,12 +169,14 @@ mensaje = mensaje==null?"":mensaje;
 	                  <td><%=fus.getSpecies().getCommon_name()%></td>
 	                  <td><%=fus.getStatus().getName()%></td>
 	                  <td>
+                          <%if(editPermission){%>
 	                  	<a href="./updateFungus?id=<%=fus.getId() %>" onclick="linkEditUser('<%=fus.getId() %>');"><i class="far fa-edit" title="Editar"></i></a>&nbsp;&nbsp;
-	                  	  
+	                  	  <%}%>
+
 	                  	<a href="./viewFungus?id=<%=fus.getId()%>" onclick="linkEditUser('<%=fus.getId()%>');"><i class="far fa-eye" title="View"></i></a>&nbsp;&nbsp;
-	                  	     
+	                  	<%if(deletePermission) {%>
 	                  	<a href="#" class="deleteFungus" id="<%=fus.getId()%>"><i class="far fa-trash-alt" title="Eliminar"></i> </a>
-	                  	  
+	                  	  <%}%>
 	                  	      <!--  <a href="" onclick="deleteUser('${usr.id}');"><i class="far fa-trash-alt" title="Eliminar"></i> </a> -->
 	                  	    
 	                  </td>

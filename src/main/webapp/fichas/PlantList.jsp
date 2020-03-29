@@ -57,6 +57,41 @@ System.out.println(specimenJson);
  String errorMsg = "";
  boolean error = false; // Para indicar cualquier error a notificar
 
+
+ // Getting user permissions
+
+ HttpSession hts = request.getSession();
+
+ Tbl_opcion[] permisions = (Tbl_opcion[]) hts.getAttribute("user_permissions");
+
+boolean viewPermission = false;
+boolean editPermission = false;
+boolean deletePermission = false;
+boolean addPermission = false;
+
+for(Tbl_opcion p: permisions) {
+    if (p.getCodename().equals("view_plantspecimen")) {
+        viewPermission = true;
+    }
+
+    if(p.getCodename().equals("change_plantspecimen")) {
+        editPermission = true;
+    }
+
+    if(p.getCodename().equals("delete_plantspecimen")) {
+        deletePermission = true;
+    }
+
+    if(p.getCodename().equals("add_plantspecimen")) {
+        addPermission = true;
+    }
+}
+
+if(!viewPermission) {
+    response.sendRedirect(request.getContextPath() + "/accesoDenegado.jsp");
+    return;
+}
+
  
  System.out.println("");
 ///////////
@@ -98,8 +133,8 @@ System.out.println(specimenJson);
 		  
 
           <!-- Page Heading -->
-          <h1 class="h3 mb-2 text-gray-800">Roles</h1>
-          <p class="mb-4">Cree, edite y elimine especimenes</p>
+          <h1 class="h3 mb-2 text-gray-800">Plantas</h1>
+          <p class="mb-4">Cree, edite y elimine fichas de plantas</p>
 
             
             
@@ -123,12 +158,15 @@ System.out.println(specimenJson);
 		    <button type="reset" id="cancelRoleBTN" class="btn btn-danger">Cancelar</button>
             </form>
             <br>
+
+            <%if(addPermission) {%>
             <a href="<%=request.getContextPath()%>/fichas/newPlant" class="btn btn-primary btn-icon-split">
                 <span class="icon text-white-50">
                   <i class="fas fa-plus"></i>
                 </span>
                 <span class="text">Agregar Planta</span>
               </a>
+            <%}%>
             <br>
             <br>
            
@@ -168,17 +206,19 @@ System.out.println(specimenJson);
                       <td id="cl-ecosystem-<%=plant.getId()%>"><%=plant.getEcosystem().getName() %></td>
                       
                       <td>
+                       <% if(editPermission) {%>
                        <a href="./updatePlant?id=<%=plant.getId()%>" id="<%=plant.getId()%>" class="editSpecimen">
                        
                        <i class="fas fa-edit editRole"></i>
                        </a>
-                       &nbsp;&nbsp;
+                       &nbsp;<%}%>
                        <a href="./viewPlant?id=<%=plant.getId()%>" >
                        <i class="far fa-eye" title="View"></i></a>&nbsp;&nbsp;
-                       
+                       <%if(deletePermission) {%>
                        <a href="#" id="<%=plant.getId()%>" onclick="deletePlant('<%=plant.getId()%>')" class="deletePlant">
                         <i class="fas fa-trash-alt"></i>
                        </a>
+                        <%}%>
                       </td>
                     </tr>
                     <%} %>
