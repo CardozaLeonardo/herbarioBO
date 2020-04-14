@@ -1,10 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1" import="entidades.*, datos.*, java.util.ArrayList"%>
+ <%@page import="entidades.fichas_tecnicas.Tbl_family"%>
+ 
+ <%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Nueva Planta</title>
+<title><%=Server.getAppName() %> Nueva Planta</title>
 <!-- Tell the browser to be responsive to screen width -->
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="shortcut icon" href="../img/Logo.png" type="image/x-icon">
@@ -36,8 +39,42 @@ jAlert css
 </head>
 
 <%
- String mensaje = "Se ha guardado";
 
+String idUser = "";
+
+  if(request.getAttribute("pass") == null){
+	  response.sendRedirect("./newPlant");
+	  return;
+  }
+
+if(request.getSession().getAttribute("user") != null){
+	 Tbl_user user = (Tbl_user) request.getSession().getAttribute("user");
+	 idUser += user.getId();
+}
+
+Tbl_family[] families = null;
+
+if(request.getAttribute("families") != null){
+families = (Tbl_family[]) request.getAttribute("families");
+	
+}
+
+// Permission
+HttpSession hts = request.getSession();
+boolean addPermission = false;
+
+Tbl_opcion[] permisions = (Tbl_opcion[]) hts.getAttribute("user_permissions");
+
+for(Tbl_opcion p: permisions) {
+    if(p.getCodename().equals("add_plantspecimen")) {
+        addPermission = true;
+    }
+}
+
+    if(!addPermission) {
+        response.sendRedirect(request.getContextPath() + "/accesoDenegado.jsp");
+        return;
+    }
 %>
 <body class="hold-transition sidebar-mini">
 
@@ -83,78 +120,87 @@ jAlert css
                         <h3 class="card-title">Nueva Planta</h3>
                     </div>
 
-                    <form role="form" action="" method="POST">
+                    <form role="form" action="../savePlant" method="POST" enctype="multipart/form-data">
+                    <input type="hidden" name="idUser" id="idUser" value="<%=idUser%>">
                         <div class="card-body">
                             <h5>Datos de Espécimen</h5>
-                            <div class="form-group">
-                                <label for="commonName">Nombre común</label>
-                                <input type="text" class="form-control" id="commonName" placeholder="Nombre común">
-                            </div>
+                            
 
-                            <div class="form-group">
-                                <label for="family">Familia</label>
-                                <select class="form-control" id="family">
 
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="genus">Género</label>
-                                <select class="form-control" id="genus">
-
-                                </select>
-                            </div>
 
                             <div class="form-group">
                                 <label for="specie">Especie</label>
-                                <select class="form-control" id="specie">
-
+                                <select class="form-control" id="specie" name="species" required>
+                                   <option value="">Seleccione...</option>
+                                   <c:if test="${species != null}">
+                                     <c:forEach items="${species}" var="specie">
+                                         <option value="${specie.id}">${specie.common_name}</option>
+                                     </c:forEach>
+                                   </c:if>
                                 </select>
                             </div>
 
                             <div class="form-group">
-                                <label for="descriptionSpecimen">Descripción del espécimen</label>
-                                <textarea class="form-control" id="descriptionSpecimen" rows="3"
-                                    placeholder="Descripción del espécimen"></textarea>
+                                <label for="specimenDescription">Descripción del espécimen</label>
+                                <textarea class="form-control" id="specimenDescription" rows="3"
+                                    placeholder="Descripción del espécimen" name="description"></textarea>
                             </div>
 
                             <div class="form-group">
-                                <label for="specimenStatus">Estado</label>
-                                <select class="form-control" id="specimenStatus">
-
+                                <label for="complete">¿Completo?</label>
+                                <select class="form-control" id="complete" name="complete" required>
+                                  <option value="">Seleccione...</option>
+                                  <option value="true">Sí</option>
+                                  <option value="false">No</option>
                                 </select>
                             </div>
 
                             <div class="form-group">
                                 <label for="numberSpecimens">Número de especímenes colectados</label>
                                 <input type="number" class="form-control" id="numberSpecimens"
-                                    placeholder="Número de especímenes">
+                                    placeholder="Número de especímenes" name="number_of_samples">
                             </div>
 
                             <h5>Datos de Ubicación</h5>
 
                             <div class="form-group">
                                 <label for="country">País</label>
-                                <select class="form-control" id="country">
-
+                                <select class="form-control" id="country" name="country" required>
+                                  <option value="">Seleccione...</option>
+                                   <c:if test="${countries != null}">
+                                     <c:forEach items="${countries}" var="cou">
+                                         <option value="${cou.id}">${cou.name}</option>
+                                     </c:forEach>
+                                   </c:if>
                                 </select>
                             </div>
 
                             <div class="form-group">
                                 <label for="state">Estado/Provincia/Condado</label>
-                                <input type="text" class="form-control" id="state"
-                                    placeholder="Estado/Provincia/Condado">
+                                <select disabled class="form-control" id="state" name="state" required>
+                                  <option value="">Seleccione...</option>
+
+                                </select>
                             </div>
 
                             <div class="form-group">
                                 <label for="city">Ciudad</label>
-                                <input type="text" class="form-control" id="city" placeholder="Ciudad">
+                                <select disabled class="form-control" id="city" name="city" required>
+                                  <option value="">Seleccione...</option>
+
+                                </select>
                             </div>
 
-                            <div class="form-group">
+                           <div class="form-group">
                                 <label for="specificCollectionArea">Area de recolección específica</label>
-                                <input type="text" class="form-control" id="specificCollectionArea"
-                                    placeholder="Area de recolección específica">
+                                <select class="form-control" id="specificCollectionArea" name="recolection_area_status" required>
+                                  <option value="">Seleccione...</option>
+                                   <c:if test="${reco != null}">
+                                     <c:forEach items="${reco}" var="rec">
+                                         <option value="${rec.id}">${rec.name}</option>
+                                     </c:forEach>
+                                   </c:if>
+                                </select>
                             </div>
 
                             <h6>Coordenadas</h6>
@@ -162,20 +208,25 @@ jAlert css
                             <div class="form-group">
                                 <label for="latitude">Latitud</label>
                                 <input type="text" class="form-control" id="latitude"
-                                    placeholder="Latitud">
+                                    placeholder="Latitud" name="latitude">
                             </div>
 
                             <div class="form-group">
                                 <label for="longitude">Longitud</label>
-                                <input type="text" class="form-control" id="longitude" placeholder="Longitud">
+                                <input type="text" class="form-control" id="longitude" placeholder="Longitud" name="longitude">
                             </div>
 
                             <h5>Datos de Hábitat</h5>
 
                             <div class="form-group">
                                 <label for="habitat">Hábitat</label>
-                                <select class="form-control" id="habitat">
-
+                                <select class="form-control" id="habitat" name="ecosystem" required>
+                                  <option value="">Seleccione...</option>
+                                   <c:if test="${ecosystems != null}">
+                                     <c:forEach items="${ecosystems}" var="ecosystem">
+                                         <option value="${ecosystem.id}">${ecosystem.name}</option>
+                                     </c:forEach>
+                                   </c:if>
                                 </select>
                             </div>
 
@@ -188,12 +239,26 @@ jAlert css
 
                             <div class="form-group">
                                 <label for="biostatus">Bioestado</label>
-                                <select class="form-control" id="biostatus">Bio
-
+                                <select class="form-control" id="biostatus" name="biostatus" required>
+                                  <option value="">Seleccione...</option>
+                                   <c:if test="${bios != null}">
+                                     <c:forEach items="${bios}" var="bio">
+                                         <option value="${bio.id}">${bio.name}</option>
+                                     </c:forEach>
+                                   </c:if>
                                 </select>
                             </div>
 
                         </div>
+                        
+                        <div class="form-group">
+                           <input type="file" id="photo" name="photo" class="form-control-file">
+                           <div class="card bg-light" style="min-height: 400px; width:90%;margin-left: auto;margin-right:auto;">
+                             <img id="imagePreview" src="" alt="image preview" width="60%" height="auto" 
+                             style="margin-left: auto;margin-right:auto;"/>
+                           </div>
+                        </div>
+                        
                         <div class="card-footer">
                             <button type="submit" class="btn btn-primary">Submit</button>
 
@@ -223,6 +288,10 @@ jAlert css
  <!-- jAlert js -->
   <script src="../vendor/jAlert/dist/jAlert.min.js"></script>
   <script src="../vendor/jAlert/dist/jAlert-functions.min.js"> </script>
+   <script src="../js/showImage.js"></script>
+  <script src="../js/axios/axios.min.js"></script>
+   <script src="../js/js_cookie/js.cookie.min.js"></script>
+  <script src="../js/zoneFetcher.js"></script>
   
 </body>
 </html>

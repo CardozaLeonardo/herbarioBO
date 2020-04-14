@@ -15,6 +15,7 @@
     if(obj.getInt("code") == 200)
     {
     	response.sendRedirect(request.getContextPath() + "/");
+    	
     	return;
     }
     
@@ -46,7 +47,7 @@
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
   <link rel="shortcut icon" href="img/Logo.png" type="image/x-icon">
   <!-- Custom styles for this template-->
-  <link href="css/sb-admin-2.min.css" rel="stylesheet">
+  <link href="css/sb-admin-2.css" rel="stylesheet">
 
 </head>
 
@@ -98,35 +99,26 @@
           <div class="card-body p-0">
             <!-- Nested Row within Card Body -->
             <div class="row">
-              <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
+              <div class="col-lg-6 d-none d-lg-block bg-login-image" >
+              	<img class = "login-image" src = "img/Logo.png">
+              </div>
               <div class="col-lg-6">
                 <div class="p-5">
                   <div class="text-center">
                     <h1 class="h4 text-gray-900 mb-4">Login</h1>
+                    <img class = "login-image-mobile" src = "img/Logo.png">
                   </div>
                   <form method="post" action="verify" class="user">
                   <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                     <div class="form-group">
-                      <input type="text" class="form-control form-control-user" id="exampleInputEmail" placeholder="Username" aria-describedby="emailHelp" name="username">
+                      <input type="text" class="form-control form-control-user" id="exampleInputEmail" placeholder="Usuario" aria-describedby="emailHelp" name="username">
                     </div>
                     <div class="form-group">
-                      <input type="password" class="form-control form-control-user" id="exampleInputPassword" placeholder="Password" name="password">
+                      <input type="password" class="form-control form-control-user" id="exampleInputPassword" placeholder="Contraseña" name="password">
                     </div>
-                    <div class="form-group">
-                      <label for="selectRol">Ingresar como:</label>
-                      <select id="selectRol" name="selectRol" class="form-control">
-                      <option selected value="">Seleccionar...</option>
-                      <c:if test="${listaRoles != null}">
-                          <c:forEach items="${listaRoles}" var="rol">
-                            <option value="${rol.id}">${rol.name}</option>
-                          </c:forEach>
-                      </c:if>
-                      </select>
-                    </div>
+                    
                     <input type="submit" class="btn btn-primary btn-user btn-block" value="Login" /> 
-                    <hr>
                   </form>
-                  <hr>
                   
                 </div>
               </div>

@@ -1,14 +1,12 @@
 package entidades.fichas_tecnicas;
 
 public class Tbl_species {
-	private int id;
-	private String common_name;
-	private String scientific_name;
-	private Tbl_family family;
+	private int id; //
+	private String common_name;//
+	private String scientific_name;//
 	private Tbl_genus genus;
 	private String description;
-	private String image;
-	private String type;
+	private String photo;
 	
 	public String getCommon_name() {
 		return common_name;
@@ -17,12 +15,7 @@ public class Tbl_species {
 		this.common_name = commonName;
 	}
 	
-	public Tbl_family getFamily() {
-		return family;
-	}
-	public void setFamily(Tbl_family family) {
-		this.family = family;
-	}
+
 	public Tbl_genus getGenus() {
 		return genus;
 	}
@@ -35,18 +28,13 @@ public class Tbl_species {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public String getImage() {
-		return image;
+	public String getPhoto() {
+		return photo;
 	}
-	public void setImage(String image) {
-		this.image = image;
+	public void setImage(String photo) {
+		this.photo = photo;
 	}
-	public String getType() {
-		return type;
-	}
-	public void setType(String type) {
-		this.type = type;
-	}
+
 	public int getId() {
 		return id;
 	}

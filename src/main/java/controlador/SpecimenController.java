@@ -265,14 +265,12 @@ public class SpecimenController {
 		
 		int idUser = Integer.parseInt(req.getParameter("idUser"));
 		int number_of_samples = Integer.parseInt(req.getParameter("number_of_samples"));
-		int family = Integer.parseInt(req.getParameter("family"));
-		int genus = Integer.parseInt(req.getParameter("genus"));
+
 		int species = Integer.parseInt(req.getParameter("species"));
 		int status = 2;
 		int ecosystem = Integer.parseInt(req.getParameter("ecosystem"));
 		int recolection_area_status = Integer.parseInt(req.getParameter("recolection_area_status"));
-		int country = Integer.parseInt(req.getParameter("country"));
-		int state = Integer.parseInt(req.getParameter("state"));
+
 		int city = Integer.parseInt(req.getParameter("city"));
 		boolean complete = Boolean.parseBoolean(req.getParameter("complete"));
 		int biostatus = Integer.parseInt(req.getParameter("biostatus"));
@@ -286,15 +284,12 @@ public class SpecimenController {
 		newFungus.add("location", "Nicaragua");
 		newFungus.add("aditional_info", req.getParameter("aditional_info"));
 		newFungus.add("user", idUser);
-		newFungus.add("family", family);
 		newFungus.add("complete", complete);
-		newFungus.add("genus", genus);
 		newFungus.add("species", species);
 		newFungus.add("status", status);
 		newFungus.add("ecosystem", ecosystem);
 		newFungus.add("recolection_area_status", recolection_area_status);
-		newFungus.add("country", country);
-		newFungus.add("state", state);
+
 		newFungus.add("city", city);
 		newFungus.add("biostatus", biostatus);
 		newFungus.add("photo", file.getResource());
@@ -351,8 +346,7 @@ public class SpecimenController {
 		int status;
 		int ecosystem = Integer.parseInt(req.getParameter("ecosystem"));
 		int recolection_area_status = Integer.parseInt(req.getParameter("recolection_area_status"));
-		int country = Integer.parseInt(req.getParameter("country"));
-		int state = Integer.parseInt(req.getParameter("state"));
+
 		int city = Integer.parseInt(req.getParameter("city"));
 		boolean complete = Boolean.parseBoolean(req.getParameter("complete"));
 		int biostatus = Integer.parseInt(req.getParameter("biostatus"));
@@ -373,8 +367,6 @@ public class SpecimenController {
 		
 		newFungus.add("ecosystem", ecosystem);
 		newFungus.add("recolection_area_status", recolection_area_status);
-		newFungus.add("country", country);
-		newFungus.add("state", state);
 		//newFungus.put("status", 4);
 		newFungus.add("city", city);
 		newFungus.add("biostatus", biostatus);
@@ -483,7 +475,7 @@ public class SpecimenController {
 		
 		int idUser = Integer.parseInt(req.getParameter("idUser"));
 		int idPlant = Integer.parseInt(req.getParameter("idPlant"));
-		JSONObject newFungus = new JSONObject();
+		MultiValueMap<String, Object> newFungus = new LinkedMultiValueMap<>();
 		
 		DT_plantSpecimen dtp = new DT_plantSpecimen();
 		JSONObject response = dtp.getPlant(idPlant, req.getCookies());
@@ -495,37 +487,36 @@ public class SpecimenController {
 			return rv;
 		}
 		
-		newFungus.put("date_received", "2019-11-25");
-		newFungus.put("number_of_samples", spe.getNumber_of_samples());
-		newFungus.put("description", spe.getDescription());
-		newFungus.put("latitude", spe.getLatitude());
-		newFungus.put("longitude", spe.getLongitude());
-		newFungus.put("location", "Nicaragua");
-		newFungus.put("aditional_info", "-");
-		newFungus.put("user", idUser);
-		newFungus.put("family", spe.getFamily().getId());
-		newFungus.put("complete", spe.getComplete());
-		newFungus.put("genus", spe.getGenus().getId());
-		newFungus.put("species", spe.getSpecies().getId());
-		newFungus.put("id", idPlant);
-		newFungus.put("ecosystem", spe.getEcosystem().getId());
-		newFungus.put("recolection_area_status", spe.getRecolection_area_status().getId());
-		newFungus.put("country", spe.getCountry().getId());
-		newFungus.put("state", spe.getState().getId());
+		newFungus.add("date_received", "2019-11-25");
+		newFungus.add("number_of_samples", spe.getNumber_of_samples());
+		newFungus.add("description", spe.getDescription());
+		newFungus.add("latitude", spe.getLatitude());
+		newFungus.add("longitude", spe.getLongitude());
+		newFungus.add("location", "Nicaragua");
+		newFungus.add("aditional_info", "-");
+		newFungus.add("user", idUser);
+		newFungus.add("complete", spe.getComplete());
+		newFungus.add("species", spe.getSpecies().getId());
+		newFungus.add("id", idPlant);
+		newFungus.add("ecosystem", spe.getEcosystem().getId());
+		newFungus.add("recolection_area_status", spe.getRecolection_area_status().getId());
+		newFungus.add("status", 2);
+
 		//newFungus.put("status", 4);
-		newFungus.put("city", spe.getCity().getId());
-		newFungus.put("biostatus",spe.getBiostatus().getId());
+		newFungus.add("city", spe.getCity().getId());
+		newFungus.add("biostatus",spe.getBiostatus().getId());
 		
 		if(req.getParameter("opt") != null) {
-			int status = Integer.parseInt(req.getParameter("opt"));
-			newFungus.put("status", status);
+			boolean status = Boolean.parseBoolean(req.getParameter("opt"));
+			newFungus.add("approved", status);
 		}else {
-			newFungus.put("status", 2);
+			newFungus.add("approved", false);
 		}
 		
-       //JSONObject respuesta = dtp.actualizarPlanta(newFungus, req.getCookies());
+       JSONObject respuesta = dtp.actualizarPlanta(newFungus, req.getCookies(), idPlant);
+
 		
-		/*if(respuesta.getInt("status") == 201 || respuesta.getInt("status") == 200) {
+		if(respuesta.getInt("status") == 201 || respuesta.getInt("status") == 200) {
 			//rv = new RedirectView(req.getContextPath() + "/fichas/PlantList");
 			redir.addFlashAttribute("msg", 1);
 			redir.addFlashAttribute("type", "success");
@@ -536,7 +527,9 @@ public class SpecimenController {
 			redir.addFlashAttribute("error", 1);
 			redir.addFlashAttribute("type", "info");
 			redir.addFlashAttribute("cont", "¡Debe iniciar sesión!");
-		}*/
+		}
+
+
 		
 		return rv;
 	}

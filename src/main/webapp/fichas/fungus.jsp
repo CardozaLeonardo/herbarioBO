@@ -164,7 +164,7 @@ if(!viewPermission) {
 	                   
 	                  <td><%=fus.getId() %></td>
 	                  <td><%=fus.getSpecies().getCommon_name()%></td>
-	                  <td><%=fus.getSpecies().getFamily().getName()%></td>
+	                  <td><%=fus.getSpecies().getGenus().getFamily().getName()%></td>
 	                  <td><%=fus.getSpecies().getGenus().getName()%></td>
 	                  <td><%=fus.getSpecies().getCommon_name()%></td>
 	                  <td><%=fus.getStatus().getName()%></td>

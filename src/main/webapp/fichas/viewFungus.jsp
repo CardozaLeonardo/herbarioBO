@@ -156,13 +156,13 @@ jAlert css
                             
                             <div class="form-group">
                                 <label for="family">Familia</label>
-                                <input disabled class="form-control" id="family" name="family" value="<%=mus.getFamily().getName()%>">
+                                <input disabled class="form-control" id="family" name="family" value="<%=mus.getSpecies().getGenus().getFamily().getName()%>">
                                 
                             </div>
 
                             <div class="form-group">
                                 <label for="genus">Género</label>
-                                <input disabled class="form-control" id="genus" name="genus" value="<%=mus.getGenus().getName()%>">
+                                <input disabled class="form-control" id="genus" name="genus" value="<%=mus.getSpecies().getGenus().getName()%>">
                             </div>
 
                             <div class="form-group">
@@ -230,12 +230,12 @@ jAlert css
 
                             <div class="form-group">
                                 <label for="country">País</label>
-                                <input disabled class="form-control" id="country" name="country" value="<%=mus.getCountry().getName()%>">
+                                <input disabled class="form-control" id="country" name="country" value="<%=mus.getCity().getState().getCountry().getName()%>">
                             </div>
 
                             <div class="form-group">
                                 <label for="state">Estado/Provincia/Condado</label>
-                                <input disabled class="form-control" id="state" name="state" value="<%=mus.getState().getName()%>">
+                                <input disabled class="form-control" id="state" name="state" value="<%=mus.getCity().getState().getName()%>">
                             </div>
 
                             <div class="form-group">

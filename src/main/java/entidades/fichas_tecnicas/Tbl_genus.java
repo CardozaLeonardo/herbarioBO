@@ -4,7 +4,6 @@ public class Tbl_genus {
 	private int id;
 	private String name;
 	private Tbl_family family;
-	private String type;
 	public String getName() {
 		return name;
 	}
@@ -16,12 +15,6 @@ public class Tbl_genus {
 	}
 	public void setFamily(Tbl_family family) {
 		this.family = family;
-	}
-	public String getType() {
-		return type;
-	}
-	public void setType(String type) {
-		this.type = type;
 	}
 	public int getId() {
 		return id;

@@ -289,14 +289,11 @@ public class EspecimenController {
 		int cap = Integer.parseInt(req.getParameter("cap"));
 		int forms = Integer.parseInt(req.getParameter("forms"));
 		int number_of_samples = Integer.parseInt(req.getParameter("number_of_samples"));
-		int family = Integer.parseInt(req.getParameter("family"));
-		int genus = Integer.parseInt(req.getParameter("genus"));
+
 		int species = Integer.parseInt(req.getParameter("species"));
 		int status = 2;
 		int ecosystem = Integer.parseInt(req.getParameter("ecosystem"));
 		int recolection_area_status = Integer.parseInt(req.getParameter("recolection_area_status"));
-		int country = Integer.parseInt(req.getParameter("country"));
-		int state = Integer.parseInt(req.getParameter("state"));
 		int city = Integer.parseInt(req.getParameter("city"));
 		boolean crust = Boolean.parseBoolean(req.getParameter("crust"));
 		
@@ -314,14 +311,11 @@ public class EspecimenController {
 		newFungus.add("smell", req.getParameter("smell"));
 		newFungus.add("aditional_info", req.getParameter("aditional_info"));
 		newFungus.add("user", idUser);
-		newFungus.add("family", family);
-		newFungus.add("genus", genus);
 		newFungus.add("species", species);
 		newFungus.add("status", status);
+		newFungus.add("approved", true);
 		newFungus.add("ecosystem", ecosystem);
 		newFungus.add("recolection_area_status", recolection_area_status);
-		newFungus.add("country", country);
-		newFungus.add("state", state);
 		newFungus.add("city", city);
 		newFungus.add("photo", file.getResource());
 		
@@ -372,14 +366,11 @@ public class EspecimenController {
 		int cap = Integer.parseInt(req.getParameter("cap"));
 		int forms = Integer.parseInt(req.getParameter("forms"));
 		int number_of_samples = Integer.parseInt(req.getParameter("number_of_samples"));
-		int family = Integer.parseInt(req.getParameter("family"));
-		int genus = Integer.parseInt(req.getParameter("genus"));
+
 		int species = Integer.parseInt(req.getParameter("species"));
 		int status;
 		int ecosystem = Integer.parseInt(req.getParameter("ecosystem"));
 		int recolection_area_status = Integer.parseInt(req.getParameter("recolection_area_status"));
-		int country = Integer.parseInt(req.getParameter("country"));
-		int state = Integer.parseInt(req.getParameter("state"));
 		int city = Integer.parseInt(req.getParameter("city"));
 		boolean crust = Boolean.parseBoolean(req.getParameter("crust"));
 
@@ -408,14 +399,11 @@ public class EspecimenController {
 		body.add("smell", req.getParameter("smell"));
 		body.add("aditional_info", req.getParameter("aditional_info"));
 		body.add("user", idUser);
-		body.add("family", family);
-		body.add("genus", genus);
 		body.add("species", species);
 		body.add("ecosystem", ecosystem);
 		body.add("recolection_area_status", recolection_area_status);
-		body.add("country", country);
-		body.add("state", state);
 		body.add("city", city);
+
 		body.add("description", req.getParameter("description"));
 		body.add("photo", file.getResource());
 		/*try {

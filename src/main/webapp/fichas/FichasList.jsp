@@ -128,10 +128,10 @@ System.out.println(specimenJson);
                     	for(Tbl_plantSpecimen plant: listSpecimens) {
                     %>
                     
-                    <%if(plant.getStatus().getId() == 4){%>
+                    <%if(!plant.isApproved()){%>
                     <tr>
                       <td id="cl-id-<%=plant.getId()%>"><%=plant.getId() %></td>
-                      <td id="cl-name-<%=plant.getId()%>"><%=plant.getUser().getFirst_name() %></td>
+                      <td id="cl-name-<%=plant.getId()%>"><%=plant.getUser().getUsername() %></td>
                        <td id="cl-name-<%=plant.getId()%>"><%=plant.getSpecies().getCommon_name() %></td>
                       
                       

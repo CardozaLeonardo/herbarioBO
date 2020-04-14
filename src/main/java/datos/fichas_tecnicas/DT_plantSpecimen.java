@@ -216,7 +216,9 @@ public JSONObject actualizarPlanta(MultiValueMap<String, Object> newFungus, Cook
 	}catch(HttpClientErrorException e)
 	{
 		
-		e.getMessage();
+
+		System.out.println(e.getMessage());
+
 		JSONObject retorno = new JSONObject();
 		retorno.put("status", e.getStatusCode().value());
 		//retorno.put("user", user);

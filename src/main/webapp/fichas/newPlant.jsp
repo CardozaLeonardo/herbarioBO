@@ -126,29 +126,7 @@ for(Tbl_opcion p: permisions) {
                             <h5>Datos de Espécimen</h5>
                             
 
-                            <div class="form-group">
-                                <label for="family">Familia</label>
-                                <select class="form-control" id="family" name="family" required>
-                                   <option value="">Seleccione...</option>
-                                   <%if(families != null) {%>
-                                     <%for(Tbl_family fam : families){ %>
-                                         <option value="<%=fam.getId()%>"><%=fam.getName()%></option>
-                                     <% }%>
-                                   <%} %>
-                                </select>
-                            </div>
 
-                            <div class="form-group">
-                                <label for="genus">Género</label>
-                                <select class="form-control" id="genus" name="genus">
-                                   <option value="">Seleccione...</option>
-                                   <c:if test="${genus != null}">
-                                     <c:forEach items="${genus}" var="gen">
-                                         <option value="${gen.id}">${gen.name}</option>
-                                     </c:forEach>
-                                   </c:if>
-                                </select>
-                            </div>
 
                             <div class="form-group">
                                 <label for="specie">Especie</label>
@@ -199,7 +177,7 @@ for(Tbl_opcion p: permisions) {
 
                             <div class="form-group">
                                 <label for="state">Estado/Provincia/Condado</label>
-                                <select class="form-control" id="state" name="state" required>
+                                <select disabled class="form-control" id="state" name="state" required>
                                   <option value="">Seleccione...</option>
 
                                 </select>
@@ -207,7 +185,7 @@ for(Tbl_opcion p: permisions) {
 
                             <div class="form-group">
                                 <label for="city">Ciudad</label>
-                                <select class="form-control" id="city" name="city" required>
+                                <select disabled class="form-control" id="city" name="city" required>
                                   <option value="">Seleccione...</option>
 
                                 </select>

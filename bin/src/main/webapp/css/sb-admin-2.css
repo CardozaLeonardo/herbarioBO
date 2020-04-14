@@ -2255,14 +2255,17 @@ fieldset:disabled a.btn {
 
 .btn-primary {
   color: #fff;
-  background-color: #4e73df;
-  border-color: #4e73df;
+  /*background-color: #4e73df;
+  border-color: #4e73df;*/
+  background-color: #00BC73;
 }
 
 .btn-primary:hover {
   color: #fff;
-  background-color: #2e59d9;
-  border-color: #2653d4;
+ /* background-color: #2e59d9;
+  border-color: #2653d4;*/
+  backgrond-color: #008b47;
+  border-color:#008b47;
 }
 
 .btn-primary:focus, .btn-primary.focus {
@@ -4411,6 +4414,10 @@ input[type="button"].btn-block {
   bottom: 0;
   left: 0;
   padding: 1.25rem;
+}
+
+.img-icon{
+	width:50px;
 }
 
 .card-img {
@@ -9672,6 +9679,7 @@ a:focus {
   background-size: cover;
 }
 
+
 .bg-gradient-secondary {
   background-color: #858796;
   background-image: linear-gradient(180deg, #858796 10%, #60616f 100%);
@@ -10584,10 +10592,29 @@ a:focus {
 }
 
 .bg-login-image {
-  background: url("https://source.unsplash.com/K4mSJ7kc0As/600x800");
+  /*background: url("https://source.unsplash.com/K4mSJ7kc0As/600x800");
   background-position: center;
-  background-size: cover;
+  background-size: cover;*/
+  background-color: white;
+  padding-right: 0;
 }
+
+.login-image{
+	width:100%;
+}
+
+.login-image-mobile{
+  display:none;
+}
+
+@media (max-width: 768px) {
+  .login-image-mobile{
+    display: initial;
+    width: 80px;
+    margin-bottom: 30px;
+}
+}
+
 
 .bg-register-image {
   background: url("https://source.unsplash.com/Mv9hjnEUHR4/600x800");
@@ -10615,6 +10642,7 @@ form.user .btn-user {
   font-size: 0.8rem;
   border-radius: 10rem;
   padding: 0.75rem 1rem;
+  margin-bottom:20px;
 }
 
 .btn-google {
@@ -10996,3 +11024,49 @@ footer.sticky-footer .copyright {
 body.sidebar-toggled footer.sticky-footer {
   width: 100%;
 }
+
+/*slider*/
+.last-plants{
+	width:90%;
+}
+
+.card-body-slider{
+	display:flex;
+	justify-content:center;
+}
+
+
+.last-plants div{
+	display:flex;
+	justify-content:center;
+}
+
+.last-plants div img{
+	width:100%;
+}
+
+.logo-image{
+	width:80px;	
+}
+
+
+.slider-card{
+	width:50vw;
+}
+
+.slick-arrow{
+background-color: #00BC73 !important;
+}
+
+.slider-row{
+	flex-wrap:nowrap;
+	width: 100%;
+}
+.
+
+@media (max-width: 768px) {
+
+}
+
+
+

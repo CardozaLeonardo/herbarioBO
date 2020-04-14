@@ -25,3 +25,21 @@ $("a.deleteRole").click(function(){
     });
 });
 
+$("a.deleteFamily").click(function(){
+    
+    idFam = $(this).attr("id");
+    confirm(function()
+    { 	
+        window.location.replace(`../deleteFamily?id=${idFam}`);
+    }, 
+    function(e,btn)
+    {
+    
+    });
+});
+
+$("#cancelRoleBTN").click(function(){
+	$("#roleForm").attr("action", "../nuevoRol");
+	$("#opcIndicador").text("Operaci\u00F3n actual: guardar");
+});
+

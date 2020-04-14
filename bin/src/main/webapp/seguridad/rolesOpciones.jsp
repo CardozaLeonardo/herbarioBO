@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1" import="entidades.*, datos.*, java.util.ArrayList"%>
-    
+    pageEncoding="ISO-8859-1" import="entidades.*, datos.*, java.util.ArrayList, util.*"%>
+    <%@page import="org.json.JSONObject, java.util.Arrays"%>
+<%@page import="com.fasterxml.jackson.databind.ObjectMapper"%>
+<%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
 <!-- 
        AUTOR:  Leonardo Cardoza
        FIN:    29/10/2019
@@ -15,12 +17,12 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>Herbario Nacional - Roles-Opciones</title>
+  <title><%=Server.getAppName() %> - Roles-Opciones</title>
 
   <!-- Custom fonts for this template -->
   <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
-
+  <link rel="shortcut icon" href="../img/Logo.png" type="image/x-icon">
   <!-- Custom styles for this template -->
   <link href="../css/sb-admin-2.css" rel="stylesheet">
 
@@ -30,48 +32,38 @@
 
 </head>
 <%
-	//VALIDACIÓN DE LA EXISTENCIA DE LA SESIÓN
-		String loginUser="";
-		loginUser = (String)session.getAttribute("login");
-		//VALIDA QUE LA VARIABLE loginUser NO SEA NULL
-		loginUser = loginUser==null?"":loginUser;
-		if(loginUser.equals(""))
-		{
-	response.sendRedirect("../login.jsp?status=2");
-	return;
-		}
+	
 		
-// VALIDAR ACCESO
-ArrayList<VW_user_opciones> opciones = (ArrayList<VW_user_opciones>) session.getAttribute("opciones");
-boolean acceso = false;
+DT_rol dtr = new DT_rol();
+JSONObject objRoles = dtr.getRoles(request.getCookies());
 
-for(VW_user_opciones vu: opciones) {
-	 if(vu.getOpcion().equals("./seguridad/rolesOpciones.jsp")) {
-		 acceso = true;
-	 }
+if(objRoles.getInt("status") == 401 || objRoles.getInt("status") == 0){
+	 response.sendRedirect("../login");
+	 return;
 }
 
-if(!acceso){
-	 response.sendRedirect("../accesoDenegado.jsp");
+Tbl_rol[] listaRoles = (Tbl_rol[]) objRoles.get("roles");
+
+DT_permissions dtp = new DT_permissions();
+
+JSONObject opc = dtp.getPermissions(request.getCookies());
+
+if(opc.getInt("status") == 401 || opc.getInt("status") == 0){
+	 response.sendRedirect("../login");
+	 return;
 }
 
-///////////
+Tbl_opcion[] permisos = (Tbl_opcion[]) opc.get("permissions");
+
+
  
 
 
- DT_rolUsuario tru = new DT_rolUsuario();
- ArrayList<VW_user_rol> rolesUser = null;
- 
- DT_Rol dtr = new DT_Rol();
- ArrayList<Tbl_rol> listaRoles = dtr.listarRoles();
- 
- ArrayList<VW_rol_opcion> opcionesRol = null;
- DT_rolOpcion  dtro = new DT_rolOpcion();
+
+ String str = "";
  
  
- 
- DT_opcion dto = new DT_opcion();
- ArrayList<Tbl_opcion> listaOpciones = dto.listarOpciones();
+
  
  
  Tbl_rol role = null;
@@ -79,6 +71,7 @@ if(!acceso){
  boolean withRole = false;
  String rolInput = "";
  String id_rol ="";
+ String rolName = "";
  String errorMsg = "";
  boolean error = false; // Para indicar cualquier error a notificar
  
@@ -87,20 +80,33 @@ if(!acceso){
  {
 	 try{
 	     int idRol = Integer.parseInt(request.getParameter("rol"));
-		 opcionesRol = dtro.listarRolOpcion(idRol);
-		 role = dtr.obtenerRol(idRol);
+		 JSONObject rol = dtr.obtenerRol(idRol, request.getCookies());
+		 
+	     if(rol.getInt("status") == 200){
+	    	 role = (Tbl_rol) rol.get("rol");
+	    	 String[] cookies =  Util.extractTokens(request.getCookies());
+	    	 
+	    	 
+	    	 str = Arrays.toString(role.getPermissions());
+	    	 
+	    	 
+	    	 Util.setTokenCookiesJsp(request, response, cookies);
+	    	 
+	     }
+	     
 		 if(role == null){
-	 response.sendRedirect("rolesOpciones.jsp?error=1");
+	 response.sendRedirect("rolesOpciones?error=1");
 	 return;
 	 //System.out.println("Adios");
 		 }
 		 
-		 rolInput = role.getRol_name();
-		 id_rol += role.getId_rol();
+		 rolInput = role.getName();
+		 id_rol += role.getId();
+		 rolName = role.getName();
 		 withRole = true;
 	 
 	 }catch(NumberFormatException e){
-		 response.sendRedirect("rolesUsuarios.jsp?error=2");
+		 response.sendRedirect("rolesOpciones?error=2");
 		 return;
 	 }
  }
@@ -135,40 +141,14 @@ if(!acceso){
 
         <!-- Begin Page Content -->
         <div class="container-fluid">
-        <%if(request.getParameter("del") != null) {%>
-	       <div class="alert alert-success alert-dismissible fade show" role="alert">
-			  ¡Se ha removido la opción<strong> correctamente</strong>!
+        <c:if test="${msg != null}">
+		    <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+			  ${cont}
 			  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
 			    <span aria-hidden="true">&times;</span>
 			  </button>
 			</div>
-		  <%} %>
-        
-          <%
-          	if(request.getParameter("saved") != null) {
-          %>
-          <div class="alert alert-success alert-dismissible fade show" role="alert">
-			  ¡La opción se ha asignado<strong> correctamente</strong>!
-			  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-			    <span aria-hidden="true">&times;</span>
-			  </button>
-			</div>
-		  <%
-		  	}
-		  %>
-		  
-		  <%
-		  		  	if(error) {
-		  		  %>
-          <div class="alert alert-danger alert-dismissible fade show" role="alert">
-			  <%=errorMsg%>
-			  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-			    <span aria-hidden="true">&times;</span>
-			  </button>
-			</div>
-		  <%
-		  	}
-		  %>
+		 </c:if>
 
           <!-- Page Heading -->
           <h1 class="h3 mb-2 text-gray-800">Roles - Opciones</h1>
@@ -181,17 +161,19 @@ if(!acceso){
             <h3>Seleccione un registro de la tabla antes de empezar</h3>
             <%} %>
             
-            <form role="form" method="POST" class="col-6" action="../SL_asignarOpciones">
+            <form role="form" method="POST" class="col-6" action="../asignarOpcion">
               
             <input type="hidden" id="idRol" name="idRol" value="<%=id_rol%>">
+            <input type="hidden" id="rolName" name="rolName" value="<%=rolName%>">
+            <input type="hidden" id="permisos" name="permisos" value="<%=str%>">
             <div class="form-group">
 		    <label for="listaOpciones">Opciones: </label>
 		    <select name="listaOpciones" required class="form-control" id="listaOpciones">
 		      <option value="" selected>Elegir</option>
 		     <%
-		     	for(Tbl_opcion opc: listaOpciones){
+		     	for(Tbl_opcion op: permisos){
 		     %>
-		      <option value="<%=opc.getId_opcion()%>"><%=opc.getOpcion()%></option>
+		      <option value="<%=op.getId()%>"><%=op.getName()%></option>
 		      <%
 		      	}
 		      %>
@@ -210,13 +192,19 @@ if(!acceso){
 		   <label for="currentOpc">Opciones actuales: </label>
 		   <select name="currentOpc" id="currentOpc" class="form-control">
 		      <option value="" selected>Elegir</option>
-		      <%
-		      	for(VW_rol_opcion r: opcionesRol) {
+		      
+		       <%
+		      	for(int r: role.getPermissions()){
+		          for(Tbl_opcion op : permisos){
+		        	if(r == op.getId()){
 		      %>
-		      <option class="cr-<%=r.getId_opc()%>" value="<%=r.getId_rol_opcion()%>"><%=r.getOpcion()%></option>
+		         <option class="cr-<%=op.getId()%>" value="<%=op.getId()%>"><%=op.getName()%></option>
 		      <%
-		      	}
+		        	}
+		        	}
+		        }
 		      %>
+		      
 		   </select>
 		   </div>
 		   
@@ -237,7 +225,6 @@ if(!acceso){
                     <tr>
                       <th>ID</th>
                       <th>Rol</th>
-                      <th>Descripción</th>
                       <th>Opcion</th>
                     </tr>
                   </thead>
@@ -245,7 +232,6 @@ if(!acceso){
                     <tr>
                       <th>ID</th>
                       <th>Rol</th>
-                      <th>Descripción</th>
                       <th>Opcion</th>
                     </tr>
                   </tfoot>
@@ -254,11 +240,10 @@ if(!acceso){
                     	for(Tbl_rol rol: listaRoles) {
                     %>
                     <tr>
-                      <td><%=rol.getId_rol() %></td>
-                      <td><%=rol.getRol_name() %></td>
-                      <td><%=rol.getRol_desc() %></td>
+                      <td><%=rol.getId() %></td>
+                      <td><%=rol.getName() %></td>
                       <td>
-                       <a role="button" href="./rolesOpciones.jsp?rol=<%=rol.getId_rol()%>" id="selectRolBTN" 
+                       <a role="button" href="./rolesOpciones?rol=<%=rol.getId()%>" id="selectRolBTN" 
                        class="btn btn-primary">Aceptar</a>
                       </td>
                     </tr>
