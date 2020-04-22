@@ -80,30 +80,22 @@
                     <input type="text" id="username" value="${user.username}" name="username" class="form-control" required>
                   </div>
                   <div class="form-group">
-                    <label for="password1">ContraseÃ±a: </label>
+                    <label for="password1">Contraseña: </label>
                     <input type="password"  id="password" name="password" class="form-control" 
-                    title="Recuerde usar letras mayÃºsculas, minÃºsculas, nÃºmeros y caracteres especiales.">
+                    title="La Contraseña debe tener mas de 6 caracteres, incluyendo mayúsculas, minúsculas y números" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" onchange="form.password2.pattern = RegExp.escape(this.value);">
                   </div>
                   <div class="form-group">
-                    <label for="password2">Confirmar ContraseÃ±a: </label>
+                    <label for="password2">Confirmar Contraseña: </label>
                     <input type="password" id="password2" name="password2" class="form-control" 
-                    title="Recuerde usar letras mayÃºsculas, minÃºsculas, nÃºmeros y caracteres especiales.">
+                    title="Confirme la contraseña nuevamente" placeholder="Ingrese nuevamente su Contraseña" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}">
                   </div>
                   <div class="form-group">
-                    <label for="nombre1">Primer Nombre:</label>
-                    <input type="text" id="nombre1" name="nombre1"  value="${user.first_name}" class="form-control" pattern="[A-Za-z]{4-16}" required>
+                    <label for="nombre1">Nombres:</label>
+                    <input type="text" id="nombre1" name="nombre1"  value="${user.first_name}" class="form-control" pattern="[A-Za-z]{4-16}" onkeypress="return soloLetras(event)" required>
                   </div>
                   <div class="form-group">
-                    <label for="nombre2">Segundo Nombre:</label>
-                    <input type="text" id="nombre2" name="nombre2"  class="form-control" required  pattern="[A-Za-z]{4-16}">
-                  </div>
-                  <div class="form-group">
-                    <label for="apellido1">Primer Apellido:</label>
-                    <input type="text" id="apellido1" name="apellido1" value="${user.last_name}" class="form-control"  pattern="[A-Za-z]{4-16}" required>
-                  </div>
-                  <div class="form-group">
-                    <label for="apellido2">Segundo Apellido:</label>
-                    <input type="text" id="apellido2" name="apellido2" class="form-control" required pattern="[A-Za-z]{4-16}">
+                    <label for="apellido1">Apellidos:</label>
+                    <input type="text" id="apellido1" name="apellido1" value="${user.last_name}" class="form-control"  pattern="[A-Za-z]{4-16}"  onkeypress="return soloLetras(event)" required>
                   </div>
                   <div class="form-group">
                     <label for="email">Email:</label>
@@ -155,13 +147,44 @@
 
       if(nuevo == "1")
       {
-        successAlert('Ã‰xito', 'El nuevo registro ha sido almacenado.');
+        successAlert('Éxito', 'El nuevo registro ha sido almacenado.');
       }
       if(nuevo == "2")
       {
         errorAlert('Error', 'Revise los datos e intente nuevamente.');
       }
     });
+    </script>
+
+    <script type="text/javascript">
+
+        // polyfill for RegExp.escape
+        if(!RegExp.escape) {
+            RegExp.escape = function(s) {
+                return String(s).replace(/[\\^$*+?.()|[\]{}]/g, '\\$&');
+            };
+        }
+
+    </script>
+    <script>
+        function soloLetras(e){
+            key = e.keyCode || e.which;
+            tecla = String.fromCharCode(key).toLowerCase();
+            letras = " áéíóúabcdefghijklmnñopqrstuvwxyz";
+            especiales = "8-37-39-46";
+
+            tecla_especial = false
+            for(var i in especiales){
+                if(key == especiales[i]){
+                    tecla_especial = true;
+                    break;
+                }
+            }
+
+            if(letras.indexOf(tecla)==-1 && !tecla_especial){
+                return false;
+            }
+        }
     </script>
 
 </body>
