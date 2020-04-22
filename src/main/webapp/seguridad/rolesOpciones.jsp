@@ -11,6 +11,8 @@
     
 <!DOCTYPE html>
 <html>
+
+<head>
 <meta charset="ISO-8859-1">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -29,6 +31,7 @@
   <!-- Custom styles for this page -->
   <link href="../vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
   <link rel="stylesheet" href="../jAlert/dist/jAlert.css" />
+    <link rel="stylesheet" href="../js/select2/select2.min.css" />
 
 </head>
 <%
@@ -295,9 +298,14 @@ Tbl_opcion[] permisos = (Tbl_opcion[]) opc.get("permissions");
   <script src="../jAlert/dist/jAlert.min.js"></script>
   <script src="../jAlert/dist/jAlert-functions.min.js"> </script>
   <script src="../js/userRol.js"></script>
+
   
+  <script src="../js/select2/select2.full.min.js"></script>
+
   <script>
-  
+      $(document).ready(function() {
+          $('#listaOpciones').select2();
+      });
   </script>
 
 </body>

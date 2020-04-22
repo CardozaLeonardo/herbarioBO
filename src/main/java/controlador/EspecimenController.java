@@ -41,6 +41,7 @@ import entidades.fichas_tecnicas.Tbl_mushroomSpecimen;
 import entidades.fichas_tecnicas.Tbl_recolection_area;
 import entidades.fichas_tecnicas.Tbl_species;
 import entidades.fichas_tecnicas.Tbl_state;
+import util.DateProvider;
 import util.ServicioArchivo;
 import util.Util;
 
@@ -299,17 +300,17 @@ public class EspecimenController {
 		
 		newFungus.add("cap", cap);
 		newFungus.add("forms", forms);
-		newFungus.add("date_received", "2019-11-25");
+		newFungus.add("date_received", DateProvider.getCurrentTime());
 		newFungus.add("number_of_samples", number_of_samples);
 		newFungus.add("description", req.getParameter("description"));
 		newFungus.add("latitude", req.getParameter("latitude"));
 		newFungus.add("longitude", req.getParameter("longitude"));
-		newFungus.add("location", "Nicaragua");
+		newFungus.add("location", req.getParameter("location"));
 		newFungus.add("crust", crust);
 		newFungus.add("color", req.getParameter("color"));
 		newFungus.add("change_of_color", req.getParameter("change_of_color"));
 		newFungus.add("smell", req.getParameter("smell"));
-		newFungus.add("aditional_info", req.getParameter("aditional_info"));
+		newFungus.add("aditional_info", "nothing");
 		newFungus.add("user", idUser);
 		newFungus.add("species", species);
 		newFungus.add("status", status);
@@ -317,7 +318,11 @@ public class EspecimenController {
 		newFungus.add("ecosystem", ecosystem);
 		newFungus.add("recolection_area_status", recolection_area_status);
 		newFungus.add("city", city);
-		newFungus.add("photo", file.getResource());
+
+		if(!file.isEmpty()) {
+			newFungus.add("photo", file.getResource());
+		}
+
 		
 		
 		
@@ -387,17 +392,16 @@ public class EspecimenController {
 		//body.add("id",id);
 		body.add("cap",cap);
 		body.add("forms", forms);
-		body.add("date_received", "2019-11-25");
 		body.add("number_of_samples", number_of_samples);
 		body.add("description", req.getParameter("description"));
 		body.add("latitude", req.getParameter("latitude"));
 		body.add("longitude", req.getParameter("longitude"));
-		body.add("location", "Nicaragua");
+		body.add("location", req.getParameter("location"));
 		body.add("crust", crust);
 		body.add("color", req.getParameter("color"));
 		body.add("change_of_color", req.getParameter("change_of_color"));
 		body.add("smell", req.getParameter("smell"));
-		body.add("aditional_info", req.getParameter("aditional_info"));
+		body.add("aditional_info", "nothing");
 		body.add("user", idUser);
 		body.add("species", species);
 		body.add("ecosystem", ecosystem);
@@ -405,7 +409,11 @@ public class EspecimenController {
 		body.add("city", city);
 
 		body.add("description", req.getParameter("description"));
-		body.add("photo", file.getResource());
+
+		if(!file.isEmpty()) {
+			body.add("photo", file.getResource());
+		}
+
 		/*try {
 			body.add("photo", new ClassPathResource(file.getResource().getFile().getPath()));
 		} catch (IOException e) {
@@ -421,7 +429,7 @@ public class EspecimenController {
 		}
 		
 
-		JSONObject respuesta = dtm.actualizarHongo(body, req.getCookies(), id);
+		JSONObject respuesta = dtm.actualizarHongoPatch(body, req.getCookies(), id);
 		
 		if(respuesta.getInt("status") == 200) {
 			rv = new RedirectView(req.getContextPath() + "/fichas/fungus");

@@ -4,7 +4,8 @@
 <%@page import="entidades.fichas_tecnicas.Tbl_mushroomSpecimen"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1" import="entidades.*, datos.*, java.util.ArrayList"%>
-    
+<%@ page import="util.StringAdapt" %>
+
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
 
 <%
@@ -263,6 +264,12 @@ jAlert css
                                 value="<%=mus.getLongitude()%>">
                             </div>
 
+                            <div class="form-group">
+                                <label for="location">Ubicación</label>
+                                <input type="text" class="form-control" id="location" placeholder="" name="location"
+                                       required value="<%=mus.getLocation()%>">
+                            </div>
+
                             <h5>Datos de Hábitat</h5>
 
                             <div class="form-group">
@@ -289,8 +296,8 @@ jAlert css
                         <div class="form-group">
                              <input disabled type="file" id="photo" name="photo" class="form-control-file">
                            <div class="card bg-light" style="min-height: 400px; width:90%;margin-left: auto;margin-right:auto;">
-                             <img id="imagePreview" src="<%=request.getContextPath() + mus.getPhoto() %>" alt="image preview" width="60%" height="auto" 
-                             style="margin-left: auto;margin-right:auto;"/>
+                             <img id="imagePreview" src="<%=StringAdapt.adaptDriveImage(mus.getPhoto())%>" alt="image preview" width="60%" height="auto"
+                                  style="margin-left: auto;margin-right:auto;"/>
                            </div>
                         </div>
                         

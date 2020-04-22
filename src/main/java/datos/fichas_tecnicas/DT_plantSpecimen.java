@@ -10,6 +10,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
@@ -23,7 +24,7 @@ import utils.Cookies;
 
 public class DT_plantSpecimen {
 
-	private static RestTemplate restTemplate = new RestTemplate();
+	private static RestTemplate restTemplate = new RestTemplate(new HttpComponentsClientHttpRequestFactory());
 	/*private static Server server = new Server();*/
 	private static String ENDPOINT_URL = Server.getHostname() + "/plant_specimen/";
 	
@@ -225,6 +226,59 @@ public JSONObject actualizarPlanta(MultiValueMap<String, Object> newFungus, Cook
 		return retorno;
 	}
 }
+
+	public JSONObject actualizarPlantaPatch(MultiValueMap<String, Object> newFungus, Cookie[] cookies, int ID) {
+
+		int id = ID;
+		String URL = Server.getHostname() + "plant_specimen/" + id + "/";
+
+		//Tbl_user user = null;
+
+		String[] tokens = Util.extractTokens(cookies);
+
+		if(tokens == null) {
+
+			JSONObject retorno = new JSONObject();
+			retorno.put("status", 0);
+			return retorno;
+		}
+
+
+
+		HttpHeaders headers = new HttpHeaders();
+
+		headers.add("Cookie", "token-access="+ tokens[0]);
+		headers.add("Cookie", "token-refresh="+ tokens[1]);
+		headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+
+		System.out.println(newFungus.toString());
+
+		HttpEntity<MultiValueMap<String, Object>> req =
+				new HttpEntity<>(newFungus,headers);
+
+		try {
+
+			ResponseEntity<String> response = restTemplate.exchange(URL, HttpMethod.PATCH, req, String.class);
+			String fungus = response.getBody();
+
+			JSONObject retorno = new JSONObject();
+			retorno.put("status", response.getStatusCodeValue());
+			retorno.put("fungus", fungus);
+			retorno.put("cookies", Util.parseCookie(response.getHeaders().get("Set-Cookie")));
+			return retorno;
+
+		}catch(HttpClientErrorException e)
+		{
+
+
+			System.out.println(e.getMessage());
+
+			JSONObject retorno = new JSONObject();
+			retorno.put("status", e.getStatusCode().value());
+			//retorno.put("user", user);
+			return retorno;
+		}
+	}
 
 public JSONObject deletePlant(int id, Cookie[] cookies) {
 	

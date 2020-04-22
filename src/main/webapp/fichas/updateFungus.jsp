@@ -55,7 +55,8 @@ if(request.getAttribute("forms") != null){
   <link href="../vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
   
   <!-- jAlert css  -->
-  <link rel="stylesheet" href="../vendor/jAlert/dist/jAlert.css" /> 
+  <link rel="stylesheet" href="../vendor/jAlert/dist/jAlert.css" />
+    <link rel="stylesheet" href="../js/select2/select2.min.css" />
   
 <!-- Font Awesome -->
 <!-- <link rel="stylesheet" href="../../plugins/fontawesome-free/css/all.min.css">
@@ -138,30 +139,6 @@ jAlert css
                         <input type="hidden" name="fungusID" value="<%=request.getParameter("id")%>">
                         <div class="card-body">
                             <h5>Datos de Espécimen</h5>
-                            
-                            <div class="form-group">
-                                <label for="family">Familia</label>
-                                <select class="form-control" id="family" name="family" required>
-                                   <option value="">Seleccione...</option>
-                                   <c:if test="${families != null}">
-                                     <c:forEach items="${families}" var="fam">
-                                         <option value="${fam.id}" ${mus.family.id == fam.id?"selected":""}>${fam.name}</option>
-                                     </c:forEach>
-                                   </c:if>
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="genus">Género</label>
-                                <select class="form-control" id="genus" name="genus">
-                                   <option value="">Seleccione...</option>
-                                   <c:if test="${genus != null}">
-                                     <c:forEach items="${genus}" var="gen">
-                                         <option value="${gen.id}" ${mus.genus.id == gen.id?"selected":""}>${gen.name}</option>
-                                     </c:forEach>
-                                   </c:if>
-                                </select>
-                            </div>
 
                             <div class="form-group">
                                 <label for="specie">Especie</label>
@@ -253,40 +230,17 @@ jAlert css
                             <h5>Datos de Ubicación</h5>
 
                             <div class="form-group">
-                                <label for="country">País</label>
-                                <select class="form-control" id="country" name="country" required>
-                                  <option value="">Seleccione...</option>
-                                   <c:if test="${countries != null}">
-                                     <c:forEach items="${countries}" var="cou">
-                                         <option value="${cou.id}" ${mus.country.id == cou.id?"selected":""}>${cou.name}</option>
-                                     </c:forEach>
-                                   </c:if>
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="state">Estado/Provincia/Condado</label>
-                                <select class="form-control" id="state" name="state" required>
-                                  <option value="">Seleccione...</option>
-                                   <c:if test="${states != null}">
-                                     <c:forEach items="${states}" var="state">
-                                         <option value="${state.id}" ${mus.state.id == state.id?"selected":""}>${state.name}</option>
-                                     </c:forEach>
-                                   </c:if>
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="city">Ciudad</label>
+                                <label for="city">Lugar: País/Estado/Ciudad</label>
                                 <select class="form-control" id="city" name="city" required>
-                                  <option value="">Seleccione...</option>
-                                   <c:if test="${cities != null}">
-                                     <c:forEach items="${cities}" var="city">
-                                         <option value="${city.id}" ${mus.city.id == city.id?"selected":""}>${city.name}</option>
-                                     </c:forEach>
-                                   </c:if>
+                                    <option value="">Sin seleccionar...</option>
+                                    <c:if test="${cities != null}">
+                                        <c:forEach items="${cities}" var="city">
+                                            <option value="${city.id}" ${mus.city.id == city.id?"selected":""}>${city.state.country.name}/${city.state.name}/${city.name}</option>
+                                        </c:forEach>
+                                    </c:if>
                                 </select>
                             </div>
+
 
                             <div class="form-group">
                                 <label for="specificCollectionArea">Area de recolección específica</label>
@@ -311,6 +265,12 @@ jAlert css
                             <div class="form-group">
                                 <label for="longitude">Longitud</label>
                                 <input type="number" class="form-control" id="longitude" placeholder="Longitud" name="longitude" value="<%=mus.getLongitude()%>">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="location">Ubicación</label>
+                                <input type="text" class="form-control" id="location" placeholder="" name="location"
+                                       required value="<%=mus.getLocation()%>">
                             </div>
 
                             <h5>Datos de Hábitat</h5>
@@ -389,7 +349,14 @@ jAlert css
   <script src="../vendor/jAlert/dist/jAlert.min.js"></script>
   <script src="../vendor/jAlert/dist/jAlert-functions.min.js"> </script>
   <script src="../js/showImage.js"></script>
-  
+  <script src="../js/zoneFetcher.js"></script>
+<script src="../js/select2/select2.full.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#city').select2();
+    });
+</script>
   
 </body>
 </html>

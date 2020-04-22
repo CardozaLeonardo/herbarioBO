@@ -2,8 +2,9 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1" import="entidades.*, datos.*, java.util.ArrayList"%>
  <%@page import="entidades.fichas_tecnicas.Tbl_family"%>
- 
- <%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
+<%@ page import="util.StringAdapt" %>
+
+<%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -23,7 +24,8 @@
   <link href="../vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
   
   <!-- jAlert css  -->
-  <link rel="stylesheet" href="../vendor/jAlert/dist/jAlert.css" /> 
+  <link rel="stylesheet" href="../vendor/jAlert/dist/jAlert.css" />
+    <link rel="stylesheet" href="../js/select2/select2.min.css" />
   
 <!-- Font Awesome -->
 <!-- <link rel="stylesheet" href="../../plugins/fontawesome-free/css/all.min.css">
@@ -118,29 +120,7 @@ Tbl_plantSpecimen mus = (Tbl_plantSpecimen) request.getAttribute("mus");
                             <h5>Datos de Espécimen</h5>
                             
 
-                            <div class="form-group">
-                                <label for="family">Familia</label>
-                                <select class="form-control" id="family" name="family" required>
-                                   <option value="">Seleccione...</option>
-                                   <c:if test="${families != null}">
-                                     <c:forEach items="${families}" var="fam">
-                                         <option value="${fam.id}" ${mus.family.id == fam.id?"selected":""}>${fam.name}</option>
-                                     </c:forEach>
-                                   </c:if>
-                                </select>
-                            </div>
 
-                            <div class="form-group">
-                                <label for="genus">Género</label>
-                                <select class="form-control" id="genus" name="genus">
-                                   <option value="">Seleccione...</option>
-                                   <c:if test="${genus != null}">
-                                     <c:forEach items="${genus}" var="gen">
-                                         <option value="${gen.id}" ${mus.genus.id == gen.id?"selected":""}>${gen.name}</option>
-                                     </c:forEach>
-                                   </c:if>
-                                </select>
-                            </div>
 
                             <div class="form-group">
                                 <label for="specie">Especie</label>
@@ -178,36 +158,12 @@ Tbl_plantSpecimen mus = (Tbl_plantSpecimen) request.getAttribute("mus");
                             <h5>Datos de Ubicación</h5>
 
                             <div class="form-group">
-                                <label for="country">País</label>
-                                <select class="form-control" id="country" name="country" required>
-                                  <option value="">Seleccione...</option>
-                                   <c:if test="${countries != null}">
-                                     <c:forEach items="${countries}" var="cou">
-                                         <option value="${cou.id}" ${mus.country.id == cou.id?"selected":""}>${cou.name}</option>
-                                     </c:forEach>
-                                   </c:if>
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="state">Estado/Provincia/Condado</label>
-                                <select class="form-control" id="state" name="state" required>
-                                  <option value="">Seleccione...</option>
-                                   <c:if test="${states != null}">
-                                     <c:forEach items="${states}" var="state">
-                                         <option value="${state.id}" ${mus.state.id == state.id?"selected":""}>${state.name}</option>
-                                     </c:forEach>
-                                   </c:if>
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="city">Ciudad</label>
+                                <label for="city">Lugar: País/Estado/Ciudad</label>
                                 <select class="form-control" id="city" name="city" required>
-                                  <option value="">Seleccione...</option>
+                                  <option value="">Sin seleccionar...</option>
                                    <c:if test="${cities != null}">
                                      <c:forEach items="${cities}" var="city">
-                                         <option value="${city.id}" ${mus.city.id == city.id?"selected":""}>${city.name}</option>
+                                         <option value="${city.id}" ${mus.city.id == city.id?"selected":""}>${city.state.country.name}/${city.state.name}/${city.name}</option>
                                      </c:forEach>
                                    </c:if>
                                 </select>
@@ -236,6 +192,12 @@ Tbl_plantSpecimen mus = (Tbl_plantSpecimen) request.getAttribute("mus");
                             <div class="form-group">
                                 <label for="longitude">Longitud</label>
                                 <input type="number" class="form-control" id="longitude" placeholder="Longitud" name="longitude" value="<%=mus.getLongitude()%>">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="location">Ubicación</label>
+                                <input type="text" class="form-control" id="location" placeholder="" name="location"
+                                    required value="<%=mus.getLocation()%>">
                             </div>
 
                             <h5>Datos de Hábitat</h5>
@@ -276,8 +238,8 @@ Tbl_plantSpecimen mus = (Tbl_plantSpecimen) request.getAttribute("mus");
                         <div class="form-group">
                            <input type="file" id="photo" name="photo" class="form-control-file">
                            <div class="card bg-light" style="min-height: 400px; width:90%;margin-left: auto;margin-right:auto;">
-                             <img id="imagePreview" src="" alt="image preview" width="60%" height="auto" 
-                             style="margin-left: auto;margin-right:auto;"/>
+                             <img id="imagePreview" src="<%=StringAdapt.adaptDriveImage(((Tbl_plantSpecimen) request.getAttribute("mus")).getPhoto())%>" alt="image preview" width="60%" height="auto"
+                                  style="margin-left: auto;margin-right:auto;"/>
                            </div>
                         </div>
                         
@@ -311,6 +273,14 @@ Tbl_plantSpecimen mus = (Tbl_plantSpecimen) request.getAttribute("mus");
   <script src="../vendor/jAlert/dist/jAlert.min.js"></script>
   <script src="../vendor/jAlert/dist/jAlert-functions.min.js"> </script>
    <script src="../js/showImage.js"></script>
+  <script src="../js/zoneFetcher.js"></script>
+<script src="../js/select2/select2.full.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#city').select2();
+    });
+</script>
   
 </body>
 </html>

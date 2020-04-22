@@ -151,7 +151,7 @@ if(!viewPermission) {
                       <th>Familia</th>
                       <th>Género</th>
                       <th>Especie</th>
-                      <th>Estado</th>
+                      <th>Fecha</th>
                       <th>Opciones</th>
                     </tr>
                   </thead>
@@ -167,7 +167,7 @@ if(!viewPermission) {
 	                  <td><%=fus.getSpecies().getGenus().getFamily().getName()%></td>
 	                  <td><%=fus.getSpecies().getGenus().getName()%></td>
 	                  <td><%=fus.getSpecies().getCommon_name()%></td>
-	                  <td><%=fus.getStatus().getName()%></td>
+	                  <td><%=fus.getDate_received()%></td>
 	                  <td>
                           <%if(editPermission){%>
 	                  	<a href="./updateFungus?id=<%=fus.getId() %>" onclick="linkEditUser('<%=fus.getId() %>');"><i class="far fa-edit" title="Editar"></i></a>&nbsp;&nbsp;
@@ -193,7 +193,7 @@ if(!viewPermission) {
                       <th>Familia</th>
                       <th>Género</th>
                       <th>Especie</th>
-                      <th>Estado</th>
+                      <th>Fecha</th>
                       <th>Opciones</th>
                     </tr>
                   </tfoot>

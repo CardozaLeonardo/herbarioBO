@@ -36,6 +36,7 @@ import entidades.fichas_tecnicas.Tbl_plantSpecimen;
 import entidades.fichas_tecnicas.Tbl_recolection_area;
 import entidades.fichas_tecnicas.Tbl_species;
 import entidades.fichas_tecnicas.Tbl_state;
+import util.DateProvider;
 import util.Util;
 
 @Controller
@@ -276,12 +277,12 @@ public class SpecimenController {
 		int biostatus = Integer.parseInt(req.getParameter("biostatus"));
 		
 		
-		newFungus.add("date_received", "2019-11-25");
+		newFungus.add("date_received", DateProvider.getCurrentTime());
 		newFungus.add("number_of_samples", number_of_samples);
 		newFungus.add("description", req.getParameter("description"));
 		newFungus.add("latitude", req.getParameter("latitude"));
 		newFungus.add("longitude", req.getParameter("longitude"));
-		newFungus.add("location", "Nicaragua");
+		newFungus.add("location", req.getParameter("location"));
 		newFungus.add("aditional_info", req.getParameter("aditional_info"));
 		newFungus.add("user", idUser);
 		newFungus.add("complete", complete);
@@ -289,10 +290,15 @@ public class SpecimenController {
 		newFungus.add("status", status);
 		newFungus.add("ecosystem", ecosystem);
 		newFungus.add("recolection_area_status", recolection_area_status);
+		newFungus.add("approved", true);
 
 		newFungus.add("city", city);
 		newFungus.add("biostatus", biostatus);
-		newFungus.add("photo", file.getResource());
+
+		if(file.getResource().exists()) {
+			newFungus.add("photo", file.getResource());
+		}
+
 		
 		
 		
@@ -333,15 +339,15 @@ public class SpecimenController {
 	@PostMapping("/actualizarPlant")
 	public RedirectView actualizarPlanta(@RequestParam("photo") MultipartFile file, HttpServletRequest req, HttpServletResponse res,
 			RedirectAttributes redir) {
-		RedirectView rv = new RedirectView(req.getContextPath() + "/fichas/newFungus");
+		RedirectView rv = new RedirectView(req.getContextPath() + "/fichas/PlantList");
 		DT_plantSpecimen dtp = new DT_plantSpecimen();
 		MultiValueMap<String, Object> newFungus = new LinkedMultiValueMap<>();
 		
 		int idUser = Integer.parseInt(req.getParameter("idUser"));
 		int idPlant = Integer.parseInt(req.getParameter("idPlant"));
 		int number_of_samples = Integer.parseInt(req.getParameter("number_of_samples"));
-		int family = Integer.parseInt(req.getParameter("family"));
-		int genus = Integer.parseInt(req.getParameter("genus"));
+		//int family = Integer.parseInt(req.getParameter("family"));
+		//int genus = Integer.parseInt(req.getParameter("genus"));
 		int species = Integer.parseInt(req.getParameter("species"));
 		int status;
 		int ecosystem = Integer.parseInt(req.getParameter("ecosystem"));
@@ -352,17 +358,14 @@ public class SpecimenController {
 		int biostatus = Integer.parseInt(req.getParameter("biostatus"));
 		
 		newFungus.add("id", idPlant);
-		newFungus.add("date_received", "2019-11-25");
 		newFungus.add("number_of_samples", number_of_samples);
 		newFungus.add("description", req.getParameter("description"));
 		newFungus.add("latitude", req.getParameter("latitude"));
 		newFungus.add("longitude", req.getParameter("longitude"));
-		newFungus.add("location", "Nicaragua");
+		newFungus.add("location", req.getParameter("location"));
 		newFungus.add("aditional_info", req.getParameter("aditional_info"));
 		newFungus.add("user", idUser);
-		newFungus.add("family", family);
 		newFungus.add("complete", complete);
-		newFungus.add("genus", genus);
 		newFungus.add("species", species);
 		
 		newFungus.add("ecosystem", ecosystem);
@@ -370,7 +373,11 @@ public class SpecimenController {
 		//newFungus.put("status", 4);
 		newFungus.add("city", city);
 		newFungus.add("biostatus", biostatus);
-		newFungus.add("photo", file.getResource());
+
+		if(!file.isEmpty()) {
+			newFungus.add("photo", file.getResource());
+		}
+
 		
 		if(req.getParameter("opt") != null) {
 			status = Integer.parseInt(req.getParameter("opt"));
@@ -380,7 +387,7 @@ public class SpecimenController {
 		}
 		
 
-		JSONObject respuesta = dtp.actualizarPlanta(newFungus, req.getCookies(), idPlant);
+		JSONObject respuesta = dtp.actualizarPlantaPatch(newFungus, req.getCookies(), idPlant);
 		
 		if(respuesta.getInt("status") == 201 || respuesta.getInt("status") == 200) {
 			rv = new RedirectView(req.getContextPath() + "/fichas/PlantList");
@@ -487,7 +494,7 @@ public class SpecimenController {
 			return rv;
 		}
 		
-		newFungus.add("date_received", "2019-11-25");
+
 		newFungus.add("number_of_samples", spe.getNumber_of_samples());
 		newFungus.add("description", spe.getDescription());
 		newFungus.add("latitude", spe.getLatitude());
@@ -497,7 +504,6 @@ public class SpecimenController {
 		newFungus.add("user", idUser);
 		newFungus.add("complete", spe.getComplete());
 		newFungus.add("species", spe.getSpecies().getId());
-		newFungus.add("id", idPlant);
 		newFungus.add("ecosystem", spe.getEcosystem().getId());
 		newFungus.add("recolection_area_status", spe.getRecolection_area_status().getId());
 		newFungus.add("status", 2);
@@ -513,7 +519,7 @@ public class SpecimenController {
 			newFungus.add("approved", false);
 		}
 		
-       JSONObject respuesta = dtp.actualizarPlanta(newFungus, req.getCookies(), idPlant);
+       JSONObject respuesta = dtp.actualizarPlantaPatch(newFungus, req.getCookies(), idPlant);
 
 		
 		if(respuesta.getInt("status") == 201 || respuesta.getInt("status") == 200) {

@@ -56,7 +56,8 @@ families = (Tbl_family[]) request.getAttribute("families");
   <link href="../vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
   
   <!-- jAlert css  -->
-  <link rel="stylesheet" href="../vendor/jAlert/dist/jAlert.css" /> 
+  <link rel="stylesheet" href="../vendor/jAlert/dist/jAlert.css" />
+    <link rel="stylesheet" href="../js/select2/select2.min.css" />
   
 <!-- Font Awesome -->
 <!-- <link rel="stylesheet" href="../../plugins/fontawesome-free/css/all.min.css">
@@ -233,29 +234,12 @@ jAlert css
                             <h5>Datos de Ubicación</h5>
 
                             <div class="form-group">
-                                <label for="country">País</label>
-                                <select class="form-control" id="country" name="country" required>
-                                  <option value="">Seleccione...</option>
-                                   <c:if test="${countries != null}">
-                                     <c:forEach items="${countries}" var="cou">
-                                         <option value="${cou.id}">${cou.name}</option>
-                                     </c:forEach>
-                                   </c:if>
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="state">Estado/Provincia/Condado</label>
-                                <select disabled class="form-control" id="state" name="state" required>
-                                  <option value="">Seleccione...</option>
-
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="city">Ciudad</label>
-                                <select disabled class="form-control" id="city" name="city" required>
-                                  <option value="">Seleccione...</option>
+                                <label for="city">Lugar: País/Estado/Ciudad</label>
+                                <select  class="form-control" id="city" name="city" required>
+                                    <option value="">Sin seleccionar</option>
+                                    <c:forEach items="${cities}" var="city">
+                                        <option value="${city.id}">${city.state.country.name}/${city.state.name}/${city.name}</option>
+                                    </c:forEach>
 
                                 </select>
                             </div>
@@ -283,6 +267,12 @@ jAlert css
                             <div class="form-group">
                                 <label for="longitude">Longitud</label>
                                 <input type="text" class="form-control" id="longitude" placeholder="Longitud" name="longitude">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="location">Ubicación</label>
+                                <input type="text" class="form-control" id="location" placeholder="" name="location"
+                                       required>
                             </div>
 
                             <h5>Datos de Hábitat</h5>
@@ -316,7 +306,7 @@ jAlert css
                         </div>
                         
                         <div class="form-group">
-                           <input type="file" id="photo" name="photo" class="form-control-file">
+                           <input type="file" id="photo" name="photo" required class="form-control-file">
                            <div class="card bg-light" style="min-height: 400px; width:90%;margin-left: auto;margin-right:auto;">
                              <img id="imagePreview" src="" alt="image preview" width="60%" height="auto" 
                              style="margin-left: auto;margin-right:auto;"/>
@@ -356,6 +346,13 @@ jAlert css
   <script src="../vendor/jAlert/dist/jAlert-functions.min.js"> </script>
   <script src="../js/showImage.js"></script>
 <script src="../js/zoneFetcher.js"></script>
+<script src="../js/select2/select2.full.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#city').select2();
+    });
+</script>
   
 </body>
 </html>
