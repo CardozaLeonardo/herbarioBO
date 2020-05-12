@@ -3,6 +3,7 @@ package controlador;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import negocio.validacion.SpecimenValidador;
 import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -39,19 +40,23 @@ import entidades.fichas_tecnicas.Tbl_state;
 import util.DateProvider;
 import util.Util;
 
+import java.io.IOException;
+
 @Controller
 public class SpecimenController {
 	
 	@GetMapping("/fichas/newPlant")
-	public String nuevaPlanta(HttpServletRequest req, HttpServletResponse res,Model model) {
+	public String nuevaPlanta(HttpServletRequest req, HttpServletResponse res,Model model) throws IOException {
 		
 		DT_country dtc = new DT_country();
 		JSONObject objCountry = dtc.getCountries(req.getCookies());
 		
-		if(objCountry.getInt("status") == 200) {
+		/*if(objCountry.getInt("status") == 200) {
 			Tbl_country[] countries = (Tbl_country[]) objCountry.get("countries");
 			model.addAttribute("countries", countries);
-		}
+		} else {
+			res.sendRedirect(req.getContextPath() + "/login");
+		}*/
 		
 		DT_family dtf = new DT_family();
 		JSONObject objFamily = dtf.getFamilies(req.getCookies());
@@ -260,7 +265,13 @@ public class SpecimenController {
 	@PostMapping("/savePlant")
 	public RedirectView guardarPlanta(@RequestParam("photo") MultipartFile file, HttpServletRequest req, HttpServletResponse res,
 			RedirectAttributes redir) {
-		RedirectView rv = new RedirectView(req.getContextPath() + "/fichas/newFungus");
+		RedirectView rv = new RedirectView(req.getContextPath() + "/fichas/PlantList");
+
+		if(!SpecimenValidador.validar(redir, req)) {
+			return rv;
+		}
+
+
 		DT_plantSpecimen dtp = new DT_plantSpecimen();
 		MultiValueMap<String, Object> newFungus = new LinkedMultiValueMap<>();
 		
@@ -410,6 +421,7 @@ public class SpecimenController {
 	@GetMapping("/deletePlant")
 	public RedirectView eliminarPlanta(HttpServletRequest req, HttpServletResponse res, RedirectAttributes redir) {
 		RedirectView rv = new RedirectView(req.getContextPath() + "/fichas/PlantList");
+		MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
 		
 		int id;
 		
@@ -421,8 +433,9 @@ public class SpecimenController {
 		}
 		
 		DT_plantSpecimen dtm = new DT_plantSpecimen();
+		body.add("status", 5);
 		
-		JSONObject response = dtm.deletePlant(id, req.getCookies());
+		JSONObject response = dtm.actualizarPlantaPatch(body, req.getCookies(), id);
 		
 		if(response.getInt("status") == 200 || response.getInt("status") == 204) {
 			redir.addFlashAttribute("msg", 1);

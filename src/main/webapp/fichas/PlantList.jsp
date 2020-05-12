@@ -138,7 +138,7 @@ if(!viewPermission) {
 
             
             
-            <form role="form" method="POST" id="especimenForm" class="col-6" action="../nuevoEspecimen">
+            <!--<form role="form" method="POST" id="especimenForm" class="col-6" action="../nuevoEspecimen">
               <h4 id="opcIndicador" class="text-gray-800">Operación actual: creación</h4>
             <input type="hidden" id="idEspecimen" name="idEspecimen" value="">
             <input type="hidden" id="opc" name="opc" value="1">
@@ -156,7 +156,7 @@ if(!viewPermission) {
 		  
 		    <button id="submitRole" type="submit" class="btn btn-success">Guardar</button>
 		    <button type="reset" id="cancelRoleBTN" class="btn btn-danger">Cancelar</button>
-            </form>
+            </form> -->
             <br>
 
             <%if(addPermission) {%>
@@ -196,7 +196,7 @@ if(!viewPermission) {
                     <%
                     	for(Tbl_plantSpecimen plant: listSpecimens) {
                     %>
-                    <%if((plant.getStatus().getId() != 3 && plant.getStatus().getId() != 4) && plant.isApproved()) {%>
+                    <%if((plant.getStatus().getId() != 5 && plant.isApproved()) && plant.isApproved()) {%>
                     
                     <tr>
                       <td id="cl-id-<%=plant.getId()%>"><%=plant.getId() %></td>

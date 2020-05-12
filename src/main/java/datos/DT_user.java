@@ -67,8 +67,9 @@ public class DT_user {
 		}
 		
 		HttpHeaders headers = new HttpHeaders();
-		headers.add("Cookie", "token-access="+ tokens[0]);
-		headers.add("Cookie", "token-refresh="+ tokens[1]);
+		String cookieHeader = "token-access="+tokens[0] + "; " + "token-refresh="+ tokens[1];
+
+		headers.add("Cookie", cookieHeader);
 		
 		HttpEntity<Tbl_user[]> ent = new HttpEntity<Tbl_user[]>(headers);
 		
@@ -155,10 +156,11 @@ public class DT_user {
 			return retorno;
 		}
 		
-        HttpHeaders headers = new HttpHeaders(); 
-		
-		headers.add("Cookie", "token-access="+ tokens[0]);
-		headers.add("Cookie", "token-refresh="+ tokens[1]);
+        HttpHeaders headers = new HttpHeaders();
+
+		String cookieHeader = "token-access="+tokens[0] + "; " + "token-refresh="+ tokens[1];
+
+		headers.add("Cookie", cookieHeader);
 		
 		HttpEntity<String> req = new HttpEntity<String>(headers);
 		
@@ -215,9 +217,10 @@ public JSONObject guardarUser(Tbl_user user, Cookie[] cookies){
         HttpHeaders headers = new HttpHeaders(); 
         
         System.out.println(userJson.toString());
-        
-        headers.add("Cookie", "token-access="+ tokens[0]);
-        headers.add("Cookie", "token-refresh="+ tokens[1]);
+
+	   String cookieHeader = "token-access="+tokens[0] + "; " + "token-refresh="+ tokens[1];
+
+	   headers.add("Cookie", cookieHeader);
         headers.setContentType(MediaType.APPLICATION_JSON);
         
         HttpEntity<String> resp = new HttpEntity<String>(userJson.toString(), headers);
@@ -257,10 +260,11 @@ public JSONObject obtenerUser(int idUser, Cookie[] cookies) {
 		return retorno;
 	}
 	
-    HttpHeaders headers = new HttpHeaders(); 
-	
-	headers.add("Cookie", "token-access="+ tokens[0]);
-	headers.add("Cookie", "token-refresh="+ tokens[1]);
+    HttpHeaders headers = new HttpHeaders();
+
+	String cookieHeader = "token-access="+tokens[0] + "; " + "token-refresh="+ tokens[1];
+
+	headers.add("Cookie", cookieHeader);
 	
 	HttpEntity<String> req = new HttpEntity<String>(headers);
 	
@@ -304,10 +308,11 @@ public JSONObject updateUser(Tbl_user usr, Cookie[] cookies) {
 	datos.remove("date_joined");
 	datos.remove("profile");
 	
-    HttpHeaders headers = new HttpHeaders(); 
-	
-	headers.add("Cookie", "token-access="+ tokens[0]);
-	headers.add("Cookie", "token-refresh="+ tokens[1]);
+    HttpHeaders headers = new HttpHeaders();
+
+	String cookieHeader = "token-access="+tokens[0] + "; " + "token-refresh="+ tokens[1];
+
+	headers.add("Cookie", cookieHeader);
 	headers.setContentType(MediaType.APPLICATION_JSON);
 	HttpEntity<String> req = new HttpEntity<String>(datos.toString(),headers);
 	
@@ -351,11 +356,17 @@ public JSONObject asignarRol(Tbl_user usr, Cookie[] cookies) {
 	datos.remove("date_joined");
 	datos.remove("profile");
 	datos.remove("username");
+	datos.remove("email");
+	datos.remove("first_name");
+	datos.remove("last_name");
+
+	System.out.println("asignarRol_DT_user: " + datos.toString());
 	
-    HttpHeaders headers = new HttpHeaders(); 
-	
-	headers.add("Cookie", "token-access="+ tokens[0]);
-	headers.add("Cookie", "token-refresh="+ tokens[1]);
+    HttpHeaders headers = new HttpHeaders();
+
+	String cookieHeader = "token-access="+tokens[0] + "; " + "token-refresh="+ tokens[1];
+
+	headers.add("Cookie", cookieHeader);
 	headers.setContentType(MediaType.APPLICATION_JSON);
 	HttpEntity<String> req = new HttpEntity<String>(datos.toString(),headers);
 	
@@ -403,10 +414,11 @@ public JSONObject deleteUser(Tbl_user usr, Cookie[] cookies) {
 	datos.remove("date_joined");
 	datos.remove("profile");
 
-	HttpHeaders headers = new HttpHeaders(); 
-	
-	headers.add("Cookie", "token-access="+ tokens[0]);
-	headers.add("Cookie", "token-refresh="+ tokens[1]);
+	HttpHeaders headers = new HttpHeaders();
+
+	String cookieHeader = "token-access="+tokens[0] + "; " + "token-refresh="+ tokens[1];
+
+	headers.add("Cookie", cookieHeader);
 	headers.setContentType(MediaType.APPLICATION_JSON);
 	HttpEntity<String> req = new HttpEntity<String>(datos.toString(),headers);
 	

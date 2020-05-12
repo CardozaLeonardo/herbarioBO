@@ -128,7 +128,7 @@ if(fungus == null){
                     	for(Tbl_mushroomSpecimen fus: fungus) {
                     %>
                     
-                    <%if(fus.getStatus().getId() == 4){%>
+                    <%if(fus.getStatus().getId() == 4 || !fus.isApproved()){%>
                     <tr>
                       <td id="cl-id-<%=fus.getId()%>"><%=fus.getId() %></td>
                       <td id="cl-name-<%=fus.getId()%>"><%=fus.getUser().getFirst_name() %></td>

@@ -55,6 +55,12 @@ public static void setTokenCookiesJsp(HttpServletRequest req, HttpServletRespons
 		boolean access = false;
 		boolean refresh = false;
 		String[] tokens = new String[2];
+
+		if(cookies == null) {
+			tokens[0] = "-123";
+			tokens[1] = "-123";
+			return tokens;
+		}
 		
 		for(Cookie c : cookies)
 		{
@@ -71,6 +77,7 @@ public static void setTokenCookiesJsp(HttpServletRequest req, HttpServletRespons
 		
 		if(!(access && refresh)) {
 			
+			//return null;
 			return null;
 		}else {
 			return tokens;

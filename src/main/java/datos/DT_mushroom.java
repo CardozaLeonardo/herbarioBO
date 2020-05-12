@@ -18,7 +18,7 @@ import entidades.fichas_tecnicas.Tbl_mushroomSpecimen;
 import util.Util;
 
 public class DT_mushroom {
-   private RestTemplate restTemplate = new RestTemplate(new HttpComponentsClientHttpRequestFactory());
+   private final RestTemplate restTemplate = new RestTemplate(new HttpComponentsClientHttpRequestFactory());
 	
 	public JSONObject getCountries(Cookie[] cookies) {
 		
@@ -35,10 +35,11 @@ public class DT_mushroom {
 			return retorno;
 		}
 		
-        HttpHeaders headers = new HttpHeaders(); 
-		
-		headers.add("Cookie", "token-access="+ tokens[0]);
-		headers.add("Cookie", "token-refresh="+ tokens[1]);
+        HttpHeaders headers = new HttpHeaders();
+
+		String cookieHeader = "token-access="+tokens[0] + "; " + "token-refresh="+ tokens[1];
+
+		headers.add("Cookie", cookieHeader);
 		
 		HttpEntity<String> req = new HttpEntity<String>(headers);
 		
@@ -80,10 +81,11 @@ public JSONObject getFungus(int id, Cookie[] cookies) {
 			return retorno;
 		}
 		
-        HttpHeaders headers = new HttpHeaders(); 
-		
-		headers.add("Cookie", "token-access="+ tokens[0]);
-		headers.add("Cookie", "token-refresh="+ tokens[1]);
+        HttpHeaders headers = new HttpHeaders();
+
+	    String cookieHeader = "token-access="+tokens[0] + "; " + "token-refresh="+ tokens[1];
+
+	    headers.add("Cookie", cookieHeader);
 		
 		HttpEntity<String> req = new HttpEntity<String>(headers);
 		
@@ -95,6 +97,11 @@ public JSONObject getFungus(int id, Cookie[] cookies) {
 			JSONObject retorno = new JSONObject();
 			retorno.put("status", response.getStatusCodeValue());
 			retorno.put("fungus", fungus);
+
+			if(response.getHeaders().get("Set-Cookie") == null){
+				retorno.put("status", 401);
+				return retorno;
+			}
 			retorno.put("cookies", Util.parseCookie(response.getHeaders().get("Set-Cookie")));
 			return retorno;
 			
@@ -125,10 +132,11 @@ public JSONObject guardarHongo(MultiValueMap<String, Object> newFungus, Cookie[]
 			return retorno;
 		}
 		
-        HttpHeaders headers = new HttpHeaders(); 
+        HttpHeaders headers = new HttpHeaders();
+
+		String cookieHeader = "token-access="+tokens[0] + "; " + "token-refresh="+ tokens[1];
 		
-		headers.add("Cookie", "token-access="+ tokens[0]);
-		headers.add("Cookie", "token-refresh="+ tokens[1]);
+		headers.add("Cookie", cookieHeader);
 		headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 		
 		System.out.println("guardarHongo: "+newFungus.toString());
@@ -179,10 +187,11 @@ public JSONObject actualizarHongo(MultiValueMap<String, Object> newFungus, Cooki
 	
 	//newFungus.remove("id");
 	
-    HttpHeaders headers = new HttpHeaders(); 
-	
-	headers.add("Cookie", "token-access="+ tokens[0]);
-	headers.add("Cookie", "token-refresh="+ tokens[1]);
+    HttpHeaders headers = new HttpHeaders();
+
+	String cookieHeader = "token-access="+tokens[0] + "; " + "token-refresh="+ tokens[1];
+
+	headers.add("Cookie", cookieHeader);
 	headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 	
 	//System.out.println(newFungus.toString());
@@ -234,8 +243,9 @@ public JSONObject actualizarHongo(MultiValueMap<String, Object> newFungus, Cooki
 
 		HttpHeaders headers = new HttpHeaders();
 
-		headers.add("Cookie", "token-access="+ tokens[0]);
-		headers.add("Cookie", "token-refresh="+ tokens[1]);
+		String cookieHeader = "token-access="+tokens[0] + "; " + "token-refresh="+ tokens[1];
+
+		headers.add("Cookie", cookieHeader);
 		headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 
 		System.out.println("ActualizarHongoPath: " + newFungus.toString());
@@ -281,10 +291,11 @@ public JSONObject deleteFungus(int id, Cookie[] cookies) {
 		return retorno;
 	}
 	
-    HttpHeaders headers = new HttpHeaders(); 
-	
-	headers.add("Cookie", "token-access="+ tokens[0]);
-	headers.add("Cookie", "token-refresh="+ tokens[1]);
+    HttpHeaders headers = new HttpHeaders();
+
+	String cookieHeader = "token-access="+tokens[0] + "; " + "token-refresh="+ tokens[1];
+
+	headers.add("Cookie", cookieHeader);
 	
 	HttpEntity<String> req = new HttpEntity<String>(headers);
 	

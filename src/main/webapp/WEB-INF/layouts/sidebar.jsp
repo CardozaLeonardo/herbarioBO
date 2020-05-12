@@ -1,4 +1,6 @@
- <%
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+         pageEncoding="ISO-8859-1" %>
+<%
     String basePath = request.getContextPath();
  %>
  
@@ -99,6 +101,7 @@
           <div id="collapseCat" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Custom Utilities:</h6>
+              <a class="collapse-item" href="<%=basePath%>/fichas/genus">Género</a>
             <a class="collapse-item" href="<%=basePath%>/fichas/species">Especies</a>
             <a class="collapse-item" href="<%=basePath%>/fichas/families">Familias</a>
             <a class="collapse-item" href="<%=basePath%>/fichas/ecosystems">Ecosistemas</a>

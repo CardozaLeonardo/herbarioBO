@@ -94,10 +94,11 @@ public JSONObject getPlant(int id, Cookie[] cookies) {
 			return retorno;
 		}
 		
-        HttpHeaders headers = new HttpHeaders(); 
-		
-		headers.add("Cookie", "token-access="+ tokens[0]);
-		headers.add("Cookie", "token-refresh="+ tokens[1]);
+        HttpHeaders headers = new HttpHeaders();
+
+	   String cookieHeader = "token-access="+tokens[0] + "; " + "token-refresh="+ tokens[1];
+
+	   headers.add("Cookie", cookieHeader);
 		
 		HttpEntity<String> req = new HttpEntity<String>(headers);
 		
@@ -139,10 +140,11 @@ public JSONObject guardarPlanta(MultiValueMap<String, Object> newFungus, Cookie[
 			return retorno;
 		}
 		
-        HttpHeaders headers = new HttpHeaders(); 
-		
-		headers.add("Cookie", "token-access="+ tokens[0]);
-		headers.add("Cookie", "token-refresh="+ tokens[1]);
+        HttpHeaders headers = new HttpHeaders();
+
+	    String cookieHeader = "token-access="+tokens[0] + "; " + "token-refresh="+ tokens[1];
+
+	     headers.add("Cookie", cookieHeader);
 		//headers.setContentType(MediaType.APPLICATION_JSON);
 		headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 
@@ -192,10 +194,11 @@ public JSONObject actualizarPlanta(MultiValueMap<String, Object> newFungus, Cook
 	
 
 	
-    HttpHeaders headers = new HttpHeaders(); 
-	
-	headers.add("Cookie", "token-access="+ tokens[0]);
-	headers.add("Cookie", "token-refresh="+ tokens[1]);
+    HttpHeaders headers = new HttpHeaders();
+
+	String cookieHeader = "token-access="+tokens[0] + "; " + "token-refresh="+ tokens[1];
+
+	headers.add("Cookie", cookieHeader);
 	headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 	
 	System.out.println(newFungus.toString());
@@ -247,8 +250,9 @@ public JSONObject actualizarPlanta(MultiValueMap<String, Object> newFungus, Cook
 
 		HttpHeaders headers = new HttpHeaders();
 
-		headers.add("Cookie", "token-access="+ tokens[0]);
-		headers.add("Cookie", "token-refresh="+ tokens[1]);
+		String cookieHeader = "token-access="+tokens[0] + "; " + "token-refresh="+ tokens[1];
+
+		headers.add("Cookie", cookieHeader);
 		headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 
 		System.out.println(newFungus.toString());
@@ -295,10 +299,11 @@ public JSONObject deletePlant(int id, Cookie[] cookies) {
 		return retorno;
 	}
 	
-    HttpHeaders headers = new HttpHeaders(); 
-	
-	headers.add("Cookie", "token-access="+ tokens[0]);
-	headers.add("Cookie", "token-refresh="+ tokens[1]);
+    HttpHeaders headers = new HttpHeaders();
+
+	String cookieHeader = "token-access="+tokens[0] + "; " + "token-refresh="+ tokens[1];
+
+	headers.add("Cookie", cookieHeader);
 	
 	HttpEntity<String> req = new HttpEntity<String>(headers);
 	

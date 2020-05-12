@@ -34,10 +34,11 @@ public class DT_country {
 			return retorno;
 		}
 		
-        HttpHeaders headers = new HttpHeaders(); 
-		
-		headers.add("Cookie", "token-access="+ tokens[0]);
-		headers.add("Cookie", "token-refresh="+ tokens[1]);
+        HttpHeaders headers = new HttpHeaders();
+
+		String cookieHeader = "token-access="+tokens[0] + "; " + "token-refresh="+ tokens[1];
+
+		headers.add("Cookie", cookieHeader);
 		
 		HttpEntity<String> req = new HttpEntity<String>(headers);
 		
@@ -47,7 +48,13 @@ public class DT_country {
 			Tbl_country[] countries = response.getBody();
 			
 			JSONObject retorno = new JSONObject();
-			retorno.put("status", response.getStatusCodeValue());
+			System.out.println("DT_Country: " + response.getStatusCodeValue());
+
+			if(response.getHeaders().get("Set-Cookie") == null) {
+				retorno.put("status", 401);
+			}else{
+				retorno.put("status", 200);
+			}
 			retorno.put("countries", countries);
 			retorno.put("cookies", Util.parseCookie(response.getHeaders().get("Set-Cookie")));
 			return retorno;
@@ -58,6 +65,7 @@ public class DT_country {
 			
 			JSONObject retorno = new JSONObject();
 			retorno.put("status", e.getStatusCode().value());
+
 			//retorno.put("user", user);
 			return retorno;
 		}

@@ -129,7 +129,7 @@ mensaje = mensaje==null?"":mensaje;
 	                  <td><%=specie.getId() %></td>
 	                  <td><%=specie.getCommon_name()%></td>
 	                  <td><%=specie.getScientific_name()%></td>
-	                  <td><%=specie.getFamily().getName()%></td>
+	                  <td><%=specie.getGenus().getFamily().getName()%></td>
 	                  <td><%=specie.getGenus().getName()%></td>
 	                  <td>
 	                  	<a href="./updateSpecie?id=<%=specie.getId() %>" onclick="linkEditUser('<%=specie.getId() %>');"><i class="far fa-edit" title="Editar"></i></a>&nbsp;&nbsp;

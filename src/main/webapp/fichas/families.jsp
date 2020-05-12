@@ -13,6 +13,7 @@
     
 <!DOCTYPE html>
 <html>
+<head>
 <meta charset="ISO-8859-1">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -41,6 +42,11 @@
  }
 
  Tbl_family[] families = (Tbl_family[]) request.getAttribute("families");
+
+ if(families == null) {
+     response.sendRedirect(request.getContextPath() + "/toLoginPage");
+     return;
+ }
 
  
  %>

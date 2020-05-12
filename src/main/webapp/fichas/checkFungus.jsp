@@ -134,9 +134,10 @@ jAlert css
                         <h3 class="card-title">Ver Hongo</h3>
                     </div>
 
-                    <form role="form" action="../actualizarHongo" method="POST" enctype="multipart/form-data">
+                    <form role="form" action="../parseFungus" method="POST" enctype="multipart/form-data">
                         <input type="hidden" name="idUser" id="idUser" value="<%=mus.getUser().getId()%>">
                         <input type="hidden" name="fungusID" value="<%=request.getParameter("id")%>">
+                        <input type="hidden" name="operation" value="approving">
                         <div class="card-body">
                             <h5>Datos de Recolector</h5>
                             
@@ -157,13 +158,13 @@ jAlert css
                             
                             <div class="form-group">
                                 <label for="family">Familia</label>
-                                <input disabled class="form-control" id="family" name="family" value="<%=mus.getFamily().getName()%>">
+                                <input disabled class="form-control" id="family" name="family" value="<%=mus.getSpecies().getGenus().getFamily().getName()%>">
                                 
                             </div>
 
                             <div class="form-group">
                                 <label for="genus">Género</label>
-                                <input disabled class="form-control" id="genus" name="genus" value="<%=mus.getGenus().getName()%>">
+                                <input disabled class="form-control" id="genus" name="genus" value="<%=mus.getSpecies().getGenus().getName()%>">
                             </div>
 
                             <div class="form-group">
@@ -215,13 +216,6 @@ jAlert css
                             </div>
 
                             <div class="form-group">
-                                <label for="specimenStatus">Estado</label>
-                                <select class="form-control" id="specimenStatus">
-
-                                </select>
-                            </div>
-
-                            <div class="form-group">
                                 <label for="numberSpecimens">Número de especímenes colectados</label>
                                 <input disabled type="number" class="form-control" id="numberSpecimens"
                                     placeholder="Número de especímenes" name="number_of_samples" value="<%=mus.getNumber_of_samples()%>">
@@ -231,12 +225,12 @@ jAlert css
 
                             <div class="form-group">
                                 <label for="country">País</label>
-                                <input disabled class="form-control" id="country" name="country" value="<%=mus.getCountry().getName()%>">
+                                <input disabled class="form-control" id="country" name="country" value="<%=mus.getCity().getState().getCountry().getName()%>">
                             </div>
 
                             <div class="form-group">
                                 <label for="state">Estado/Provincia/Condado</label>
-                                <input disabled class="form-control" id="state" name="state" value="<%=mus.getState().getName()%>">
+                                <input disabled class="form-control" id="state" name="state" value="<%=mus.getCity().getState().getName()%>">
                             </div>
 
                             <div class="form-group">
@@ -304,9 +298,9 @@ jAlert css
                         <div class="card-footer">
                             <label for="opt">Opción</label>
                             <div class="form-group">
-                            <select class="form-control" name="opt">
-                               <option value="2">Aprobar</option>
-                               <option value="3">Rechazar</option>
+                            <select class="form-control" name="opt" id="opt">
+                               <option value="true">Aprobar</option>
+                               <option value="false">Rechazar</option>
                             </select>
                             </div>
                               <button type="submit" class="btn btn-primary">Continuar</button>

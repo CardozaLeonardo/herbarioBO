@@ -30,10 +30,11 @@ public class DT_capType {
 			return retorno;
 		}
 		
-        HttpHeaders headers = new HttpHeaders(); 
-		
-		headers.add("Cookie", "token-access="+ tokens[0]);
-		headers.add("Cookie", "token-refresh="+ tokens[1]);
+        HttpHeaders headers = new HttpHeaders();
+
+		String cookieHeader = "token-access="+tokens[0] + "; " + "token-refresh="+ tokens[1];
+
+		headers.add("Cookie", cookieHeader);
 		
 		HttpEntity<String> req = new HttpEntity<String>(headers);
 		
@@ -79,8 +80,9 @@ public class DT_capType {
 
 		HttpHeaders headers = new HttpHeaders();
 
-		headers.add("Cookie", "token-access="+ tokens[0]);
-		headers.add("Cookie", "token-refresh="+ tokens[1]);
+		String cookieHeader = "token-access="+tokens[0] + "; " + "token-refresh="+ tokens[1];
+
+		headers.add("Cookie", cookieHeader);
 		headers.setContentType(MediaType.APPLICATION_JSON);
 
 		System.out.println(data.toString());
@@ -128,8 +130,9 @@ public class DT_capType {
 
 		HttpHeaders headers = new HttpHeaders();
 
-		headers.add("Cookie", "token-access="+ tokens[0]);
-		headers.add("Cookie", "token-refresh="+ tokens[1]);
+		String cookieHeader = "token-access="+tokens[0] + "; " + "token-refresh="+ tokens[1];
+
+		headers.add("Cookie", cookieHeader);
 
 		HttpEntity<String> req = new HttpEntity<String>(headers);
 

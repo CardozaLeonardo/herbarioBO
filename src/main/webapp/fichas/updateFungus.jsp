@@ -4,7 +4,8 @@
 <%@page import="entidades.fichas_tecnicas.Tbl_mushroomSpecimen"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1" import="entidades.*, datos.*, java.util.ArrayList"%>
-    
+<%@ page import="util.StringAdapt" %>
+
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
 
 <%
@@ -156,7 +157,7 @@ jAlert css
                             <div class="form-group">
                                 <label for="specimenDescription">Descripción del espécimen</label>
                                 <textarea class="form-control" id="specimenDescription" rows="3"
-                                    placeholder="Descripción del espécimen" name="description" value="<%=mus.getDescription()%>"></textarea>
+                                    placeholder="Descripción del espécimen" name="description"><%=mus.getDescription()%></textarea>
                             </div>
 
                             <div class="form-group">
@@ -307,8 +308,8 @@ jAlert css
                            <input type="file" id="photo" name="photo" class="form-control-file">
                            <div class="card bg-light" style="min-height: 400px; width:90%;margin-left: auto;margin-right:auto;">
                              <%if(mus.getPhoto() != null) {%>
-                             <img id="imagePreview" src="<%=request.getContextPath() + mus.getPhoto() %>" alt="image preview" width="60%" height="auto" 
-                             style="margin-left: auto;margin-right:auto;"/>
+                             <img id="imagePreview" src="<%=StringAdapt.adaptDriveImage(mus.getPhoto())%>" alt="image preview" width="60%" height="auto"
+                                  style="margin-left: auto;margin-right:auto;"/>
                              <%}else{ %>
                               <img id="imagePreview" src="" alt="image preview" width="60%" height="auto" 
                              style="margin-left: auto;margin-right:auto;"/>

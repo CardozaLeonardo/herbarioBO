@@ -31,10 +31,11 @@ private RestTemplate restTemplate = new RestTemplate();
 			return retorno;
 		}
 		
-        HttpHeaders headers = new HttpHeaders(); 
-		
-		headers.add("Cookie", "token-access="+ tokens[0]);
-		headers.add("Cookie", "token-refresh="+ tokens[1]);
+        HttpHeaders headers = new HttpHeaders();
+
+		String cookieHeader = "token-access="+tokens[0] + "; " + "token-refresh="+ tokens[1];
+
+		headers.add("Cookie", cookieHeader);
 		
 		HttpEntity<String> req = new HttpEntity<String>(headers);
 		
@@ -75,10 +76,11 @@ public JSONObject getEcosystem(int id, Cookie[] cookies) {
 			return retorno;
 		}
 		
-        HttpHeaders headers = new HttpHeaders(); 
-		
-		headers.add("Cookie", "token-access="+ tokens[0]);
-		headers.add("Cookie", "token-refresh="+ tokens[1]);
+        HttpHeaders headers = new HttpHeaders();
+
+	   String cookieHeader = "token-access="+tokens[0] + "; " + "token-refresh="+ tokens[1];
+
+	   headers.add("Cookie", cookieHeader);
 		
 		HttpEntity<String> req = new HttpEntity<String>(headers);
 		
@@ -123,10 +125,11 @@ public JSONObject saveEcosystem(Tbl_ecosystem ecosystem, Cookie[] cookies) {
 			return retorno;
 		}
 		
-        HttpHeaders headers = new HttpHeaders(); 
-		
-		headers.add("Cookie", "token-access="+ tokens[0]);
-		headers.add("Cookie", "token-refresh="+ tokens[1]);
+        HttpHeaders headers = new HttpHeaders();
+
+	    String cookieHeader = "token-access="+tokens[0] + "; " + "token-refresh="+ tokens[1];
+
+	    headers.add("Cookie", cookieHeader);
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		
 		//System.out.println(data.toString());
@@ -178,10 +181,11 @@ public JSONObject updateEcosystem(Tbl_ecosystem ecosystem, Cookie[] cookies) {
 	
 	
 	
-    HttpHeaders headers = new HttpHeaders(); 
-	
-	headers.add("Cookie", "token-access="+ tokens[0]);
-	headers.add("Cookie", "token-refresh="+ tokens[1]);
+    HttpHeaders headers = new HttpHeaders();
+
+	String cookieHeader = "token-access="+tokens[0] + "; " + "token-refresh="+ tokens[1];
+
+	headers.add("Cookie", cookieHeader);
 	headers.setContentType(MediaType.APPLICATION_JSON);
 	
 	//System.out.println(newFungus.toString());
@@ -225,10 +229,11 @@ public JSONObject deleteEcosystem(int id, Cookie[] cookies) {
 		return retorno;
 	}
 	
-    HttpHeaders headers = new HttpHeaders(); 
-	
-	headers.add("Cookie", "token-access="+ tokens[0]);
-	headers.add("Cookie", "token-refresh="+ tokens[1]);
+    HttpHeaders headers = new HttpHeaders();
+
+	String cookieHeader = "token-access="+tokens[0] + "; " + "token-refresh="+ tokens[1];
+
+	headers.add("Cookie", cookieHeader);
 	
 	HttpEntity<String> req = new HttpEntity<String>(headers);
 	

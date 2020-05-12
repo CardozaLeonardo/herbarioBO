@@ -15,12 +15,16 @@ import datos.DT_family;
 import entidades.fichas_tecnicas.Tbl_family;
 import util.Util;
 
+import java.io.IOException;
+
+
 @Controller
 public class FamilyController {
 	
 	@GetMapping("/fichas/families")
-	public String showFamilies(HttpServletRequest req, HttpServletResponse res, Model model) {
+	public String showFamilies(HttpServletRequest req, HttpServletResponse res, Model model) throws IOException {
 		DT_family dtf = new DT_family();
+
 		
 		JSONObject response = dtf.getFamilies(req.getCookies());
 		Tbl_family[] families = null;
@@ -30,6 +34,9 @@ public class FamilyController {
 			String[] cookies = (String[]) response.get("cookies");
 			Util.setTokenCookies(req, res, cookies);
 			
+		}else if (response.getInt("status") == 401) {
+			res.sendRedirect(req.getContextPath() + "/toLoginPage");
+			return null;
 		}
 		
 		model.addAttribute("families", families);

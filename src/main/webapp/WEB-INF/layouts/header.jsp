@@ -1,4 +1,5 @@
-
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+         pageEncoding="ISO-8859-1" %>
         <%@ page import="entidades.*"%>
         <%@ page import="datos.Server" %>
 
@@ -160,7 +161,7 @@
                 <%if(user != null){ %>
                    <%=user.getUsername()%>
                 <%} else{%>
-                  <%="An�nimo" %>
+                  <%="Anónimo" %>
                 <%} %>
                 </span>
                 <% if(user.getProfile() != null) {%>
@@ -186,7 +187,7 @@
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="<%=request.getContextPath()%>/exit">
                   <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                  Cerrar Sesi�n
+                  Cerrar Sesión
                 </a>
               </div>
             </li>

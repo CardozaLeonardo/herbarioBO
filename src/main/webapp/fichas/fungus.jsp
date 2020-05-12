@@ -160,6 +160,7 @@ if(!viewPermission) {
 	                <%if(fungus != null) {%>
 	                
 	                <%for(Tbl_mushroomSpecimen fus : fungus){ %>
+                    <%if(fus.isApproved() && fus.getStatus().getId() != 5){%>
 	                <tr>
 	                   
 	                  <td><%=fus.getId() %></td>
@@ -181,6 +182,7 @@ if(!viewPermission) {
 	                  	    
 	                  </td>
 	                </tr>
+                    <%}%>
 	                <%} %>
 	                 
 	                <%} %>

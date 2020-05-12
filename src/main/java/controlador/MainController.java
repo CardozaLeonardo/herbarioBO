@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import datos.DT_rol;
 import entidades.Tbl_rol;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 
 //import com.example.dao.DT_user;
 //import com.example.entity.User;
@@ -37,21 +39,7 @@ public class MainController {
 			, HttpServletResponse res) {
 		
 		
-		/*DT_rol dtr = new DT_rol();
-		if(token.equals("Atta")) {
-			
-			String[] sessions = dtr.optenerCredenciales();
-			if(sessions != null) {
-				String [] parts = sessions[0].split("=");
-				String [] parts2 = sessions[1].split("=");
-				Cookie ck = new Cookie(parts[0],parts[1]);
-				Cookie ck2 = new Cookie(parts2[0],parts2[1]);
-				ck.setMaxAge(300);
-				ck2.setMaxAge(300);
-				res.addCookie(ck);
-				res.addCookie(ck2);
-			}
-		}*/
+
 		//dtr.getRoles(res, token, token2);
         return "index.jsp";
     }
@@ -103,7 +91,14 @@ public class MainController {
 		return "login.jsp";
     }
 	
-	
-	
+	@GetMapping("/toLoginPage")
+	public RedirectView redirectLoginForDeniedAccess(HttpServletRequest req, RedirectAttributes attributes) {
+		RedirectView rv = new RedirectView(req.getContextPath() + "/login");
+
+		attributes.addFlashAttribute("error", 1);
+		attributes.addFlashAttribute("type", "info");
+		attributes.addFlashAttribute("msg", "¡Debe iniciar sesión!");
+		return rv;
+	}
 
 }

@@ -31,10 +31,11 @@ public class DT_family {
 			return retorno;
 		}
 		
-        HttpHeaders headers = new HttpHeaders(); 
-		
-		headers.add("Cookie", "token-access="+ tokens[0]);
-		headers.add("Cookie", "token-refresh="+ tokens[1]);
+        HttpHeaders headers = new HttpHeaders();
+
+		String cookieHeader = "token-access="+tokens[0] + "; " + "token-refresh="+ tokens[1];
+
+		headers.add("Cookie", cookieHeader);
 		
 		HttpEntity<String> req = new HttpEntity<String>(headers);
 		
@@ -44,8 +45,13 @@ public class DT_family {
 			Tbl_family[] families = response.getBody();
 			
 			JSONObject retorno = new JSONObject();
+			if(response.getHeaders().get("Set-Cookie") == null) {
+				retorno.put("status", 401);
+				return retorno;
+			}
 			retorno.put("status", response.getStatusCodeValue());
 			retorno.put("families", families);
+
 			retorno.put("cookies", Util.parseCookie(response.getHeaders().get("Set-Cookie")));
 			return retorno;
 			
@@ -75,10 +81,11 @@ public JSONObject getFamily(int id, Cookie[] cookies) {
 			return retorno;
 		}
 		
-        HttpHeaders headers = new HttpHeaders(); 
-		
-		headers.add("Cookie", "token-access="+ tokens[0]);
-		headers.add("Cookie", "token-refresh="+ tokens[1]);
+        HttpHeaders headers = new HttpHeaders();
+
+	    String cookieHeader = "token-access="+tokens[0] + "; " + "token-refresh="+ tokens[1];
+
+	    headers.add("Cookie", cookieHeader);
 		
 		HttpEntity<String> req = new HttpEntity<String>(headers);
 		
@@ -123,10 +130,11 @@ public JSONObject saveFamily(Tbl_family family, Cookie[] cookies) {
 			return retorno;
 		}
 		
-        HttpHeaders headers = new HttpHeaders(); 
-		
-		headers.add("Cookie", "token-access="+ tokens[0]);
-		headers.add("Cookie", "token-refresh="+ tokens[1]);
+        HttpHeaders headers = new HttpHeaders();
+
+	   String cookieHeader = "token-access="+tokens[0] + "; " + "token-refresh="+ tokens[1];
+
+	    headers.add("Cookie", cookieHeader);
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		
 		System.out.println(data.toString());
@@ -178,10 +186,11 @@ public JSONObject updateFamily(Tbl_family family, Cookie[] cookies) {
 	
 	
 	
-    HttpHeaders headers = new HttpHeaders(); 
-	
-	headers.add("Cookie", "token-access="+ tokens[0]);
-	headers.add("Cookie", "token-refresh="+ tokens[1]);
+    HttpHeaders headers = new HttpHeaders();
+
+	String cookieHeader = "token-access="+tokens[0] + "; " + "token-refresh="+ tokens[1];
+
+	headers.add("Cookie", cookieHeader);
 	headers.setContentType(MediaType.APPLICATION_JSON);
 	
 	//System.out.println(newFungus.toString());
@@ -225,10 +234,11 @@ public JSONObject deleteFamily(int id, Cookie[] cookies) {
 		return retorno;
 	}
 	
-    HttpHeaders headers = new HttpHeaders(); 
-	
-	headers.add("Cookie", "token-access="+ tokens[0]);
-	headers.add("Cookie", "token-refresh="+ tokens[1]);
+    HttpHeaders headers = new HttpHeaders();
+
+	String cookieHeader = "token-access="+tokens[0] + "; " + "token-refresh="+ tokens[1];
+
+	headers.add("Cookie", cookieHeader);
 	
 	HttpEntity<String> req = new HttpEntity<String>(headers);
 	

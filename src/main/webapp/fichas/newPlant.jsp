@@ -66,6 +66,12 @@ boolean addPermission = false;
 
 Tbl_opcion[] permisions = (Tbl_opcion[]) hts.getAttribute("user_permissions");
 
+if(permisions == null) {
+    
+    response.sendRedirect(request.getContextPath() + "/toLoginPage");
+    return;
+}
+
 for(Tbl_opcion p: permisions) {
     if(p.getCodename().equals("add_plantspecimen")) {
         addPermission = true;

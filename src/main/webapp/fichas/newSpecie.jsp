@@ -15,6 +15,9 @@ Tbl_family[] families = null;
 if(request.getAttribute("families") != null){
 families = (Tbl_family[]) request.getAttribute("families");
 	
+}else {
+    response.sendRedirect(request.getContextPath() + "/toLoginPage");
+    return;
 }
 
 
@@ -144,17 +147,6 @@ jAlert css
                                     placeholder="Descripción" name="description"></textarea>
                             </div>
 
-                            <div class="form-group">
-                                <label for="family">Familia</label>
-                                <select class="form-control" id="family" name="family" required>
-                                   <option value="">Seleccione...</option>
-                                   <%if(families != null) {%>
-                                     <%for(Tbl_family fam : families){ %>
-                                         <option value="<%=fam.getId()%>"><%=fam.getName()%></option>
-                                     <% }%>
-                                   <%} %>
-                                </select>
-                            </div>
 
                             <div class="form-group">
                                 <label for="genus">Género</label>

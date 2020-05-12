@@ -49,9 +49,10 @@ public class DT_rol {
 		
 		Tbl_rol[] roles = null;
 		HttpHeaders headers = new HttpHeaders(); // Esto sirve para agregar los headers, con .add() se agregan
-		
-		headers.add("Cookie", "token-access="+ tokens[0]);
-		headers.add("Cookie", "token-refresh="+ tokens[1]);
+
+		String cookieHeader = "token-access="+tokens[0] + "; " + "token-refresh="+ tokens[1];
+
+		headers.add("Cookie", cookieHeader);
 		
 		HttpEntity<Tbl_rol[]> respuesta = new HttpEntity<Tbl_rol[]>(headers);
 		// Usar arrays tradicionales para recibir la informacion, no funciona con ArrayList y otros.
@@ -107,10 +108,11 @@ public class DT_rol {
 			return retorno;
 		}
 		
-        HttpHeaders headers = new HttpHeaders(); 
-		
-		headers.add("Cookie", "token-access="+ tokens[0]);
-		headers.add("Cookie", "token-refresh="+ tokens[1]);
+        HttpHeaders headers = new HttpHeaders();
+
+		String cookieHeader = "token-access="+tokens[0] + "; " + "token-refresh="+ tokens[1];
+
+		headers.add("Cookie", cookieHeader);
 		
 		HttpEntity<String> req = new HttpEntity<String>(headers);
 		
@@ -189,10 +191,11 @@ public class DT_rol {
 		
 		String URL = Server.getHostname() + "group/";
 		
-        HttpHeaders headers = new HttpHeaders(); 
-		
-		headers.add("Cookie", "token-access="+ tokens[0]);
-		headers.add("Cookie", "token-refresh="+ tokens[1]);
+        HttpHeaders headers = new HttpHeaders();
+
+		String cookieHeader = "token-access="+tokens[0] + "; " + "token-refresh="+ tokens[1];
+
+		headers.add("Cookie", cookieHeader);
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		
 		HttpEntity<String> respuesta = new HttpEntity<String>(rolJson.toString(), headers);
@@ -243,10 +246,11 @@ public class DT_rol {
 		String URL = Server.getHostname() + "group/" + idRol + "/";
 		Tbl_rol rol = new Tbl_rol();
 		
-        HttpHeaders headers = new HttpHeaders(); 
-		
-		headers.add("Cookie", "token-access="+ tokens[0]);
-		headers.add("Cookie", "token-refresh="+ tokens[1]);
+        HttpHeaders headers = new HttpHeaders();
+
+		String cookieHeader = "token-access="+tokens[0] + "; " + "token-refresh="+ tokens[1];
+
+		headers.add("Cookie", cookieHeader);
 		
 		HttpEntity<String> req = new HttpEntity<String>(headers);
 		
@@ -286,10 +290,11 @@ public class DT_rol {
 		datos.remove("id");
 		datos.remove("permissions");
 		
-        HttpHeaders headers = new HttpHeaders(); 
-		
-		headers.add("Cookie", "token-access="+ tokens[0]);
-		headers.add("Cookie", "token-refresh="+ tokens[1]);
+        HttpHeaders headers = new HttpHeaders();
+
+		String cookieHeader = "token-access="+tokens[0] + "; " + "token-refresh="+ tokens[1];
+
+		headers.add("Cookie", cookieHeader);
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		
 		HttpEntity<String> req = new HttpEntity<String>(datos.toString(),headers);
@@ -331,10 +336,11 @@ public class DT_rol {
 		datos.remove("id");
 		//datos.remove("permissions");
 		
-        HttpHeaders headers = new HttpHeaders(); 
-		
-		headers.add("Cookie", "token-access="+ tokens[0]);
-		headers.add("Cookie", "token-refresh="+ tokens[1]);
+        HttpHeaders headers = new HttpHeaders();
+
+		String cookieHeader = "token-access="+tokens[0] + "; " + "token-refresh="+ tokens[1];
+
+		headers.add("Cookie", cookieHeader);
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		
 		HttpEntity<String> req = new HttpEntity<String>(datos.toString(),headers);

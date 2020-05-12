@@ -7,7 +7,8 @@
     response.setHeader("Cache-Control", "no-store");
     response.setDateHeader("Expires", 0);
     response.setDateHeader("Expires", -1);
-    
+
+
     
     DT_user dtu = new DT_user();
     JSONObject obj = dtu.obtenerUsuarioIngresado(request.getCookies());
@@ -109,7 +110,11 @@
                     <img class = "login-image-mobile" src = "img/Logo.png">
                   </div>
                   <form method="post" action="verify" class="user">
+                      <%if(request.getAttribute("cont") != null){%>
+                      <input type="hidden" name="cont" value="<%=request.getAttribute("cont")%>"/>
+                      <%}%>
                   <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+
                     <div class="form-group">
                       <input type="text" class="form-control form-control-user" id="exampleInputEmail" placeholder="Usuario" aria-describedby="emailHelp" name="username">
                     </div>
