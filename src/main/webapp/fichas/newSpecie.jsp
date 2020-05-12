@@ -160,17 +160,7 @@ jAlert css
                                 </select>
                             </div>
 
-                            
-                            <div class="form-group">
-                                <label for="type">Tipo</label>
-                                <select class="form-control" id="type" name="type" required>
-                                  <option value="">Seleccione...</option>
-                                  <option value="planta">Planta</option>
-                                  <option value="hongo">Hongo</option>
-                                </select>
-                            </div>
 
-                            
                         
                         <div class="card-footer">
                             <button type="submit" class="btn btn-primary">Submit</button>

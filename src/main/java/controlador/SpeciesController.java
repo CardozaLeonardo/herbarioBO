@@ -141,8 +141,6 @@ public class SpeciesController {
 		data.put("common_name", req.getParameter("common_name"));
 		data.put("scientific_name", req.getParameter("scientific_name"));
 		data.put("description", req.getParameter("description"));
-		data.put("type", req.getParameter("type"));
-		data.put("family", family);
 		data.put("genus", genus);
 		
 		JSONObject response = dts.saveSpecie(data, req.getCookies());

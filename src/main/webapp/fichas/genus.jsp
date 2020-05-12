@@ -104,6 +104,12 @@ FIN:    29/10/2019
                 </form>
                 <br>
 
+                <a href="<%=request.getContextPath()%>/fichas/newGenus" class="btn btn-primary btn-icon-split">
+                    <span class="icon text-white-50">
+                      <i class="fas fa-plus"></i>
+                    </span>
+                        <span class="text">Agregar Género</span>
+                </a>
 
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
 
@@ -132,7 +138,7 @@ FIN:    29/10/2019
                         <td id="cl-name-<%=gen.getId()%>"><%=gen.getName() %></td>
                         <td id="cl-type-<%=gen.getId()%>"><%=gen.getFamily().getName() %></td>
                         <td>
-                            <a href="#" id="<%=gen.getId()%>" class="">
+                            <a href="./updateGenus?id=<%=gen.getId()%>" id="<%=gen.getId()%>" class="">
 
                                 <i class="fas fa-edit editRole"></i>
                             </a>

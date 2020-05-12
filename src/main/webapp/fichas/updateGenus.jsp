@@ -14,7 +14,7 @@
 <html>
 <head>
     <meta charset="ISO-8859-1">
-    <title><%=Server.getAppName() %> Nueva Género</title>
+    <title><%=Server.getAppName() %> Actualizar Género</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="../img/Logo.png" type="image/x-icon">
@@ -48,17 +48,17 @@
 
 <%
     HttpSession hts = request.getSession();
-    boolean createPermission = false;
+    boolean editPermission = false;
 
     Tbl_opcion[] permisions = (Tbl_opcion[]) hts.getAttribute("user_permissions");
 
     for(Tbl_opcion op : permisions) {
-        if(op.getCodename().equals("add_genus")) {
-            createPermission = true;
+        if(op.getCodename().equals("change_genus")) {
+            editPermission = true;
         }
     }
 
-    if(!createPermission) {
+    if(!editPermission) {
         response.sendRedirect(request.getContextPath() + "/accesoDenegado.jsp");
         return;
     }
@@ -85,12 +85,12 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>Registro [Nueva Género]</h1>
+                        <h1>Registro [Actualizar Género]</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="">Gestión de Fichas Técnicas</a></li>
-                            <li class="breadcrumb-item active">Nuevo Género</li>
+                            <li class="breadcrumb-item active">Actualizar Género</li>
                         </ol>
                     </div>
                 </div>
@@ -110,6 +110,7 @@
                         </button>
                     </div>
                 </c:if>
+
                 <div class="row">
                     <!-- left column -->
                     <div class="col-md-12">
@@ -119,13 +120,16 @@
                                 <h3 class="card-title">Nuevo Género</h3>
                             </div>
 
-                            <form role="form" action="../saveGenus" method="POST" enctype="multipart/form-data">
+                            <form role="form" action="../changeGenus" method="POST" enctype="multipart/form-data">
                                 <div class="card-body">
                                     <h5>Datos de Género</h5>
 
+                                    <input type="hidden" name="idGenus" value="${gen.id}">
+
                                     <div class="form-group">
                                         <label for="name">Nombre</label>
-                                        <input type="text" class="form-control" id="name" placeholder="Nombre" name="name" required>
+                                        <input type="text" class="form-control" id="name" placeholder="Nombre" name="name"
+                                               value="${gen.name}" required>
                                     </div>
 
 
@@ -135,14 +139,14 @@
                                             <option value="">Seleccione...</option>
                                             <c:if test="${families != null}">
                                                 <c:forEach items="${families}" var="fam">
-                                                    <option value="${fam.id}">${fam.name}</option>
+                                                    <option ${gen.family.id == fam.id ? 'selected':''} value="${fam.id}">${fam.name}</option>
                                                 </c:forEach>
                                             </c:if>
                                         </select>
                                     </div>
 
                                     <div class="card-footer">
-                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                        <button type="submit" class="btn btn-primary">Guardar</button>
 
                                         <a href="" class="btn btn-danger btn-icon-split">
                                             <span class="text">Cancelar</span>
