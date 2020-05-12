@@ -30,6 +30,7 @@
 
     <!-- jAlert css  -->
     <link rel="stylesheet" href="../vendor/jAlert/dist/jAlert.css" />
+    <link rel="stylesheet" href="../js/select2/select2.min.css" />
 
     <!-- Font Awesome -->
     <!-- <link rel="stylesheet" href="../../plugins/fontawesome-free/css/all.min.css">
@@ -46,13 +47,20 @@
 </head>
 
 <%
-    String mensaje = "Se ha guardado";
+    HttpSession hts = request.getSession();
+    boolean createPermission = false;
 
-    String idUser = "";
+    Tbl_opcion[] permisions = (Tbl_opcion[]) hts.getAttribute("user_permissions");
 
-    if(request.getSession().getAttribute("user") != null){
-        Tbl_user user = (Tbl_user) request.getSession().getAttribute("user");
-        idUser += user.getId();
+    for(Tbl_opcion op : permisions) {
+        if(op.getCodename().equals("add_genus")) {
+            createPermission = true;
+        }
+    }
+
+    if(!createPermission) {
+        response.sendRedirect(request.getContextPath() + "/accesoDenegado.jsp");
+        return;
     }
 
 
@@ -108,16 +116,15 @@
                         <!-- general form elements -->
                         <div class="card card-primary">
                             <div class="card-header">
-                                <h3 class="card-title">Nueva Especie</h3>
+                                <h3 class="card-title">Nuevo Género</h3>
                             </div>
 
-                            <form role="form" action="../saveSpecie" method="POST" enctype="multipart/form-data">
-                                <input type="hidden" name="idUser" id="idUser" value="<%=idUser%>">
+                            <form role="form" action="../saveGenus" method="POST" enctype="multipart/form-data">
                                 <div class="card-body">
-                                    <h5>Datos de Especie</h5>
+                                    <h5>Datos de Género</h5>
 
                                     <div class="form-group">
-                                        <label for="name"></label>
+                                        <label for="name">Nombre</label>
                                         <input type="text" class="form-control" id="name" placeholder="Nombre" name="name" required>
                                     </div>
 
