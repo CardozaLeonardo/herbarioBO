@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONObject;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,11 +20,15 @@ import entidades.fichas_tecnicas.Tbl_genus;
 import entidades.fichas_tecnicas.Tbl_species;
 import util.Util;
 
+import java.io.IOException;
+import java.util.logging.Logger;
+
 @Controller
 public class SpeciesController {
 	
+
 	@GetMapping("/fichas/species")
-	public String showSpecies(HttpServletRequest req, HttpServletResponse res, Model model) {
+	public String showSpecies(HttpServletRequest req, HttpServletResponse res, Model model) throws IOException {
 		
 		model.addAttribute("pass", 1);
 		DT_species dts = new DT_species();
@@ -35,6 +40,9 @@ public class SpeciesController {
 			species = (Tbl_species[]) json.get("species");
 			String[] cookies = (String[]) json.get("cookies");
 			Util.setTokenCookies(req, res, cookies);
+		}else if(json.getInt("status") == 401) {
+			res.sendRedirect(req.getContextPath() + "/toLoginPage");
+			return null;
 		}
 		
 		model.addAttribute("species", species);
@@ -43,7 +51,7 @@ public class SpeciesController {
 	}
 	
 	@GetMapping("/fichas/viewSpecie")
-    public String showSpecie(HttpServletRequest req, HttpServletResponse res, Model model) {
+    public String showSpecie(HttpServletRequest req, HttpServletResponse res, Model model) throws IOException {
 		
 		model.addAttribute("pass", 1);
 		int id = Integer.parseInt(req.getParameter("id"));
@@ -56,6 +64,9 @@ public class SpeciesController {
 			specie = (Tbl_species) json.get("specie");
 			String[] cookies = (String[]) json.get("cookies");
 			Util.setTokenCookies(req, res, cookies);
+		} else if(json.getInt("status") == 401) {
+			res.sendRedirect(req.getContextPath() + "/toLoginPage");
+			return null;
 		}
 		
 		model.addAttribute("specie", specie);
@@ -134,7 +145,7 @@ public class SpeciesController {
 		RedirectView rv = new RedirectView(req.getContextPath() + "/fichas/species");
 		DT_species dts = new DT_species();
 		
-		int family = Integer.parseInt(req.getParameter("family"));
+		//int family = Integer.parseInt(req.getParameter("family"));
 		int genus = Integer.parseInt(req.getParameter("genus"));
 		
 		JSONObject data = new JSONObject();

@@ -24,7 +24,7 @@ private RestTemplate restTemplate = new RestTemplate();
 		if(tokens == null) {
 			
 			JSONObject retorno = new JSONObject();
-			retorno.put("status", 0);
+			retorno.put("status", 401);
 			return retorno;
 		}
 		
@@ -42,8 +42,13 @@ private RestTemplate restTemplate = new RestTemplate();
 			Tbl_genus[] genus = response.getBody();
 			
 			JSONObject retorno = new JSONObject();
+			if(response.getHeaders().get("Set-Cookie") == null) {
+				retorno.put("status", 401);
+				return retorno;
+			}
 			retorno.put("status", response.getStatusCodeValue());
 			retorno.put("genus", genus);
+
 			retorno.put("cookies", Util.parseCookie(response.getHeaders().get("Set-Cookie")));
 			return retorno;
 			
@@ -183,6 +188,62 @@ private RestTemplate restTemplate = new RestTemplate();
 			String fungus = response.getBody();
 
 			JSONObject retorno = new JSONObject();
+			retorno.put("status", response.getStatusCodeValue());
+			retorno.put("genus", fungus);
+			retorno.put("cookies", Util.parseCookie(response.getHeaders().get("Set-Cookie")));
+			return retorno;
+
+		}catch(HttpClientErrorException e)
+		{
+
+			e.getMessage();
+			e.printStackTrace();
+			JSONObject retorno = new JSONObject();
+			retorno.put("status", e.getStatusCode().value());
+			//retorno.put("user", user);
+			return retorno;
+		}
+	}
+
+
+	public JSONObject deleteGenus(int idGenus, Cookie[] cookies) {
+		String URL = Server.getHostname() + "genus/" + idGenus +"/";
+
+		//Tbl_user user = null;
+
+		String[] tokens = Util.extractTokens(cookies);
+
+		if(tokens == null) {
+
+			JSONObject retorno = new JSONObject();
+			retorno.put("status", 0);
+			return retorno;
+		}
+
+		HttpHeaders headers = new HttpHeaders();
+
+		String cookieHeader = "token-access="+tokens[0] + "; " + "token-refresh="+ tokens[1];
+
+		headers.add("Cookie", cookieHeader);
+		headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+
+
+
+		HttpEntity<String> req =
+				new HttpEntity<>(headers);
+
+		try {
+
+			ResponseEntity<String> response = restTemplate.exchange(URL, HttpMethod.DELETE, req, String.class);
+			String fungus = response.getBody();
+
+			JSONObject retorno = new JSONObject();
+
+			if(response.getHeaders().get("Set-Cookie") == null) {
+				retorno.put("status", 401);
+				return retorno;
+			}
+
 			retorno.put("status", response.getStatusCodeValue());
 			retorno.put("genus", fungus);
 			retorno.put("cookies", Util.parseCookie(response.getHeaders().get("Set-Cookie")));

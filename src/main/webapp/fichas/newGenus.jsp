@@ -63,6 +63,11 @@
         return;
     }
 
+    if(request.getAttribute("families") == null) {
+        response.sendRedirect(request.getContextPath() + "/toLoginPage");
+        return;
+    }
+
 
 %>
 <body class="hold-transition sidebar-mini">
@@ -83,6 +88,8 @@
             <!-- /.navbar -->
 
             <div class="container-fluid">
+
+
                 <div class="row mb-2">
                     <div class="col-sm-6">
                         <h1>Registro [Nueva Género]</h1>
@@ -162,9 +169,14 @@
         <!-- ./Footer -->
     </div>
 </div>
-
-<!-- jQuery -->
+<!-- Bootstrap core JavaScript-->
 <script src="../vendor/jquery/jquery.min.js"></script>
+<script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
+<!-- jQuery -->
+<!--<script src="../vendor/jquery/jquery.min.js"></script> -->
 <!-- <script src="../../plugins/jquery/jquery.min.js"></script> -->
 <!-- Custom scripts for all pages-->
 <script src="../js/sb-admin-2.min.js"></script>

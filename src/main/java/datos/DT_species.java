@@ -46,6 +46,11 @@ private RestTemplate restTemplate = new RestTemplate();
 			Tbl_species[] species = response.getBody();
 			
 			JSONObject retorno = new JSONObject();
+			if(response.getHeaders().get("Set-Cookie") == null) {
+                retorno.put("status", 401);
+                return retorno;
+            }
+
 			retorno.put("status", response.getStatusCodeValue());
 			retorno.put("species", species);
 			retorno.put("cookies", Util.parseCookie(response.getHeaders().get("Set-Cookie")));
@@ -252,4 +257,6 @@ public JSONObject deleteSpecie(int id, Cookie[] cookies) {
 		return retorno;
 	}
 }
+
+
 }

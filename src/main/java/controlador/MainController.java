@@ -12,19 +12,18 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import datos.DT_user;
 import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import datos.DT_rol;
 import entidades.Tbl_rol;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
+import util.MessageAlertUtil;
 
 //import com.example.dao.DT_user;
 //import com.example.entity.User;
@@ -100,5 +99,12 @@ public class MainController {
 		attributes.addFlashAttribute("msg", "¡Debe iniciar sesión!");
 		return rv;
 	}
+
+	@GetMapping("/forgot_password")
+	public String forgotPassword() {
+		return "/forgot-password.jsp";
+	}
+
+
 
 }

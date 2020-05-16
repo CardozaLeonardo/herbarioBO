@@ -38,7 +38,6 @@ FIN:    29/10/2019
 <%
     Tbl_genus[] genus = (Tbl_genus[]) request.getAttribute("genus");
 
-
 %>
 
 <body id="page-top">
@@ -143,7 +142,7 @@ FIN:    29/10/2019
                                 <i class="fas fa-edit editRole"></i>
                             </a>
                             &nbsp;&nbsp;
-                            <a href="#" id="<%=gen.getId()%>" onclick="deleteFamily(<%=gen.getId()%>)" class="deleteFamily">
+                            <a href="#" id="<%=gen.getId()%>" onclick="deleteGenus('<%=gen.getId()%>')" class="">
                                 <i class="fas fa-trash-alt"></i>
                             </a>
                         </td>
@@ -199,11 +198,11 @@ FIN:    29/10/2019
 
 <script>
 
-    function deleteFamily(id){
-        idFam = id;
+    function deleteGenus(id){
+        var idGenus = id;
         confirm(function()
             {
-                window.location.replace(`../deleteFamily?id=${idFam}`);
+                window.location.replace('../deleteGenus?id=' + idGenus);
             },
             function(e,btn)
             {

@@ -28,6 +28,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import datos.DT_user;
 import entidades.Tbl_user;
+import util.MessageAlertUtil;
 import util.Util;
 
 @Controller
@@ -383,6 +384,26 @@ public class UserController {
 		}
 		
 		return rv;
+	}
+
+
+	@RequestMapping(method = RequestMethod.POST,value = "/resetPassword")
+	public RedirectView resetPassword(HttpServletRequest req, HttpServletResponse res,
+									  RedirectAttributes redir) {
+		RedirectView rv = new RedirectView(req.getContextPath() + "/forgot_password");
+		String email = req.getParameter("email");
+		DT_user dt_user = new DT_user();
+
+		JSONObject object = new JSONObject();
+
+		object.put("email", email);
+
+		dt_user.restorePassword(object);
+
+		MessageAlertUtil.restorePasswordMessage(redir);
+
+		return rv;
+
 	}
 	
 	

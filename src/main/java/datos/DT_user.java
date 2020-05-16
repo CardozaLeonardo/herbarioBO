@@ -438,4 +438,41 @@ public JSONObject deleteUser(Tbl_user usr, Cookie[] cookies) {
 		return retorno;
 	}
   }
+
+	public JSONObject restorePassword(JSONObject email){
+		String URL = Server.getHostname() + "me/restore_password/";
+
+		//Tbl_user user = null;
+
+
+
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		//System.out.println(newFungus.toString());
+
+		HttpEntity<String> req = new HttpEntity<String>(email.toString(),headers);
+
+		try {
+
+			ResponseEntity<String> response = restTemplate.exchange(URL, HttpMethod.POST, req, String.class);
+			String fungus = response.getBody();
+
+			JSONObject retorno = new JSONObject();
+			retorno.put("status", response.getStatusCodeValue());
+			retorno.put("cont", fungus);
+			//retorno.put("cookies", Util.parseCookie(response.getHeaders().get("Set-Cookie")));
+			return retorno;
+
+		}catch(HttpClientErrorException e)
+		{
+
+			e.getMessage();
+			JSONObject retorno = new JSONObject();
+			retorno.put("status", e.getStatusCode().value());
+			//retorno.put("user", user);
+			return retorno;
+		}
+	}
 }

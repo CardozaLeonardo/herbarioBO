@@ -180,9 +180,7 @@
 
                                         </c:when>
                                     </c:choose>
-
-
-
+                                    <a href="../banUser?id=${usr.id}" ><i class="far fa-user-lock" title="Bloquear usuario"></i> </a>
                                 </td>
                             </tr>
                         </c:forEach>

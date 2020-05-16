@@ -16,9 +16,28 @@ public class MessageAlertUtil {
         redir.addFlashAttribute("cont", "¡Registro actualizado con éxito!");
     }
 
+    public static void SuccessDeleteMessage(RedirectAttributes redir) {
+        redir.addFlashAttribute("msg", 1);
+        redir.addFlashAttribute("type", "success");
+        redir.addFlashAttribute("cont", "¡Registro eliminado con éxito!");
+    }
+
     public static void UnauthorizedAccessMessage(RedirectAttributes redir) {
         redir.addFlashAttribute("error", 1);
         redir.addFlashAttribute("type", "success");
         redir.addFlashAttribute("msg", "¡Debe Iniciar Sesión!");
+    }
+
+    public static void alreadyExistMessage(RedirectAttributes redir, String attr) {
+        redir.addFlashAttribute("msg", 1);
+        redir.addFlashAttribute("type", "danger");
+        redir.addFlashAttribute("cont",
+                "Ya existe un registro con " + attr + " especificado");
+    }
+
+    public static void restorePasswordMessage(RedirectAttributes redir) {
+        redir.addFlashAttribute("msg", 1);
+        redir.addFlashAttribute("type", "info");
+        redir.addFlashAttribute("cont","Por favor verifique su bandeja de entrada en su correo");
     }
 }

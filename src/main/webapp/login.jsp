@@ -124,6 +124,11 @@
                     
                     <input type="submit" class="btn btn-primary btn-user btn-block" value="Login" /> 
                   </form>
+
+                    <div>
+                        <p>¿Olvidó contraseña?</p>
+                        <a href="./forgot_password">Restablecer contraseña</a>
+                    </div>
                   
                 </div>
               </div>

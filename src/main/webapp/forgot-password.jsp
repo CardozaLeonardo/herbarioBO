@@ -1,15 +1,20 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+pageEncoding="ISO-8859-1" import="entidades.*, datos.*, java.util.ArrayList"%>
+
+<%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
 
-  <meta charset="utf-8">
+  <meta charset="ISO-8859-1">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>SB Admin 2 - Forgot Password</title>
+  <title>Herbario Nacional - Restablecer contraseña</title>
 
   <!-- Custom fonts for this template-->
   <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -20,9 +25,27 @@
 
 </head>
 
+<style>
+  .bg-password-image {
+    background: url("./img/padlock-166882_640.jpg");
+  }
+
+  body{
+    background-color: #00bc73;
+  }
+</style>
+
 <body class="bg-gradient-primary">
 
   <div class="container">
+      <c:if test="${msg != null}">
+          <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                  ${cont}
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+      </c:if>
 
     <!-- Outer Row -->
     <div class="row justify-content-center">
@@ -37,25 +60,22 @@
               <div class="col-lg-6">
                 <div class="p-5">
                   <div class="text-center">
-                    <h1 class="h4 text-gray-900 mb-2">Forgot Your Password?</h1>
-                    <p class="mb-4">We get it, stuff happens. Just enter your email address below and we'll send you a link to reset your password!</p>
+                    <h1 class="h4 text-gray-900 mb-2">¿Olvidó su contraseña?</h1>
+                    <p class="mb-4"> Ingrese su email para recibir en su bandeja el enlace que le permitirá restablecer su contraseña</p>
                   </div>
-                  <form class="user">
+                  <form class="user" action="./resetPassword" method="POST" >
                     <div class="form-group">
-                      <input type="email" class="form-control form-control-user" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Enter Email Address...">
+                      <input name="email" type="email" class="form-control form-control-user" id="exampleInputEmail"
+                             aria-describedby="emailHelp" placeholder="Ingrese correo electrónico">
                     </div>
-                    <a href="login.html" class="btn btn-primary btn-user btn-block">
-                      Reset Password
-                    </a>
+                    <input type="submit" class="btn btn-primary btn-user btn-block" value="Restablecer contraseña" />
+
+
                   </form>
                   <hr>
-                  <div class="text-center">
-                    <a class="small" href="register.html">Create an Account!</a>
-                  </div>
-                  <div class="text-center">
-                    <a class="small" href="login.html">Already have an account? Login!</a>
-                  </div>
+                  <a href="./login">Ir a login</a>
                 </div>
+
               </div>
             </div>
           </div>

@@ -40,6 +40,11 @@ if(request.getAttribute("pass") == null){
 
 Tbl_species[] species =(Tbl_species[]) request.getAttribute("species");
 
+if(species == null) {
+    response.sendRedirect(request.getContextPath() + "/toLoginPage");
+    return;
+}
+
 ///////////
 
 /* RECUPERAMOS EL VALOR DE LA VARIABLE MSJ */
@@ -136,9 +141,9 @@ mensaje = mensaje==null?"":mensaje;
 	                  	  
 	                  	<a href="./viewSpecie?id=<%=specie.getId()%>" onclick="linkEditUser('<%=specie.getId()%>');"><i class="far fa-eye" title="View"></i></a>&nbsp;&nbsp;
 	                  	     
-	                  	<a href="#" class="deleteSpecie" id="<%=specie.getId()%>"><i class="far fa-trash-alt" title="Eliminar"></i> </a>
+	                  	<a href="#" class="deleteSpecie" onclick="deleteSpecie('<%=specie.getId()%>');" id="<%=specie.getId()%>"><i class="far fa-trash-alt" title="Eliminar"></i> </a>
 	                  	  
-	                  	      <!--  <a href="" onclick="deleteUser('${usr.id}');"><i class="far fa-trash-alt" title="Eliminar"></i> </a> -->
+
 	                  	    
 	                  </td>
 	                </tr>
@@ -255,13 +260,13 @@ mensaje = mensaje==null?"":mensaje;
   
   
   <script>
-function deleteFungus(idHongo)
+function deleteSpecie(idSpecie)
 {
-	var id= idHongo;
+	var id= idSpecie;
 	confirm(function(e,btn)
      { 	//event + button clicked
      	e.preventDefault();
-     	window.location.href="../deleteFungus?id="+id;
+     	window.location.href="../deleteSpecie?id="+id;
        	//successAlert('Confirmed!');
      }, 
      function(e,btn)

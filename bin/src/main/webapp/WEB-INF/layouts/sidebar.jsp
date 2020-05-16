@@ -28,16 +28,16 @@
          </a>
         <a class="nav-link" href="<%=basePath%>/seguridad/rolesOpciones">
           <i class="fas fa-fw fa-tasks"></i>
-          <span>Gestión de Opciones</span>
+          <span>Gestiï¿½n de Opciones</span>
          </a>
         <a class="nav-link" href="<%=basePath%>/seguridad/usuarios">
           <i class="fas fa-fw fa-tachometer-alt"></i>
-          <span>Gestión de Usuarios</span>
+          <span>Gestiï¿½n de Usuarios</span>
          </a>
          <li class="nav-item" style="cursor:pointer;">
          <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
           <i class="fas fa-fw fa-user-tag"></i>
-          <span>Gestión de Roles</span>
+          <span>Gestiï¿½n de Roles</span>
           
          </a>
           <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
@@ -62,7 +62,7 @@
        <li class="nav-item" style="cursor:pointer;">
          <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapseSpecimen" aria-expanded="true" aria-controls="collapseUtilities">
           <i class="fas fa-seedling"></i>
-          <span>Gestión de Espécimenes</span>
+          <span>Gestiï¿½n de Espï¿½cimenes</span>
           
          </a>
           <div id="collapseSpecimen" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
@@ -159,7 +159,7 @@
 <!--             <h6 class="collapse-header">Login Screens:</h6> -->
 <!--             <a class="collapse-item" href="login.html">Login</a> -->
 <!--             <a class="collapse-item" href="register.html">Register</a> -->
-<!--             <a class="collapse-item" href="forgot-password.html">Forgot Password</a> -->
+<!--             <a class="collapse-item" href="forgot-password.jsp">Forgot Password</a> -->
 <!--             <div class="collapse-divider"></div> -->
 <!--             <h6 class="collapse-header">Other Pages:</h6> -->
 <!--             <a class="collapse-item" href="404.html">404 Page</a> -->

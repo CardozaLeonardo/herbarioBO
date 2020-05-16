@@ -126,6 +126,14 @@ jAlert css
 	<!-- Main content -->
     <section class="content">
       <div class="container-fluid">
+          <c:if test="${msg != null}">
+              <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                      ${cont}
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                  </button>
+              </div>
+          </c:if>
         <div class="row">
           <!-- left column -->
           <div class="col-md-12">
@@ -340,8 +348,11 @@ jAlert css
 	</div>
   </div>
 
-  <!-- jQuery -->
-  <script src="../vendor/jquery/jquery.min.js"></script>
+<script src="../vendor/jquery/jquery.min.js"></script>
+<script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
   <!-- <script src="../../plugins/jquery/jquery.min.js"></script> -->
   <!-- Custom scripts for all pages-->
   <script src="../js/sb-admin-2.min.js"></script>

@@ -4,7 +4,10 @@ import datos.DT_family;
 import datos.DT_genus;
 import entidades.fichas_tecnicas.Tbl_family;
 import entidades.fichas_tecnicas.Tbl_genus;
+import negocio.GenusValidator;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.LinkedMultiValueMap;
@@ -23,7 +26,8 @@ import java.io.IOException;
 @Controller
 public class GenusController {
 
-
+    Logger logger = LoggerFactory.getLogger(GenusController.class);
+    GenusValidator genusValidator = new GenusValidator();
     @GetMapping("/fichas/genus")
     public String getAll(HttpServletRequest req, HttpServletResponse res, Model model)
             throws IOException {
@@ -37,7 +41,7 @@ public class GenusController {
             model.addAttribute("error", 1);
             model.addAttribute("type", "info");
             model.addAttribute("cont", "¡Debe iniciar sesión!");
-            res.sendRedirect(req.getContextPath() + "/login");
+            res.sendRedirect(req.getContextPath() + "/toLoginPage");
             return null;
         }
 
@@ -54,14 +58,15 @@ public class GenusController {
 
         DT_family famDt = new DT_family();
         JSONObject result = famDt.getFamilies(req.getCookies());
-        Tbl_family[] families;
+        Tbl_family[] families = null;
+        logger.debug(".._ " + result.getInt("status"));
 
         if(result.getInt("status") == 401) {
-            res.sendRedirect(req.getContextPath() + "/ToLoginPage");
+            res.sendRedirect(req.getContextPath() + "/toLoginPage");
             return null;
         }
-
         families = (Tbl_family[]) result.get("families");
+
 
         String[] cookies = (String[]) result.get("cookies");
         Util.setTokenCookies(req, res, cookies);
@@ -83,10 +88,23 @@ public class GenusController {
 
         DT_genus dtGenus = new DT_genus();
 
+        int valid = genusValidator.alreadyExistName(req.getParameter("name"), req.getCookies());
+
+        if(valid == -1) {
+            res.sendRedirect(req.getContextPath() + "/toLoginPage");
+            return null;
+        }
+
+        if(valid == 1) {
+            rv = new RedirectView(req.getContextPath() + "/fichas/newGenus");
+            MessageAlertUtil.alreadyExistMessage(redir, "el nombre");
+            return rv;
+        }
+
         JSONObject result = dtGenus.saveGenus(newGenus, req.getCookies());
 
         if(result.getInt("status") == 401) {
-            res.sendRedirect(req.getContextPath() + "/ToLoginPage");
+            res.sendRedirect(req.getContextPath() + "/toLoginPage");
             return null;
         }
 
@@ -111,12 +129,12 @@ public class GenusController {
         JSONObject genusRes = dtGenus.getGenus(req.getCookies(), idGenus);
 
         if(genusRes.getInt("status") == 401) {
-            res.sendRedirect(req.getContextPath() + "/ToLoginPage");
+            res.sendRedirect(req.getContextPath() + "/toLoginPage");
             return null;
         }
 
         if(result.getInt("status") == 401) {
-            res.sendRedirect(req.getContextPath() + "/ToLoginPage");
+            res.sendRedirect(req.getContextPath() + "/toLoginPage");
             return null;
         }
 
@@ -133,7 +151,7 @@ public class GenusController {
 
     @PostMapping("/changeGenus")
     public RedirectView changeGenus(HttpServletRequest req, HttpServletResponse res,
-                                    RedirectAttributes redir) {
+                                    RedirectAttributes redir) throws IOException {
         RedirectView rv = new RedirectView(req.getContextPath() + "/fichas/genus");
 
         MultiValueMap<String, Object> genus = new LinkedMultiValueMap<>();
@@ -144,6 +162,19 @@ public class GenusController {
         genus.add("family", family);
 
         DT_genus dtGenus = new DT_genus();
+        int valid = genusValidator.alreadyExistNameUpdate(req.getParameter("name"), req.getCookies(), idGenus);
+
+        if(valid == -1) {
+            res.sendRedirect(req.getContextPath() + "/toLoginPage");
+            return null;
+        }
+
+        if(valid == 1) {
+            rv = new RedirectView(req.getContextPath() + "/fichas/updateGenus?id=" +idGenus);
+            MessageAlertUtil.alreadyExistMessage(redir, "el nombre");
+            return rv;
+        }
+
 
         JSONObject result = dtGenus.updateGenus(genus, req.getCookies(), idGenus);
 
@@ -154,7 +185,36 @@ public class GenusController {
         }
         MessageAlertUtil.SuccessUpdateMessage(redir);
 
+        String[] cookies = (String[]) result.get("cookies");
+        Util.setTokenCookies(req, res, cookies);
+
         return rv;
+    }
+
+    @GetMapping("/deleteGenus")
+    public RedirectView deleteGenus(HttpServletRequest req, HttpServletResponse res,
+                       RedirectAttributes redir) {
+
+        int idGenus = Integer.parseInt(req.getParameter("id"));
+        RedirectView rv = new RedirectView(req.getContextPath() + "/fichas/genus");
+
+        DT_genus dtGenus = new DT_genus();
+
+        JSONObject result = dtGenus.deleteGenus(idGenus, req.getCookies());
+
+        if(result.getInt("status") == 401) {
+            rv = new RedirectView(req.getContextPath() + "/login");
+            MessageAlertUtil.UnauthorizedAccessMessage(redir);
+           return rv;
+        }
+
+        MessageAlertUtil.SuccessDeleteMessage(redir);
+
+        String[] cookies = (String[]) result.get("cookies");
+        Util.setTokenCookies(req, res, cookies);
+
+        return rv;
+
     }
 
 }
