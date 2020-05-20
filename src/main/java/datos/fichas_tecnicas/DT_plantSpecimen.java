@@ -242,7 +242,7 @@ public JSONObject actualizarPlanta(MultiValueMap<String, Object> newFungus, Cook
 		if(tokens == null) {
 
 			JSONObject retorno = new JSONObject();
-			retorno.put("status", 0);
+			retorno.put("status", 401);
 			return retorno;
 		}
 

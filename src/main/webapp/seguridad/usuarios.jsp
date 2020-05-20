@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
 
-    <title><%=Server.getAppName() %>-Usuarios</title>
+    <title><%=Server.getAppName() %> - Usuarios</title>
 
     <!-- Custom fonts for this template -->
     <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -67,6 +67,7 @@
         boolean editPermission = false;
         boolean deletePermission = false;
         boolean addPermission = false;
+        boolean blockPermission = false;
         for(Tbl_opcion p: permisions) {
             if (p.getCodename().equals("view_user")) {
                 viewPermission = true;
@@ -78,6 +79,10 @@
                 deletePermission = true;
             }
             if (p.getCodename().equals("add_user")) {
+                addPermission = true;
+            }
+
+            if(p.getCodename().equals("block_user")) {
                 addPermission = true;
             }
         }
@@ -124,6 +129,15 @@
         <div id="content">
             <!-- Begin Page Content -->
             <div class="container-fluid">
+
+                <c:if test="${msg != null}">
+                    <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                            ${cont}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                </c:if>
                 <!-- Page Heading -->
                 <!-- <h1 class="h3 mb-2 text-gray-800">Roles</h1>
                 <p class="mb-4">DataTables is a third party plugin that is used to generate the demo table below. For more information about DataTables, please visit the <a target="_blank" href="https://datatables.net">official DataTables documentation</a>.</p> -->
@@ -162,7 +176,7 @@
                                 <td>${usr.last_name}</td>
                                 <td>${usr.username}</td>
                                 <td>${usr.email}</td>
-                                <td>${(usr.is_active)?"Activo":"Inactivo"}</td>
+                                <td>${(usr.is_active)?"Activo":"Bloqueado"}</td>
                                 <td>
                                     <%if(editPermission){%>
                                     <a href="./updateUser?id=${usr.id}" onclick="linkEditUser('${usr.id}');"><i class="far fa-edit" title="Editar"></i></a>&nbsp;&nbsp;
@@ -180,7 +194,16 @@
 
                                         </c:when>
                                     </c:choose>
-                                    <a href="../banUser?id=${usr.id}" ><i class="far fa-user-lock" title="Bloquear usuario"></i> </a>
+
+                                    <c:if test="${usr.is_active}">
+                                        &nbsp;&nbsp;
+                                        <a href="#" onclick="blockUser('${usr.id}');" ><i class="far fa-linux" title="Bloquear usuario"></i> </a>
+                                    </c:if>
+
+                                    <c:if test="${!usr.is_active}">
+                                        <a href="#" onclick="unblockUser('${usr.id}');" ><i class="far fa-unlock-alt" title="Desbloquear usuario"></i> </a>
+                                    </c:if>
+
                                 </td>
                             </tr>
                         </c:forEach>
@@ -255,8 +278,8 @@
 <script src="../js/sb-admin-2.min.js"></script>
 
 <!-- Page level plugins -->
-<script src="../vendor/datatables/jquery.dataTables.min.js"></script>
-<script src="../vendor/datatables/dataTables.bootstrap4.min.js"></script>
+<!--<script src="../vendor/datatables/jquery.dataTables.min.js"></script>
+<script src="../vendor/datatables/dataTables.bootstrap4.min.js"></script> -->
 
 <!-- Page level custom scripts -->
 <script src="../js/demo/datatables-demo.js"></script>
@@ -265,7 +288,7 @@
 <script src="../vendor/jAlert/dist/jAlert.min.js"></script>
 <script src="../vendor/jAlert/dist/jAlert-functions.min.js"> </script>
 
-<script src="../vendor/DataTablesNew/jQuery-3.3.1/jquery-3.3.1.min.js"></script>
+<!--<script src="../vendor/DataTablesNew/jQuery-3.3.1/jquery-3.3.1.min.js"></script> -->
 <!-- DATATABLE -->
 <script src="../vendor/DataTablesNew/DataTables-1.10.18/js/jquery.dataTables.js"></script>
 
@@ -305,6 +328,40 @@
             { 	//event + button clicked
                 e.preventDefault();
                 window.location.href="./deleteUser?id="+idUsuario;
+                //successAlert('Confirmed!');
+            },
+            function(e,btn)
+            {
+                e.preventDefault();
+                //errorAlert('Denied!');
+            });
+
+    }
+
+    function blockUser(user)
+    {
+        var idUsuario = user;
+        confirm(function(e,btn)
+            { 	//event + button 0
+                e.preventDefault();
+                window.location.href="../blockUser?id="+idUsuario;
+                //successAlert('Confirmed!');
+            },
+            function(e,btn)
+            {
+                e.preventDefault();
+                //errorAlert('Denied!');
+            });
+
+    }
+
+    function unblockUser(user)
+    {
+        var idUsuario = user;
+        confirm(function(e,btn)
+            { 	//event + button 0
+                e.preventDefault();
+                window.location.href="../blockUser?id="+idUsuario +"&opc=2";
                 //successAlert('Confirmed!');
             },
             function(e,btn)

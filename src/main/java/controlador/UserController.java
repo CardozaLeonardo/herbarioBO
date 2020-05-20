@@ -15,6 +15,8 @@ import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -384,6 +386,38 @@ public class UserController {
 		}
 		
 		return rv;
+	}
+
+	@GetMapping("/blockUser")
+	public RedirectView blockUser(HttpServletRequest req, HttpServletResponse res,
+								  RedirectAttributes redir) {
+		RedirectView rv = new RedirectView(req.getContextPath() + "/seguridad/usuarios");
+
+		int idUser = Integer.parseInt(req.getParameter("id"));
+		DT_user dt_user = new DT_user();
+
+		//MultiValueMap<String, Object> user = new LinkedMultiValueMap<>();
+		JSONObject user = new JSONObject();
+
+		user.put("is_active", req.getParameter("opc") != null);
+
+
+
+		JSONObject result = dt_user.updateUserPatch(idUser, user, req.getCookies());
+
+		if(result.getInt("status") == 401) {
+			rv = new RedirectView(req.getContextPath() + "/login");
+			MessageAlertUtil.UnauthorizedAccessMessage(redir);
+			return rv;
+		}
+
+		String[] cookies = (String[]) result.get("cookies");
+		Util.setTokenCookies(req, res, cookies);
+
+		MessageAlertUtil.SuccessBlockUserMessage(redir);
+
+		return rv;
+
 	}
 
 

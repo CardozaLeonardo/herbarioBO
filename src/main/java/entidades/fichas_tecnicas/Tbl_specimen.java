@@ -12,7 +12,16 @@ public class Tbl_specimen {
 	}
 
 	private Tbl_user user;
-	private String photo;
+	private String photo_url;
+
+	public String getPhoto_url() {
+		return photo_url;
+	}
+
+	public void setPhoto_url(String photo_url) {
+		this.photo_url = photo_url;
+	}
+
 	private String date_received;
 	private Tbl_family family;
 	private Tbl_genus genus;
@@ -28,12 +37,6 @@ public class Tbl_specimen {
 	}
 	public void setUser(Tbl_user user) {
 		this.user = user;
-	}
-	public String getPhoto() {
-		return photo;
-	}
-	public void setPhoto(String photo) {
-		this.photo = photo;
 	}
 
 	public boolean isApproved() {

@@ -290,7 +290,7 @@ jAlert css
                         <div class="form-group">
                            <!--  <input type="file" id="photo" name="photo" class="form-control-file"> -->
                            <div class="card bg-light" style="min-height: 400px; width:90%;margin-left: auto;margin-right:auto;">
-                             <img id="imagePreview" src="<%=StringAdapt.adaptDriveImage(mus.getPhoto())%>" alt="image preview" width="60%" height="auto"
+                             <img id="imagePreview" src="<%=StringAdapt.adaptDriveImage(mus.getPhoto_url())%>" alt="image preview" width="60%" height="auto"
                                   style="margin-left: auto;margin-right:auto;"/>
                            </div>
                         </div>

@@ -13,7 +13,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
@@ -24,7 +26,7 @@ import util.Util;
 
 public class DT_user {
 	
-	private static RestTemplate restTemplate = new RestTemplate();
+	private static RestTemplate restTemplate = new RestTemplate(new HttpComponentsClientHttpRequestFactory());
 	//private String ENDPOINT_URL = "http://localhost:3000/usuarios";
 	//geeksforgeeks.org/md5-hash-in-java
 	
@@ -469,6 +471,61 @@ public JSONObject deleteUser(Tbl_user usr, Cookie[] cookies) {
 		{
 
 			e.getMessage();
+			JSONObject retorno = new JSONObject();
+			retorno.put("status", e.getStatusCode().value());
+			//retorno.put("user", user);
+			return retorno;
+		}
+	}
+
+
+	public JSONObject updateUserPatch(int idUser,JSONObject user, Cookie[] cookies) {
+
+
+		String URL = Server.getHostname() + "user/" + idUser + "/";
+
+		//Tbl_user user = null;
+
+		String[] tokens = Util.extractTokens(cookies);
+
+		if(tokens == null) {
+
+			JSONObject retorno = new JSONObject();
+			retorno.put("status", 401);
+			return retorno;
+		}
+
+
+
+		HttpHeaders headers = new HttpHeaders();
+
+		String cookieHeader = "token-access="+tokens[0] + "; " + "token-refresh="+ tokens[1];
+
+		headers.add("Cookie", cookieHeader);
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		//System.out.println(user.toString());
+
+		HttpEntity<String> req =
+				new HttpEntity<String>(user.toString(),headers);
+
+		try {
+
+			ResponseEntity<String> response = restTemplate.exchange(URL, HttpMethod.PATCH, req, String.class);
+			String fungus = response.getBody();
+
+			JSONObject retorno = new JSONObject();
+			retorno.put("status", response.getStatusCodeValue());
+			retorno.put("fungus", fungus);
+			retorno.put("cookies", Util.parseCookie(response.getHeaders().get("Set-Cookie")));
+			return retorno;
+
+		}catch(HttpClientErrorException e)
+		{
+
+
+			System.out.println(e.getMessage());
+
 			JSONObject retorno = new JSONObject();
 			retorno.put("status", e.getStatusCode().value());
 			//retorno.put("user", user);

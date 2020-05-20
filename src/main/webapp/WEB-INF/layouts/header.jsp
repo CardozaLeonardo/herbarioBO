@@ -2,8 +2,9 @@
          pageEncoding="ISO-8859-1" %>
         <%@ page import="entidades.*"%>
         <%@ page import="datos.Server" %>
+<%@ page import="util.StringAdapt" %>
 
-        <%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
+<%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
         <!-- Topbar -->
         <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
@@ -165,7 +166,7 @@
                 <%} %>
                 </span>
                 <% if(user.getProfile() != null) {%>
-                <img class="img-profile rounded-circle" src="<%=Server.getHostnameOp() + user.getProfile().getPhoto()%>">
+                <img class="img-profile rounded-circle" src="<%=StringAdapt.adaptDriveImage(user.getProfile().getPhoto())%>">
                 <% } else {%>
                 <img class="img-profile rounded-circle" src="https://source.unsplash.com/QAB-WJcbgJk/60x60">
                 <%}%>
@@ -187,7 +188,7 @@
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="<%=request.getContextPath()%>/exit">
                   <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                  Cerrar Sesión
+                  Salir
                 </a>
               </div>
             </li>

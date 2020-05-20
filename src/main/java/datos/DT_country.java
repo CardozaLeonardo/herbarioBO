@@ -30,7 +30,7 @@ public class DT_country {
 		if(tokens == null) {
 			
 			JSONObject retorno = new JSONObject();
-			retorno.put("code", 0);
+			retorno.put("status", 401);
 			return retorno;
 		}
 		

@@ -315,8 +315,8 @@ jAlert css
                         <div class="form-group">
                            <input type="file" id="photo" name="photo" class="form-control-file">
                            <div class="card bg-light" style="min-height: 400px; width:90%;margin-left: auto;margin-right:auto;">
-                             <%if(mus.getPhoto() != null) {%>
-                             <img id="imagePreview" src="<%=StringAdapt.adaptDriveImage(mus.getPhoto())%>" alt="image preview" width="60%" height="auto"
+                             <%if(mus.getPhoto_url() != null) {%>
+                             <img id="imagePreview" src="<%=StringAdapt.adaptDriveImage(mus.getPhoto_url())%>" alt="image preview" width="60%" height="auto"
                                   style="margin-left: auto;margin-right:auto;"/>
                              <%}else{ %>
                               <img id="imagePreview" src="" alt="image preview" width="60%" height="auto" 

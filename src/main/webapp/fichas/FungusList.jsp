@@ -17,7 +17,8 @@
 	Cookie[] cookies = request.getCookies();
 
 if(cookies == null){
-	response.sendRedirect("../login");
+	response.sendRedirect(request.getContextPath() + "/toLoginPage");
+	return;
 }
 
 List <String> get_cookies = Cookies.getCookies(cookies);
@@ -38,12 +39,12 @@ if(specimenJson.getInt("status") == 200){
   fungus = (Tbl_mushroomSpecimen[]) specimenJson.get("fungus");
 	
 }else if(specimenJson.getInt("status") == 401){
-	response.sendRedirect("../login");
+	response.sendRedirect(request.getContextPath() + "/toLoginPage");
 	return;
 }
 
 if(fungus == null){
-	response.sendRedirect("../login");
+	response.sendRedirect(request.getContextPath() + "/toLoginPage");
 	return;
 }
  

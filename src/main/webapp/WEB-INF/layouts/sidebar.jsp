@@ -107,6 +107,7 @@
             <a class="collapse-item" href="<%=basePath%>/fichas/ecosystems">Ecosistemas</a>
             <a class="collapse-item" href="<%=basePath%>/fichas/capsType">Sombreros (Hongos)</a>
             <a class="collapse-item" href="<%=basePath%>/fichas/fungusForms">Formas (Hongos)</a>
+              <a class="collapse-item" href="<%=basePath%>/location/country">Países</a>
           </div>
         </div>
          </li>

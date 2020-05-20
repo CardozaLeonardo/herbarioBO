@@ -16,6 +16,12 @@ public class MessageAlertUtil {
         redir.addFlashAttribute("cont", "¡Registro actualizado con éxito!");
     }
 
+    public static void SuccessBlockUserMessage(RedirectAttributes redir) {
+        redir.addFlashAttribute("msg", 1);
+        redir.addFlashAttribute("type", "success");
+        redir.addFlashAttribute("cont", "¡Usuario bloquedo con éxito!");
+    }
+
     public static void SuccessDeleteMessage(RedirectAttributes redir) {
         redir.addFlashAttribute("msg", 1);
         redir.addFlashAttribute("type", "success");
