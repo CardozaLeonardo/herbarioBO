@@ -2,7 +2,7 @@
 <%@page import="org.json.JSONObject"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
          pageEncoding="ISO-8859-1" import="entidades.*, datos.*, java.util.ArrayList"%>
-<%@ page import="entidades.fichas_tecnicas.Tbl_country" %>
+<%@ page import="entidades.fichas_tecnicas.Tbl_state" %>
 
 <!--
 AUTOR:  Leonardo Cardoza
@@ -11,9 +11,9 @@ FIN:    29/10/2019
 -->
 
 <%
-    Tbl_country[] countries = (Tbl_country[]) request.getAttribute("countries");
+    Tbl_state[] states = (Tbl_state[]) request.getAttribute("states");
 
-    if(countries == null) {
+    if(states == null) {
         response.sendRedirect(request.getContextPath() + "/toLoginPage");
         return;
     }
@@ -30,7 +30,7 @@ FIN:    29/10/2019
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title><%=Server.getAppName() %> - Paises</title>
+    <title><%=Server.getAppName() %> - Estados</title>
 
     <!-- Custom fonts for this template -->
     <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -86,8 +86,8 @@ FIN:    29/10/2019
 
 
                 <!-- Page Heading -->
-                <h1 class="h3 mb-2 text-gray-800">Familias</h1>
-                <p class="mb-4">Cree, edite y elimine familias</p>
+                <h1 class="h3 mb-2 text-gray-800">Estados</h1>
+                <p class="mb-4">Cree, edite y elimine estados</p>
 
 
 
@@ -115,11 +115,11 @@ FIN:    29/10/2019
                     <button type="reset" id="cancelRoleBTN" class="btn btn-danger">Cancelar</button>
                 </form>
                 <br>
-                <a href="<%=request.getContextPath()%>/location/newCountry" class="btn btn-primary btn-icon-split">
+                <a href="<%=request.getContextPath()%>/location/newState" class="btn btn-primary btn-icon-split">
                     <span class="icon text-white-50">
                       <i class="fas fa-user-plus"></i>
                     </span>
-                    <span class="text">Agregar País</span>
+                    <span class="text">Agregar Estado</span>
                 </a>
                 <br>
 
@@ -130,6 +130,7 @@ FIN:    29/10/2019
                     <tr>
                         <th>ID</th>
                         <th>Nombre</th>
+                        <th>País</th>
                         <th>Opción</th>
                     </tr>
                     </thead>
@@ -137,23 +138,25 @@ FIN:    29/10/2019
                     <tr>
                         <th>ID</th>
                         <th>Nombre</th>
+                        <th>País</th>
                         <th>Opción</th>
                     </tr>
                     </tfoot>
                     <tbody>
                     <%
-                        for(Tbl_country cou: countries) {
+                        for(Tbl_state state: states) {
                     %>
                     <tr>
-                        <td id="cl-id-<%=cou.getId()%>"><%=cou.getId() %></td>
-                        <td id="cl-name-<%=cou.getId()%>"><%=cou.getName() %></td>
+                        <td id="cl-id-<%=state.getId()%>"><%=state.getId() %></td>
+                        <td id="cl-name-<%=state.getId()%>"><%=state.getName() %></td>
+                        <td id="cl-name-<%=state.getId()%>"><%=state.getCountry().getName() %></td>
                         <td>
-                            <a href="./updateCountry?id=<%=cou.getId()%>" id="<%=cou.getId()%>" class="">
+                            <a href="./updateState?id=<%=state.getId()%>" id="<%=state.getId()%>" class="">
 
                                 <i class="fas fa-edit editRole"></i>
                             </a>
                             &nbsp;&nbsp;
-                            <a href="#" id="<%=cou.getId()%>" onclick="deleteCountry(<%=cou.getId()%>)" class="deleteCountry">
+                            <a href="#" id="<%=state.getId()%>" onclick="deleteState(<%=state.getId()%>)" class="deleteCountry">
                                 <i class="fas fa-trash-alt"></i>
                             </a>
                         </td>
@@ -209,11 +212,11 @@ FIN:    29/10/2019
 
 <script>
 
-    function deleteCountry(id){
+    function deleteState(id){
         idCou = id;
         confirm(function()
             {
-                window.location.replace('../deleteCountry?id=' + idCou);
+                window.location.replace('../deleteState?id=' + idCou);
             },
             function(e,btn)
             {
