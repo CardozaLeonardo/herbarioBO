@@ -109,6 +109,7 @@
             <a class="collapse-item" href="<%=basePath%>/fichas/fungusForms">Formas (Hongos)</a>
               <a class="collapse-item" href="<%=basePath%>/location/country">Países</a>
               <a class="collapse-item" href="<%=basePath%>/location/states">Estados</a>
+              <a class="collapse-item" href="<%=basePath%>/location/cities">Cities</a>
           </div>
         </div>
          </li>

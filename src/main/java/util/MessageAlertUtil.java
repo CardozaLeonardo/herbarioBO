@@ -41,6 +41,13 @@ public class MessageAlertUtil {
                 "Ya existe un registro con " + attr + " especificado");
     }
 
+    public static void alreadyExistCustomMsg(RedirectAttributes redir, String attr) {
+        redir.addFlashAttribute("msg", 1);
+        redir.addFlashAttribute("type", "danger");
+        redir.addFlashAttribute("cont",
+                attr);
+    }
+
     public static void restorePasswordMessage(RedirectAttributes redir) {
         redir.addFlashAttribute("msg", 1);
         redir.addFlashAttribute("type", "info");

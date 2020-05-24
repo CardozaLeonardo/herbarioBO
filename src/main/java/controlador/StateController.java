@@ -4,6 +4,7 @@ import datos.DT_country;
 import datos.DT_state;
 import entidades.fichas_tecnicas.Tbl_country;
 import entidades.fichas_tecnicas.Tbl_state;
+import negocio.StateValidator;
 import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +22,7 @@ import java.io.IOException;
 @Controller
 public class StateController {
 
+    StateValidator validator = new StateValidator();
     @GetMapping("/location/states")
     public String getStates(HttpServletRequest req, HttpServletResponse res,
                             Model model) throws IOException {
@@ -48,6 +50,8 @@ public class StateController {
 
         DT_country dtCountry = new DT_country();
 
+
+
         JSONObject result = dtCountry.getCountries(req.getCookies());
 
         if(result.getInt("status") == 401) {
@@ -71,6 +75,8 @@ public class StateController {
         int id = Integer.parseInt(req.getParameter("id"));
         DT_country dtCountry = new DT_country();
         DT_state dtState = new DT_state();
+
+
 
         JSONObject result = dtCountry.getCountries(req.getCookies());
 
@@ -108,6 +114,21 @@ public class StateController {
         newState.put("name", name);
         newState.put("country", country);
 
+        int valid = validator.alreadyExistName(name, country, req.getCookies());
+
+        if(valid == -1) {
+            rv = new RedirectView(req.getContextPath() + "/login");
+            MessageAlertUtil.SuccessStoreMessage(redir);
+            return rv;
+        }
+
+        if(valid == 1) {
+            rv = new RedirectView(req.getContextPath() + "/location/newState");
+            MessageAlertUtil.alreadyExistCustomMsg(redir, "Ya existe un estado con el" +
+                    " nombre especificado");
+            return rv;
+        }
+
         JSONObject result = dtState.saveState(newState, req.getCookies());
 
         if(result.getInt("status") == 401) {
@@ -137,6 +158,23 @@ public class StateController {
         newState.put("name", name);
         newState.put("country", country);
 
+        int valid = validator.alreadyExistNameUpdate(name, req.getCookies(),id, country);
+
+        if(valid == -1) {
+            rv = new RedirectView(req.getContextPath() + "/login");
+            MessageAlertUtil.SuccessStoreMessage(redir);
+            return rv;
+        }
+
+        if(valid == 1) {
+            rv = new RedirectView(req.getContextPath() + "/location/updateState?id=" + id);
+            MessageAlertUtil.alreadyExistCustomMsg(redir, "Ya existe un estado con el" +
+                    " nombre especificado para el mismo estado");
+            return rv;
+        }
+
+
+
         JSONObject result = dtState.updateState(newState,id, req.getCookies());
 
         if(result.getInt("status") == 401) {
@@ -146,6 +184,30 @@ public class StateController {
         }
 
         MessageAlertUtil.SuccessUpdateMessage(redir);
+
+        String[] cookies = (String[]) result.get("cookies");
+        Util.setTokenCookies(req, res, cookies);
+
+        return rv;
+    }
+
+    @GetMapping("/deleteState")
+    public RedirectView deleteState(HttpServletRequest req, HttpServletResponse res,
+                                    RedirectAttributes redir) {
+        RedirectView rv = new RedirectView(req.getContextPath() + "/location/states");
+        int id = Integer.parseInt(req.getParameter("id"));
+        DT_state dtState = new DT_state();
+
+
+        JSONObject result = dtState.deleteState(id, req.getCookies());
+
+        if(result.getInt("status") == 401) {
+            rv = new RedirectView(req.getContextPath() + "/login");
+            MessageAlertUtil.SuccessStoreMessage(redir);
+            return rv;
+        }
+
+        MessageAlertUtil.SuccessDeleteMessage(redir);
 
         String[] cookies = (String[]) result.get("cookies");
         Util.setTokenCookies(req, res, cookies);
