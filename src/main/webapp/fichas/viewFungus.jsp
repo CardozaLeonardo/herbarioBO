@@ -50,7 +50,7 @@ if(request.getAttribute("forms") != null){
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
   <!-- Custom styles for this template -->
-  <link href="../css/sb-admin-2.min.css" rel="stylesheet">
+  <link href="../css/sb-admin-2.css" rel="stylesheet">
 
   <!-- Custom styles for this page -->
   <link href="../vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
@@ -71,6 +71,12 @@ jAlert css
 
 
 </head>
+
+<style>
+    #accordionSidebar{
+        background-color: #00BC73 !important;
+    }
+</style>
 
 <%
  String mensaje = "Se ha guardado";
@@ -214,12 +220,7 @@ jAlert css
                                     placeholder="Olor" name="smell" ><%=mus.getSmell()%></textarea>
                             </div>
 
-                            <div class="form-group">
-                                <label for="specimenStatus">Estado</label>
-                                <select class="form-control" id="specimenStatus">
 
-                                </select>
-                            </div>
 
                             <div class="form-group">
                                 <label for="numberSpecimens">Número de especímenes colectados</label>
@@ -254,7 +255,7 @@ jAlert css
 
                             <div class="form-group">
                                 <label for="latitude">Latitud</label>
-                                <input diabled type="number" class="form-control" id="latitude
+                                <input disabled type="number" class="form-control" id="latitude
                                     placeholder="Latitud" name="latitude" value="<%=mus.getLatitude()%>">
                             </div>
 
@@ -319,6 +320,8 @@ jAlert css
 
   <!-- jQuery -->
   <script src="../vendor/jquery/jquery.min.js"></script>
+<script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
   <!-- <script src="../../plugins/jquery/jquery.min.js"></script> -->
   <!-- Custom scripts for all pages-->
   <script src="../js/sb-admin-2.min.js"></script>

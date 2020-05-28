@@ -41,7 +41,7 @@ DT_rol dtr = new DT_rol();
 JSONObject objRoles = dtr.getRoles(request.getCookies());
 
 if(objRoles.getInt("status") == 401 || objRoles.getInt("status") == 0){
-	 response.sendRedirect("../login");
+	 response.sendRedirect(request.getContextPath() + "/toLoginPage");
 	 return;
 }
 
@@ -241,6 +241,7 @@ Tbl_opcion[] permisos = (Tbl_opcion[]) opc.get("permissions");
                   <tbody>
                     <%
                     	for(Tbl_rol rol: listaRoles) {
+                    	    if(!rol.getName().equals("Admin")) {
                     %>
                     <tr>
                       <td><%=rol.getId() %></td>
@@ -250,7 +251,7 @@ Tbl_opcion[] permisos = (Tbl_opcion[]) opc.get("permissions");
                        class="btn btn-primary">Aceptar</a>
                       </td>
                     </tr>
-                    <%} %>
+                    <%} }%>
                     
                   </tbody>
                 </table>

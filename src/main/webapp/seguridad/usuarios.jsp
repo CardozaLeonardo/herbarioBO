@@ -37,6 +37,7 @@
         Cookie[] cookies = request.getCookies();
         if(cookies == null){
             response.sendRedirect("../login");
+            return;
         }
         String token = null;
         String tokenRefresh = null;
@@ -52,9 +53,15 @@
         }
         if(token == null && tokenRefresh == null){
             response.sendRedirect("../login");
+            return;
         }
         DT_user dtus = new DT_user();
         Tbl_user[] users = dtus.getUsers(token, tokenRefresh);
+
+        if(users == null) {
+            response.sendRedirect(request.getContextPath() + "/toLoginPage");
+            return;
+        }
                         ///////////
         /* RECUPERAMOS EL VALOR DE LA VARIABLE MSJ */
         String mensaje = "";
@@ -181,27 +188,21 @@
                                     <%if(editPermission){%>
                                     <a href="./updateUser?id=${usr.id}" onclick="linkEditUser('${usr.id}');"><i class="far fa-edit" title="Editar"></i></a>&nbsp;&nbsp;
                                     <%}%>
-                                    <c:choose>
-                                        <c:when test="${usr.is_active}">
-                                            <%if(deletePermission){%>
-                                            <a href="" onclick="deleteUser('${usr.id}');"><i class="far fa-trash-alt" title="Eliminar"></i> </a>
-                                            <%}%>
-                                        </c:when>
 
-                                        <c:when test="${usr.is_active == false}">
 
-                                            <!--  <a href="" onclick="deleteUser('${usr.id}');"><i class="far fa-trash-alt" title="Eliminar"></i> </a> -->
+                                    <%if(deletePermission){%>
+                                    <a href="" onclick="deleteUser('${usr.id}');"><i class="far fa-trash-alt" title="Eliminar"></i> </a>
+                                    <%}%>
 
-                                        </c:when>
-                                    </c:choose>
 
                                     <c:if test="${usr.is_active}">
                                         &nbsp;&nbsp;
-                                        <a href="#" onclick="blockUser('${usr.id}');" ><i class="far fa-linux" title="Bloquear usuario"></i> </a>
+                                        <a href="#" onclick="blockUser('${usr.id}');" ><i class="fas fa-unlock-alt" title="Bloquear usuario"></i> </a>
                                     </c:if>
 
                                     <c:if test="${!usr.is_active}">
-                                        <a href="#" onclick="unblockUser('${usr.id}');" ><i class="far fa-unlock-alt" title="Desbloquear usuario"></i> </a>
+                                        &nbsp;&nbsp;
+                                        <a href="#" onclick="unblockUser('${usr.id}');" ><i class="fas fa-lock" title="Desbloquear usuario"></i> </a>
                                     </c:if>
 
                                 </td>

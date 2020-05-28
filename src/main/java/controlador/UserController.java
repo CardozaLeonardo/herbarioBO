@@ -134,6 +134,7 @@ public class UserController {
 		
 		if(respuesta.getInt("code") == 200) {
 			String[] cookies =  (String[]) respuesta.get("cookies");
+			System.out.println("Cookies: " + cookies.length);
 			String [] parts = cookies[0].split("=");
 			String [] parts2 = cookies[1].split("=");
 			Cookie ck = new Cookie(parts[0],parts[1]);
@@ -152,7 +153,13 @@ public class UserController {
 			Tbl_opcion[] permissions = (Tbl_opcion[]) permissionsData.get("permissions");
 			 if(obj.getInt("code") == 200)
 			 {
+				 /*HttpSession hts1 = req.getSession(false);
+			 	if(hts1 != null){
+			 		hts1.invalidate();
+				} */
 				 HttpSession hts = req.getSession(true);
+
+
 
 				 System.out.println("valor: " +us.getUsername() + " " + obj.getInt("code"));
 				 hts.setAttribute("user_permissions", permissions);
@@ -262,8 +269,11 @@ public class UserController {
 		ta.setMaxAge(0);
 		Cookie tr = new Cookie("token-refresh", "-");
 		tr.setMaxAge(0);
-		res.addCookie(ta); 
+		res.addCookie(ta);
+		res.addCookie(tr);
 		
+		//req.getSession().getAttribute("user").;
+
 		req.getSession().invalidate();
 		
 		res.sendRedirect(req.getContextPath() + "/login");
@@ -312,9 +322,12 @@ public class UserController {
 			
 			JSONObject obj = dtu.asignarRol(usr, req.getCookies());
 			
-			if(obj.getInt("status") == 200) {
-				rv = new RedirectView(req.getContextPath() + "/seguridad/rolesUsuarios?user="+user);
+			if(obj.getInt("status") == 401) {
+				rv = new RedirectView(req.getContextPath() + "/login");
+				MessageAlertUtil.UnauthorizedAccessMessage(redir);
 			}
+
+			rv = new RedirectView(req.getContextPath() + "/seguridad/rolesUsuarios?user="+user);
 			
 			
 			

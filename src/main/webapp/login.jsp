@@ -19,6 +19,10 @@
     	
     	return;
     }
+
+    if(request.getSession() != null) {
+        request.getSession().invalidate();
+    }
     
     %>
     

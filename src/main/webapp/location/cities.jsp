@@ -17,6 +17,34 @@ FIN:    29/10/2019
         response.sendRedirect(request.getContextPath() + "/toLoginPage");
         return;
     }
+
+    HttpSession hts = request.getSession();
+    Tbl_opcion[] permissions = (Tbl_opcion[]) hts.getAttribute("user_permissions");
+    boolean viewPermission = false;
+    boolean editPermission = false;
+    boolean deletePermission = false;
+    boolean addPermission = false;
+
+    for(Tbl_opcion p: permissions) {
+        if (p.getCodename().equals("view_city")) {
+            viewPermission = true;
+        }
+        if (p.getCodename().equals("change_city")) {
+            editPermission = true;
+        }
+        if (p.getCodename().equals("delete_city")) {
+            deletePermission = true;
+        }
+        if (p.getCodename().equals("add_city")) {
+            addPermission = true;
+        }
+
+    }
+
+    if(!viewPermission) {
+        response.sendRedirect(request.getContextPath() + "/accesoDenegado.jsp");
+        return;
+    }
 %>
 
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
@@ -92,12 +120,14 @@ FIN:    29/10/2019
 
 
                 <br>
+                <% if(addPermission) {%>
                 <a href="<%=request.getContextPath()%>/location/newCity" class="btn btn-primary btn-icon-split">
                     <span class="icon text-white-50">
                       <i class="fas fa-plus"></i>
                     </span>
                     <span class="text">Agregar Ciudad</span>
                 </a>
+                <%}%>
                 <br>
                 <br>
 
@@ -133,14 +163,18 @@ FIN:    29/10/2019
                         <td id="cl-name-<%=city.getId()%>"><%=city.getState().getName() %></td>
                         <td id="cl-name-<%=city.getId()%>"><%=city.getState().getCountry().getName() %></td>
                         <td>
+                            <%if(editPermission) {%>
                             <a href="./updateCity?id=<%=city.getId()%>" id="<%=city.getId()%>" class="">
 
                                 <i class="fas fa-edit editRole"></i>
                             </a>
+                            <%}%>
                             &nbsp;&nbsp;
+                            <%if(deletePermission) {%>
                             <a href="#" id="<%=city.getId()%>" onclick="deleteCity(<%=city.getId()%>)" class="deleteCity">
                                 <i class="fas fa-trash-alt"></i>
                             </a>
+                            <%}%>
                         </td>
                     </tr>
                     <%} %>

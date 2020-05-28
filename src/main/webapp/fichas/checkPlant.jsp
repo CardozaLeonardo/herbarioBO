@@ -234,7 +234,7 @@ Tbl_plantSpecimen mus = (Tbl_plantSpecimen) request.getAttribute("mus");
                         </div>
                         
                         <div class="form-group">
-                           <input type="file" id="photo" name="photo" class="form-control-file">
+
                            <div class="card bg-light" style="min-height: 400px; width:90%;margin-left: auto;margin-right:auto;">
                              <img id="imagePreview" src="<%=StringAdapt.adaptDriveImage(mus.getPhoto_url())%>" alt="image preview" width="60%" height="auto"
                                   style="margin-left: auto;margin-right:auto;"/>
@@ -272,6 +272,11 @@ Tbl_plantSpecimen mus = (Tbl_plantSpecimen) request.getAttribute("mus");
   <!-- jQuery -->
   <script src="../vendor/jquery/jquery.min.js"></script>
   <!-- <script src="../../plugins/jquery/jquery.min.js"></script> -->
+
+<script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
 
  <!-- jAlert js -->
   <script src="../vendor/jAlert/dist/jAlert.min.js"></script>

@@ -373,7 +373,7 @@ public JSONObject asignarRol(Tbl_user usr, Cookie[] cookies) {
 	HttpEntity<String> req = new HttpEntity<String>(datos.toString(),headers);
 	
 	try {
-		ResponseEntity<String> response = restTemplate.exchange(URL, HttpMethod.PUT, req, String.class);
+		ResponseEntity<String> response = restTemplate.exchange(URL, HttpMethod.PATCH, req, String.class);
 		String str = response.getBody();
 		
 		JSONObject retorno = new JSONObject();
@@ -398,7 +398,7 @@ public JSONObject deleteUser(Tbl_user usr, Cookie[] cookies) {
 	if(tokens == null) {
 		
 		JSONObject retorno = new JSONObject();
-		retorno.put("status", 0);
+		retorno.put("status", 401);
 		return retorno;
 	}
 	
