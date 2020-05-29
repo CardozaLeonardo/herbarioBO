@@ -44,6 +44,7 @@
   <link href="css/sb-admin-2.css" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="css/dist/slick.css"/>
   <link rel="stylesheet" type="text/css" href="css/dist/slick-theme.css"/>
+  <link rel="shortcut icon" href="img/Logo.png" type="image/x-icon">
 
 
 </head>

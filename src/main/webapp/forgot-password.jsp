@@ -31,7 +31,7 @@ pageEncoding="ISO-8859-1" import="entidades.*, datos.*, java.util.ArrayList"%>
   }
 
   body{
-    background-color: #00bc73;
+    background-color: #20772b;
   }
 </style>
 

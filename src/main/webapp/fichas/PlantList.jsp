@@ -8,7 +8,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
  
 
-  <title>Herbario Nacional-Especimenes</title> 
+  <title>Herbario Nacional-Especimenes</title>
+    <link rel="shortcut icon" href="../img/Logo.png" type="image/x-icon">
 
 
   <jsp:include page="../WEB-INF/layouts/meta.jsp"></jsp:include>
@@ -99,6 +100,8 @@ if(!viewPermission) {
 %>
 
  <%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
+
+</head>
 
 <body id="page-top">
    <!-- Page Wrapper -->

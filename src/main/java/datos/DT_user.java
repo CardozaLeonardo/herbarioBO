@@ -26,7 +26,8 @@ import util.Util;
 
 public class DT_user {
 	
-	private static RestTemplate restTemplate = new RestTemplate(new HttpComponentsClientHttpRequestFactory());
+	//private static RestTemplate restTemplate = new RestTemplate(new HttpComponentsClientHttpRequestFactory());
+    private static RestTemplate restTemplate = new RestTemplate();
 	//private String ENDPOINT_URL = "http://localhost:3000/usuarios";
 	//geeksforgeeks.org/md5-hash-in-java
 	
@@ -337,6 +338,7 @@ public JSONObject updateUser(Tbl_user usr, Cookie[] cookies) {
 
 public JSONObject asignarRol(Tbl_user usr, Cookie[] cookies) {
     String URL = Server.getHostname() + "user/" +usr.getId() +"/";
+    RestTemplate restTemplateS = new RestTemplate(new HttpComponentsClientHttpRequestFactory());
     
     String[] tokens = Util.extractTokens(cookies);
     usr.setIs_active(true);
@@ -373,7 +375,7 @@ public JSONObject asignarRol(Tbl_user usr, Cookie[] cookies) {
 	HttpEntity<String> req = new HttpEntity<String>(datos.toString(),headers);
 	
 	try {
-		ResponseEntity<String> response = restTemplate.exchange(URL, HttpMethod.PATCH, req, String.class);
+		ResponseEntity<String> response = restTemplateS.exchange(URL, HttpMethod.PATCH, req, String.class);
 		String str = response.getBody();
 		
 		JSONObject retorno = new JSONObject();
@@ -483,6 +485,7 @@ public JSONObject deleteUser(Tbl_user usr, Cookie[] cookies) {
 
 
 		String URL = Server.getHostname() + "user/" + idUser + "/";
+		RestTemplate restTemplateS = new RestTemplate(new HttpComponentsClientHttpRequestFactory());
 
 		//Tbl_user user = null;
 
@@ -511,7 +514,7 @@ public JSONObject deleteUser(Tbl_user usr, Cookie[] cookies) {
 
 		try {
 
-			ResponseEntity<String> response = restTemplate.exchange(URL, HttpMethod.PATCH, req, String.class);
+			ResponseEntity<String> response = restTemplateS.exchange(URL, HttpMethod.PATCH, req, String.class);
 			String fungus = response.getBody();
 
 			JSONObject retorno = new JSONObject();

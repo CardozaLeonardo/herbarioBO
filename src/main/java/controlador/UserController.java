@@ -126,27 +126,32 @@ public class UserController {
 		String pass = req.getParameter("password");
 		DT_user dtu = new DT_user();
 		DT_permissions dtpp = new DT_permissions();
-		System.out.println(usr);
+		System.out.println("Usuario ingresado: " + usr);
+		System.out.println("Contraseña ingresada: " + pass);
 		
 		ModelAndView ma = new ModelAndView();
 		
 		JSONObject respuesta = dtu.comprobarLogin(usr, pass);
+		Cookie ck = null;
+		Cookie ck2 = null;
 		
 		if(respuesta.getInt("code") == 200) {
 			String[] cookies =  (String[]) respuesta.get("cookies");
 			System.out.println("Cookies: " + cookies.length);
 			String [] parts = cookies[0].split("=");
 			String [] parts2 = cookies[1].split("=");
-			Cookie ck = new Cookie(parts[0],parts[1]);
-			Cookie ck2 = new Cookie(parts2[0],parts2[1]);
+			ck = new Cookie(parts[0],parts[1]);
+			ck2 = new Cookie(parts2[0],parts2[1]);
 			ck.setMaxAge(1800);
 			ck.setPath("/");
 			ck2.setMaxAge(1800);
 			ck2.setPath("/");
 			res.addCookie(ck);
 			res.addCookie(ck2);
+
 			
 			 Cookie [] cks = new Cookie[]{ck, ck2};
+			 dtu = new DT_user();
 			 JSONObject obj = dtu.obtenerUsuarioIngresado(cks);
 			 Tbl_user us = (Tbl_user) obj.get("user");
 			 JSONObject permissionsData = dtpp.getUserPermissions(us.getId(), cks);
@@ -179,7 +184,7 @@ public class UserController {
 			return rv;
 			
 		}
-		
+
 	    res.sendRedirect("/login?status=" + respuesta.getInt("code"));
 	    return null;
 	}

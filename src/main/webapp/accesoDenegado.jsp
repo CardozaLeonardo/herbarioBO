@@ -9,7 +9,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>Acceso Denegado</title>
+  <title>Herbario Nacional - Acceso Denegado</title>
 
   <!-- Custom fonts for this template-->
   <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -18,6 +18,7 @@
   <!-- Custom styles for this template-->
   <link href="css/sb-admin-2.min.css" rel="stylesheet">
   <link rel="stylesheet" href="./jAlert/dist/jAlert.css" />
+  <link rel="shortcut icon" href="img/Logo.png" type="image/x-icon">
 
 </head>
 
@@ -34,8 +35,8 @@
             <!--  <div class="error mx-auto" data-text="404">404</div> -->
             <img alt="access-denied" src="./img/access_denied.png" width="300px" height="auto">
             <p class="lead text-gray-800 mb-5">Acceso Denegado</p>
-            <p class="text-gray-500 mb-0">It looks like you found a glitch in the matrix...</p>
-            <a href="index.html">&larr; Back to Dashboard</a>
+            <p class="text-gray-700 mb-0">Solicite permiso al administrador del sistema</p>
+            <a href="<%=request.getContextPath() + "/"%>">&larr; Regresar a Inicio</a>
           </div>
 
         </div>
@@ -48,7 +49,7 @@
       <footer class="sticky-footer bg-white">
         <div class="container my-auto">
           <div class="copyright text-center my-auto">
-            <span>Copyright &copy; Your Website 2019</span>
+            <span>UCA HERBARIO NACIONAL - 2019</span>
           </div>
         </div>
       </footer>

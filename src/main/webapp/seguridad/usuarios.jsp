@@ -26,6 +26,8 @@
     <!-- Custom styles for this page -->
     <link href="../vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 
+    <link rel="shortcut icon" href="../img/Logo.png" type="image/x-icon">
+
     <!-- jAlert css  -->
     <link rel="stylesheet" href="../vendor/jAlert/dist/jAlert.css" />
 
@@ -150,12 +152,14 @@
                 <p class="mb-4">DataTables is a third party plugin that is used to generate the demo table below. For more information about DataTables, please visit the <a target="_blank" href="https://datatables.net">official DataTables documentation</a>.</p> -->
 
                 <h2>Usuarios</h2>
+                <%if(addPermission) {%>
                 <a href="<%=request.getContextPath()%>/seguridad/newUser" class="btn btn-primary btn-icon-split">
                     <span class="icon text-white-50">
                       <i class="fas fa-user-plus"></i>
                     </span>
                     <span class="text">Agregar Usuario</span>
                 </a>
+                <%}%>
                 <br>
                 <br>
                 <table id="example2" class="display">

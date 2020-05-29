@@ -8,7 +8,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
  
 
-  <title><%=Server.getAppName() %> - Hongos Sin Revisar</title> 
+  <title><%=Server.getAppName() %> - Hongos Sin Revisar</title>
+    <link rel="shortcut icon" href="../img/Logo.png" type="image/x-icon">
 
 
   <jsp:include page="../WEB-INF/layouts/meta.jsp"></jsp:include>

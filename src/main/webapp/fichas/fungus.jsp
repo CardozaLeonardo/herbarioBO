@@ -17,6 +17,7 @@
 
   <!-- Custom styles for this template -->
   <link href="../css/sb-admin-2.css" rel="stylesheet">
+    <link rel="shortcut icon" href="../img/Logo.png" type="image/x-icon">
   
   <!-- DATATABLE NEW -->
   <link href="../vendor/DataTablesNew/DataTables-1.10.18/css/jquery.dataTables.min.css" rel="stylesheet">

@@ -120,10 +120,12 @@
                   <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 
                     <div class="form-group">
-                      <input type="text" class="form-control form-control-user" id="exampleInputEmail" placeholder="Usuario" aria-describedby="emailHelp" name="username">
+                      <input type="text" class="form-control form-control-user" id="exampleInputEmail"
+                             placeholder="Usuario" aria-describedby="emailHelp" required name="username">
                     </div>
                     <div class="form-group">
-                      <input type="password" class="form-control form-control-user" id="exampleInputPassword" placeholder="Contraseña" name="password">
+                      <input type="password" class="form-control form-control-user" id="exampleInputPassword"
+                             placeholder="Contraseña" required name="password">
                     </div>
                     
                     <input type="submit" class="btn btn-primary btn-user btn-block" value="Login" /> 
