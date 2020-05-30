@@ -4,7 +4,7 @@
 <html>
 <head>
     <meta charset="ISO-8859-1">
-    <title>Nuevo Usuario</title>
+    <title><%=Server.getAppName()%> - Nuevo Usuario</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="../img/Logo.png" type="image/x-icon">
@@ -75,7 +75,7 @@
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="usuarios.jsp">Seguridad</a></li>
+                            <li class="breadcrumb-item"><a href="./usuarios">Usuarios</a></li>
                             <li class="breadcrumb-item active">Nuevo Usuario</li>
                         </ol>
                     </div>

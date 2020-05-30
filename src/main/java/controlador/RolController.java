@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import negocio.RoleValidator;
 import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,12 +23,13 @@ import entidades.Tbl_opcion;
 import entidades.Tbl_rol;
 import entidades.Tbl_user;
 import negocio.NG_rol;
+import util.MessageAlertUtil;
 import util.Util;
 
 @Controller
 public class RolController {
 	
-	
+	private RoleValidator validator = new RoleValidator();
 	@GetMapping("/seguridad/roles")
 	public String showRoles() {
 		return "/seguridad/roles.jsp";
@@ -48,6 +50,14 @@ public class RolController {
 	public RedirectView guardarRol(HttpServletRequest req, HttpServletResponse res, RedirectAttributes redir) throws IOException {
 		
 		String rolName = req.getParameter("rolName");
+
+		if(!validator.verifyAddPermission(req)) {
+			RedirectView redirectView = new RedirectView(req.getContextPath() + "/seguridad/roles");
+			MessageAlertUtil.failGenericMsg(redir, "¡No cuenta con permisos para realizar" +
+					" esta acción!");
+			return redirectView;
+		}
+
 		Tbl_rol rol = new Tbl_rol();
 		
 		rol.setName(rolName);
@@ -78,23 +88,23 @@ public class RolController {
 			}
 			else if(obj.getInt("status") == 500){
 				RedirectView rv = new RedirectView(req.getContextPath() + "/login");
-				redir.addFlashAttribute("error", 1);
+				redir.addFlashAttribute("msg", 1);
 				redir.addFlashAttribute("type", "danger");
-				redir.addFlashAttribute("msg", "Ha ocurrido un error en el <strong>servidor</strong>.");
+				redir.addFlashAttribute("cont", "Ha ocurrido un error en el <strong>servidor</strong>.");
 				return rv;
 			}
 		}else if(validacion == 1) {
 			RedirectView rv = new RedirectView(req.getContextPath() + "/seguridad/roles");
-			redir.addFlashAttribute("error", 1);
+			redir.addFlashAttribute("msg", 1);
 			redir.addFlashAttribute("type", "danger");
-			redir.addFlashAttribute("msg", "¡<strong>Error</strong>: el nuevo nombre para el rol"
+			redir.addFlashAttribute("cont", "¡<strong>Error</strong>: el nuevo nombre para el rol"
 					+ " ya existe!");
 			return rv;
 		}else if(validacion == 2) {
 			RedirectView rv = new RedirectView(req.getContextPath() + "/login");
-			redir.addFlashAttribute("error", 1);
+			redir.addFlashAttribute("msg", 1);
 			redir.addFlashAttribute("type", "info");
-			redir.addFlashAttribute("msg", "Tiene que iniciar sesión primero");
+			redir.addFlashAttribute("cont", "Tiene que iniciar sesión primero");
 			return rv;
 		}
 		
@@ -115,17 +125,17 @@ public class RolController {
 		int validacion = ngr.existeRol(rolName, idRol, req.getCookies());
 		
 		if(validacion == 1) {
-			redir.addFlashAttribute("error", 1);
-			redir.addFlashAttribute("type", "danger");
-			redir.addFlashAttribute("msg", "¡<strong>Error</strong>: el nuevo nombre para el rol"
+			redir.addFlashAttribute("msg", 1);
+			redir.addFlashAttribute("type", "");
+			redir.addFlashAttribute("cont", "¡<strong>Error</strong>: el nuevo nombre para el rol"
 					+ " ya existe!");
 			return rv;
 		}else if(validacion == 0) {
 			JSONObject obj = dtr.actualizarRol(tbr, req.getCookies());
 			if(obj.getInt("status") == 200) {
-				redir.addFlashAttribute("error", 1);
+				redir.addFlashAttribute("msg", 1);
 				redir.addFlashAttribute("type", "success");
-				redir.addFlashAttribute("msg", "¡Rol actualizado <strong>exitosamente</strong>!");
+				redir.addFlashAttribute("cont", "¡Rol actualizado <strong>exitosamente</strong>!");
 				String[] cks = (String[]) obj.get("cookies");
 				Util.setTokenCookies(req, res, cks);
 			}
@@ -183,6 +193,7 @@ public class RolController {
 	
 	@PostMapping("/asignarOpcion")
 	public RedirectView asignarOpcion(HttpServletRequest req, HttpServletResponse res, RedirectAttributes redir) throws IOException {
+		RedirectView rv = null;
 		String rolId = req.getParameter("idRol");
 		String opcId = req.getParameter("listaOpciones");
 		String permisos = req.getParameter("permisos");
@@ -214,7 +225,10 @@ public class RolController {
 			JSONObject obj = dtr.asignarOpc(role, req.getCookies());
 			
 			if(obj.getInt("status") == 200) {
-				res.sendRedirect(req.getContextPath() +"/seguridad/rolesOpciones?rol=" + rol+"&saved=1");
+				//res.sendRedirect(req.getContextPath() +"/seguridad/rolesOpciones?rol=" + rol+"&saved=1");
+				rv = new RedirectView(req.getContextPath() + "/seguridad/rolesOpciones?rol=" + rol);
+				MessageAlertUtil.SuccessGenericMessage(redir, "¡Agregado existosamente!");
+				return rv;
 			}
 			
 			

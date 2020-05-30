@@ -16,6 +16,12 @@ public class MessageAlertUtil {
         redir.addFlashAttribute("cont", "¡Registro actualizado con éxito!");
     }
 
+    public static void SuccessGenericMessage(RedirectAttributes redir, String msg) {
+        redir.addFlashAttribute("msg", 1);
+        redir.addFlashAttribute("type", "success");
+        redir.addFlashAttribute("cont", msg);
+    }
+
     public static void SuccessBlockUserMessage(RedirectAttributes redir) {
         redir.addFlashAttribute("msg", 1);
         redir.addFlashAttribute("type", "success");
@@ -39,6 +45,12 @@ public class MessageAlertUtil {
         redir.addFlashAttribute("type", "danger");
         redir.addFlashAttribute("cont",
                 "Ya existe un registro con " + attr + " especificado");
+    }
+
+    public static void failGenericMsg(RedirectAttributes redir, String msg) {
+        redir.addFlashAttribute("msg", 1);
+        redir.addFlashAttribute("type", "danger");
+        redir.addFlashAttribute("cont", msg);
     }
 
     public static void alreadyExistCustomMsg(RedirectAttributes redir, String attr) {

@@ -89,6 +89,34 @@ if(listaRoles == null){
  String id_rol ="";
  String errorMsg = "";
  boolean error = false; // Para indicar cualquier error a notificar
+
+
+    HttpSession hts = request.getSession();
+    Tbl_opcion[] permisions = (Tbl_opcion[]) hts.getAttribute("user_permissions");
+    boolean viewPermission = false;
+    boolean editPermission = false;
+    boolean deletePermission = false;
+    boolean addPermission = false;
+    for(Tbl_opcion p: permisions) {
+        if (p.getCodename().equals("view_group")) {
+            viewPermission = true;
+        }
+        if (p.getCodename().equals("change_group")) {
+            editPermission = true;
+        }
+        if (p.getCodename().equals("delete_group")) {
+            deletePermission = true;
+        }
+        if (p.getCodename().equals("add_group")) {
+            addPermission = true;
+        }
+
+
+    }
+    if(!viewPermission) {
+        response.sendRedirect(request.getContextPath() + "/accesoDenegado.jsp");
+        return;
+    }
  
  %>
  
@@ -113,9 +141,9 @@ if(listaRoles == null){
         <!-- Begin Page Content -->
         <div class="container-fluid">
           
-		  <c:if test="${error != null}">
+		  <c:if test="${msg != null}">
 		    <div class="alert alert-${type} alert-dismissible fade show" role="alert">
-			  ${msg}
+			  ${cont}
 			  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
 			    <span aria-hidden="true">&times;</span>
 			  </button>
@@ -140,11 +168,7 @@ if(listaRoles == null){
 		    <input type="text" class="form-control" id="rolName" value="" name="rolName" required>
 		  </div>
 		  
-		  
-            <div class="form-group">
-		    <label for="rolDesc">Descripción: </label>
-		    <input type="text" class="form-control" name="rolDesc" id="rolDesc" value="">
-		  </div>
+
 		  
 		    <button id="submitRole" type="submit" class="btn btn-success">Guardar</button>
 		    <button type="reset" id="cancelRoleBTN" class="btn btn-danger">Cancelar</button>
@@ -171,22 +195,27 @@ if(listaRoles == null){
                   <tbody>
                     <%
                     	for(Tbl_rol rol: listaRoles) {
+                    	    if(!rol.getName().equals("Admin")){
                     %>
                     <tr>
                       <td id="cl-id-<%=rol.getId()%>"><%=rol.getId() %></td>
                       <td id="cl-name-<%=rol.getId()%>"><%=rol.getName() %></td>
                       <td>
+                       <%if(editPermission) {%>
                        <a href="#" id="<%=rol.getId()%>" class="editRole">
                        
                        <i class="fas fa-edit editRole"></i>
                        </a>
+                       <%}%>
                        &nbsp;&nbsp;
+                       <%if(deletePermission) {%>
                        <a href="#" id="<%=rol.getId()%>" class="deleteRole">
                         <i class="fas fa-trash-alt"></i>
                        </a>
+                       <%}%>
                       </td>
                     </tr>
-                    <%} %>
+                    <%}} %>
                     
                   </tbody>
                 </table>

@@ -124,7 +124,7 @@ public class DT_user {
 			
 			String[] cks = new String[2];
 			
-			System.out.println(ck);
+			//System.out.println(ck);
 			
 			String [] parts = list.get(0).split(";");
 			String [] parts2 = list.get(1).split(";");

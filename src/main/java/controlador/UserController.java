@@ -126,8 +126,6 @@ public class UserController {
 		String pass = req.getParameter("password");
 		DT_user dtu = new DT_user();
 		DT_permissions dtpp = new DT_permissions();
-		System.out.println("Usuario ingresado: " + usr);
-		System.out.println("Contraseña ingresada: " + pass);
 		
 		ModelAndView ma = new ModelAndView();
 		
@@ -166,7 +164,7 @@ public class UserController {
 
 
 
-				 System.out.println("valor: " +us.getUsername() + " " + obj.getInt("code"));
+				 //System.out.println("valor: " +us.getUsername() + " " + obj.getInt("code"));
 				 hts.setAttribute("user_permissions", permissions);
 				 hts.setAttribute("user", us);
 				 hts.setMaxInactiveInterval(1800);
